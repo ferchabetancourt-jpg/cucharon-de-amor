@@ -53,7 +53,7 @@ export function AuthDialog({ open, onClose }: Props) {
           className="p-6 md:p-7"
           style={{
             background:
-              "linear-gradient(135deg, #FEFCF8 0%, #FFF6EA 100%)",
+              "linear-gradient(135deg, #FFF6EA 0%, #FFF6EA 100%)",
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
             boxShadow: "0 20px 50px -20px rgba(47,42,38,0.25)",
@@ -72,7 +72,7 @@ export function AuthDialog({ open, onClose }: Props) {
             <DialogDescription asChild>
               <p
                 className="text-[13px] mt-1 italic"
-                style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+                style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
               >
                 Tus recetas y favoritos te están esperando
               </p>
@@ -81,7 +81,7 @@ export function AuthDialog({ open, onClose }: Props) {
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
+              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Correo
               </label>
               <input
@@ -100,7 +100,7 @@ export function AuthDialog({ open, onClose }: Props) {
               />
             </div>
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
+              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Contraseña
               </label>
               <input
@@ -140,7 +140,7 @@ export function AuthDialog({ open, onClose }: Props) {
               <div
                 className="mt-3 px-3.5 py-2.5 rounded-xl text-[12.5px] text-center leading-relaxed"
                 style={{
-                  background: "linear-gradient(135deg, #FEFCF8, #FFF6EA)",
+                  background: "linear-gradient(135deg, #FFF6EA, #FFF6EA)",
                   border: "1px solid #E85D2F",
                   color: "#A84E22",
                   fontFamily: "Montserrat, sans-serif",
@@ -153,7 +153,7 @@ export function AuthDialog({ open, onClose }: Props) {
 
           <p
             className="text-center text-[12.5px] mt-4"
-            style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             El registro es solo por invitación. Pide acceso a la administradora.
           </p>

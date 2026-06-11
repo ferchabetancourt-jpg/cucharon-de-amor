@@ -40,7 +40,7 @@ export function Header() {
           </h1>
           <p
             className="italic text-[11.5px] md:text-[13px] mt-0.5"
-            style={{ fontFamily: "Montserrat, sans-serif", color: "#6B6257" }}
+            style={{ fontFamily: "Montserrat, sans-serif", color: "#8A6B55" }}
           >
             {user ? `Hola, ${displayName} 💛` : "Recetas que viajan por generaciones"}
           </p>
@@ -70,7 +70,7 @@ export function Header() {
                     <p className="truncate text-[13px] font-semibold" style={{ color: "#3A2A20" }}>
                       {displayName}
                     </p>
-                    <p className="truncate text-[11px]" style={{ color: "#6B6257" }}>
+                    <p className="truncate text-[11px]" style={{ color: "#8A6B55" }}>
                       {user.email}
                     </p>
                   </div>

@@ -54,7 +54,7 @@ export function ChangePasswordDialog() {
         <div
           className="p-6 md:p-7"
           style={{
-            background: "linear-gradient(135deg, #FEFCF8 0%, #FFF6EA 100%)",
+            background: "linear-gradient(135deg, #FFF6EA 0%, #FFF6EA 100%)",
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
             boxShadow: "0 20px 50px -20px rgba(47,42,38,0.25)",
@@ -68,7 +68,7 @@ export function ChangePasswordDialog() {
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
-              <p className="text-[13px] mt-1 italic" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
+              <p className="text-[13px] mt-1 italic" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
                 Estás usando una contraseña temporal. Defínela antes de continuar.
               </p>
             </DialogDescription>
@@ -76,7 +76,7 @@ export function ChangePasswordDialog() {
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
+              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Nueva contraseña
               </label>
               <input
@@ -96,7 +96,7 @@ export function ChangePasswordDialog() {
               />
             </div>
             <div>
-              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
+              <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Confirmar contraseña
               </label>
               <input
@@ -136,7 +136,7 @@ export function ChangePasswordDialog() {
               <div
                 className="mt-3 px-3.5 py-2.5 rounded-xl text-[12.5px] text-center leading-relaxed"
                 style={{
-                  background: "linear-gradient(135deg, #FEFCF8, #FFF6EA)",
+                  background: "linear-gradient(135deg, #FFF6EA, #FFF6EA)",
                   border: "1px solid #E85D2F",
                   color: "#A84E22",
                   fontFamily: "Montserrat, sans-serif",

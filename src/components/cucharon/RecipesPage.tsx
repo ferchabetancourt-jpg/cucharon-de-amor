@@ -117,7 +117,7 @@ function RecipeDetail({
             placeholder="Anota aquí tus cambios, sustituciones o trucos personales..."
             className="w-full rounded-xl p-3.5 text-sm leading-relaxed outline-none transition-colors resize-y min-h-[120px]"
             style={{
-              background: "#FEFCF8",
+              background: "#FFF6EA",
               border: "1.5px solid #EDE8DC",
               color: "#3A2A20",
               fontFamily: "'DM Sans', system-ui, sans-serif",
@@ -177,7 +177,7 @@ function RecipeListItem({
             className="rounded-full px-2.5 py-1 text-[11px]"
             style={{
               background: "#FFF6EA",
-              color: "#6F8B72",
+              color: "#5E8C4A",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 500,
               border: "1px solid #EDE8DC",
@@ -198,7 +198,7 @@ function RecipeListItem({
         {/* Metadata */}
         <div
           className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
-          style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+          style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
         >
           {recipe.methods?.map((m, i) => {
             const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
@@ -224,7 +224,7 @@ function RecipeListItem({
             type="button"
             onClick={(e) => { e.stopPropagation(); onEdit(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-            style={{ background: "#FFF6EA", color: "#6F8B72" }}
+            style={{ background: "#FFF6EA", color: "#5E8C4A" }}
             aria-label="Editar receta"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -374,7 +374,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           </h2>
           <p
             className="mt-1.5 text-[13px] md:text-[14px] italic leading-[1.5]"
-            style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             {favoritesOnly
               ? "Las recetas que más quieres, siempre a mano."
@@ -399,7 +399,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
       </section>
 
       <div className="relative mb-4">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" style={{ color: "#6B6257" }} />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" style={{ color: "#8A6B55" }} />
         <input
           type="text"
           value={query}
@@ -430,7 +430,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         <div className="flex items-center justify-between mb-2">
           <span
             className="text-[10px] uppercase tracking-[0.18em] font-medium"
-            style={{ color: "#6F8B72" }}
+            style={{ color: "#5E8C4A" }}
           >
             Método de cocción
           </span>
@@ -438,7 +438,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
             <button
               onClick={() => setMethods([])}
               className="text-[11px] font-medium inline-flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors"
-              style={{ background: "#EDE8DC", color: "#6B6257" }}
+              style={{ background: "#EDE8DC", color: "#8A6B55" }}
             >
               <X className="w-3 h-3" /> Limpiar
             </button>
@@ -454,8 +454,8 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               )}
               style={
                 methods.includes(m.key)
-                  ? { background: "#6F8B72", borderColor: "#6F8B72", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: "#FFFFFF", borderColor: "#EDE8DC", color: "#6B6257" }
+                  ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
+                  : { background: "#FFFFFF", borderColor: "#EDE8DC", color: "#8A6B55" }
               }
             >
               {m.label}

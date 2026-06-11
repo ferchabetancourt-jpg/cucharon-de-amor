@@ -99,7 +99,7 @@ export function RecipeGenerator() {
           </h2>
           <p
             className="text-[13px] md:text-[14.5px] leading-relaxed"
-            style={{ fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif", color: "#6B6257" }}
+            style={{ fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif", color: "#8A6B55" }}
           >
             Cuéntame qué tienes en casa y encontraremos algo rico para ti.
           </p>
