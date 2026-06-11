@@ -145,99 +145,108 @@ function RecipeListItem({
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
+  const catStyle = getCategoryStyle(recipe.category);
 
   return (
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-2xl p-5 md:p-6 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
+        className="group relative rounded-[24px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
         style={{
           background: "#FFFFFF",
           border: "1px solid #EDE8DC",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(47,42,38,0.15)",
         }}
       >
-        {/* Top row: star + category badge */}
-        <div className="flex items-start justify-between gap-2">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              const wasFav = recipesStore.isFavorite(recipe.id);
-              recipesStore.toggleFavorite(recipe.id);
-              if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
-            }}
-            aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
-            className="text-2xl leading-none transition-transform hover:scale-110 cursor-pointer"
-            style={{ color: isFav ? "#E85D2F" : "#D6CFC1" }}
-          >
-            {isFav ? "★" : "☆"}
-          </button>
-          <span
-            className="rounded-full px-2.5 py-1 text-[11px]"
-            style={{
-              background: "#FFF6EA",
-              color: "#5E8C4A",
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 500,
-              border: "1px solid #EDE8DC",
-            }}
-          >
-            {catLabel}
-          </span>
-        </div>
-
-        {/* Recipe name */}
-        <h3
-          className="font-serif text-[19px] md:text-[21px] leading-[1.2] mt-3 mb-3"
-          style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "-0.005em" }}
-        >
-          {recipe.name}
-        </h3>
-
-        {/* Metadata */}
+        {/* Bloque de color superior según categoría */}
         <div
-          className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
-          style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
-        >
-          {recipe.methods?.map((m, i) => {
-            const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
-            if (!ml) return null;
-            return (
-              <span key={m} className="inline-flex items-center gap-1">
-                {i > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                <span>{ml}</span>
-              </span>
-            );
-          })}
-          {recipe.time && (
-            <>
-              {(recipe.methods?.length ?? 0) > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-              <span className="inline-flex items-center gap-1">⏱️ {recipe.time}</span>
-            </>
-          )}
-        </div>
+          aria-hidden
+          className="h-20 md:h-24 w-full"
+          style={{ background: catStyle.bar }}
+        />
 
-        {/* Actions */}
-        <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onEdit(); }}
-            className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-            style={{ background: "#FFF6EA", color: "#5E8C4A" }}
-            aria-label="Editar receta"
+        <div className="p-5 md:p-6">
+          {/* Top row: star + category badge */}
+          <div className="flex items-start justify-between gap-2 -mt-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                const wasFav = recipesStore.isFavorite(recipe.id);
+                recipesStore.toggleFavorite(recipe.id);
+                if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+              }}
+              aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
+              className="text-2xl leading-none transition-transform hover:scale-110 cursor-pointer"
+              style={{ color: isFav ? "#E85D2F" : "#D6CFC1" }}
+            >
+              {isFav ? "★" : "☆"}
+            </button>
+            <span
+              className="rounded-full px-2.5 py-1 text-[11px]"
+              style={{
+                background: catStyle.chipBg,
+                color: catStyle.chipText,
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              {catLabel}
+            </span>
+          </div>
+
+          {/* Recipe name */}
+          <h3
+            className="font-serif text-[19px] md:text-[21px] leading-[1.2] mt-3 mb-3"
+            style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "-0.005em" }}
           >
-            <Pencil className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
-            className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-            style={{ background: "#FFF6EA", color: "#E85D2F" }}
-            aria-label="Eliminar receta"
+            {recipe.name}
+          </h3>
+
+          {/* Metadata */}
+          <div
+            className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
+            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
+            {recipe.methods?.map((m, i) => {
+              const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
+              if (!ml) return null;
+              return (
+                <span key={m} className="inline-flex items-center gap-1">
+                  {i > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
+                  <span>{ml}</span>
+                </span>
+              );
+            })}
+            {recipe.time && (
+              <>
+                {(recipe.methods?.length ?? 0) > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
+                <span className="inline-flex items-center gap-1">⏱️ {recipe.time}</span>
+              </>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onEdit(); }}
+              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+              style={{ background: "#FFF6EA", color: "#5E8C4A" }}
+              aria-label="Editar receta"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
+              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+              style={{ background: "#FFF6EA", color: "#E85D2F" }}
+              aria-label="Eliminar receta"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </li>
