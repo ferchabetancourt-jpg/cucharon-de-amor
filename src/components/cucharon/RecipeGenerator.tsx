@@ -77,7 +77,7 @@ export function RecipeGenerator() {
         className="relative overflow-hidden rounded-[24px] px-5 pt-5 pb-5 md:px-7 md:pt-7 md:pb-6 mb-5 shadow-card border border-cream-deep"
         style={{
           background:
-            "radial-gradient(140% 90% at 100% 0%, rgba(201,106,43,0.10), transparent 55%), radial-gradient(120% 80% at 0% 100%, rgba(111,139,114,0.08), transparent 60%), linear-gradient(135deg, #F7F3EB 0%, #EDE8DC 100%)",
+            "radial-gradient(140% 90% at 100% 0%, rgba(201,106,43,0.10), transparent 55%), radial-gradient(120% 80% at 0% 100%, rgba(111,139,114,0.08), transparent 60%), linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%)",
         }}
       >
         {/* Ilustración oficial - flotando integrada al fondo */}
@@ -93,7 +93,7 @@ export function RecipeGenerator() {
         <div className="relative z-10 pr-[120px] md:pr-[170px] mb-4">
           <h2
             className="font-serif text-[26px] md:text-[32px] leading-[1.08] mb-2"
-            style={{ color: "#2F2A26", letterSpacing: "-0.005em" }}
+            style={{ color: "#3A2A20", letterSpacing: "-0.005em" }}
           >
             ¿Qué cocinamos hoy?
           </h2>
@@ -117,7 +117,7 @@ export function RecipeGenerator() {
             onChange={(e) => setIngredients(e.target.value)}
             placeholder="Abre la nevera y cuéntame qué encontraste…"
             className="w-full pl-10 pr-10 py-3 border border-cream-deep rounded-2xl bg-white text-sm outline-none focus:border-terracotta-light focus:ring-2 focus:ring-terracotta/15 transition shadow-sm placeholder:text-[#A89F92]"
-            style={{ color: "#2F2A26" }}
+            style={{ color: "#3A2A20" }}
           />
           <Refrigerator
             className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-terracotta/70"
@@ -150,7 +150,7 @@ export function RecipeGenerator() {
           disabled={loading}
           className="relative z-10 w-full text-white py-3.5 rounded-2xl text-[15px] shadow-warm hover:opacity-95 hover:scale-[1.01] hover:shadow-lg active:scale-[.98] transition-all duration-200 ease-out cursor-pointer disabled:opacity-65 disabled:cursor-wait inline-flex items-center justify-center gap-2"
           style={{
-            background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+            background: "linear-gradient(135deg, #E85D2F, #A84E22)",
             fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
             fontWeight: 600,
             boxShadow: "0 10px 24px -10px rgba(201,106,43,0.55), 0 2px 6px rgba(168,78,34,0.18)",

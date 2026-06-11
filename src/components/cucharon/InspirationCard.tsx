@@ -32,7 +32,7 @@ export function InspirationCard() {
   return (
     <article
       className="relative overflow-hidden rounded-[18px] px-5 py-6 mb-4 border border-cream-deep shadow-sm transition-all duration-300 ease-out hover:shadow-md"
-      style={{ background: "#F7F3EB" }}
+      style={{ background: "#FFF6EA" }}
     >
       <img
         src={sprig}
@@ -60,7 +60,7 @@ export function InspirationCard() {
         >
           <h3
             className="font-serif text-[20px] mb-2 leading-snug"
-            style={{ color: "#2F2A26", fontWeight: 600 }}
+            style={{ color: "#3A2A20", fontWeight: 600 }}
           >
             {item.title}
           </h3>

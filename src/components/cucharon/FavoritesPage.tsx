@@ -120,7 +120,7 @@ function RecipeDetail({
             style={{
               background: "#FEFCF8",
               border: "1.5px solid #EDE8DC",
-              color: "#2F2A26",
+              color: "#3A2A20",
               fontFamily: "'DM Sans', system-ui, sans-serif",
             }}
           />
@@ -168,13 +168,13 @@ function FavoriteCard({
             }}
             aria-label="Quitar favorita"
             className="text-2xl leading-none transition-transform hover:scale-110"
-            style={{ color: "#C96A2B" }}
+            style={{ color: "#E85D2F" }}
           >
             ★
           </button>
           <span
             className="rounded-full px-2.5 py-1 text-[11px]"
-            style={{ background: "#F7F3EB", color: "#6F8B72", fontFamily: "Montserrat, sans-serif", fontWeight: 500, border: "1px solid #EDE8DC" }}
+            style={{ background: "#FFF6EA", color: "#6F8B72", fontFamily: "Montserrat, sans-serif", fontWeight: 500, border: "1px solid #EDE8DC" }}
           >
             {catLabel}
           </span>
@@ -182,7 +182,7 @@ function FavoriteCard({
 
         <h3
           className="font-serif text-[19px] md:text-[21px] leading-[1.2] mt-3 mb-3"
-          style={{ color: "#2F2A26", fontWeight: 600, letterSpacing: "-0.005em" }}
+          style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "-0.005em" }}
         >
           {recipe.name}
         </h3>
@@ -214,7 +214,7 @@ function FavoriteCard({
             type="button"
             onClick={(e) => { e.stopPropagation(); onEdit(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center"
-            style={{ background: "#F7F3EB", color: "#6F8B72" }}
+            style={{ background: "#FFF6EA", color: "#6F8B72" }}
             aria-label="Editar"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -223,7 +223,7 @@ function FavoriteCard({
             type="button"
             onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center"
-            style={{ background: "#F7F3EB", color: "#C96A2B" }}
+            style={{ background: "#FFF6EA", color: "#E85D2F" }}
             aria-label="Eliminar"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -300,7 +300,7 @@ export function FavoritesPage() {
         className="relative overflow-hidden rounded-[20px] mb-7 px-5 py-6 md:px-7 md:py-7"
         style={{
           background:
-            "linear-gradient(135deg, #F7F3EB 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.06), transparent 60%)",
+            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.06), transparent 60%)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
         }}
       >
@@ -308,7 +308,7 @@ export function FavoritesPage() {
           <div className="flex-1 min-w-0">
             <h2
               className="font-serif text-[24px] md:text-[30px] leading-[1.15]"
-              style={{ color: "#2F2A26", letterSpacing: "-0.005em", fontWeight: 600 }}
+              style={{ color: "#3A2A20", letterSpacing: "-0.005em", fontWeight: 600 }}
             >
               ⭐ Mis Favoritas
             </h2>
@@ -342,7 +342,7 @@ export function FavoritesPage() {
           />
           <h3
             className="font-serif text-[22px] md:text-[24px] mb-3"
-            style={{ color: "#2F2A26", fontWeight: 600 }}
+            style={{ color: "#3A2A20", fontWeight: 600 }}
           >
             ⭐ Aún no has marcado favoritos
           </h3>
@@ -366,7 +366,7 @@ export function FavoritesPage() {
             <span className="h-px flex-1" style={{ background: "#EDE8DC" }} />
             <span
               className="text-[11px] uppercase tracking-[0.22em] font-medium"
-              style={{ color: "#C96A2B", fontFamily: "Montserrat, sans-serif" }}
+              style={{ color: "#E85D2F", fontFamily: "Montserrat, sans-serif" }}
             >
               ⭐ Tus recetas favoritas
             </span>
