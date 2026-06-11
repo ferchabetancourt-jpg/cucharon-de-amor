@@ -21,6 +21,7 @@ const REMOVED_SEEDS_KEY = "cucharon-removed-seeds-v1";
 const FAVORITES_KEY = "cucharon-favorites-v1";
 const NOTES_KEY = "cucharon-personal-notes-v1";
 const RESET_FLAG_KEY = "cucharon-reset-v1";
+const MIGRATION_FLAG_KEY = "cucharon-local-migration-v1";
 
 if (typeof window !== "undefined") {
   try {
@@ -206,24 +207,59 @@ export const recipesStore = {
       emit();
       return;
     }
-    // Migrate any local favorites and notes into the user's account
+    // One-time migration of pre-login localStorage data into the user's account.
+    // If the Supabase row already exists, keep the Supabase version (no overwrite).
     try {
-      const localFavs = localFavoritesSet();
-      if (localFavs.size > 0) {
-        const rows = [...localFavs].map((recipe_id) => ({ user_id: userId, recipe_id }));
-        await supabase.from("favorites").upsert(rows, { onConflict: "user_id,recipe_id" });
-        localStorage.removeItem(FAVORITES_KEY);
-      }
-      const rawNotes = localStorage.getItem(NOTES_KEY);
-      if (rawNotes) {
-        const map = JSON.parse(rawNotes) as Record<string, string>;
-        const rows = Object.entries(map)
-          .filter(([, v]) => v && v.trim().length > 0)
-          .map(([recipe_id, content]) => ({ user_id: userId, recipe_id, content }));
-        if (rows.length > 0) {
-          await supabase.from("recipe_notes").upsert(rows, { onConflict: "user_id,recipe_id" });
+      const migrationKey = `${MIGRATION_FLAG_KEY}:${userId}`;
+      const alreadyMigrated = localStorage.getItem(migrationKey) === "1";
+      if (!alreadyMigrated) {
+        const localFavs = localFavoritesSet();
+        const rawNotes = localStorage.getItem(NOTES_KEY);
+        const hasLocalData = localFavs.size > 0 || !!rawNotes;
+
+        if (hasLocalData) {
+          // Favorites: only insert recipe_ids not already present remotely
+          if (localFavs.size > 0) {
+            const { data: existingFavs } = await supabase
+              .from("favorites")
+              .select("recipe_id")
+              .eq("user_id", userId);
+            const existingFavIds = new Set((existingFavs ?? []).map((r) => r.recipe_id as string));
+            const newFavRows = [...localFavs]
+              .filter((rid) => !existingFavIds.has(rid))
+              .map((recipe_id) => ({ user_id: userId, recipe_id }));
+            if (newFavRows.length > 0) {
+              await supabase.from("favorites").insert(newFavRows);
+            }
+            localStorage.removeItem(FAVORITES_KEY);
+          }
+
+          // Notes: only insert recipe_ids not already present remotely
+          if (rawNotes) {
+            const map = JSON.parse(rawNotes) as Record<string, string>;
+            const candidates = Object.entries(map).filter(
+              ([, v]) => v && v.trim().length > 0
+            );
+            if (candidates.length > 0) {
+              const { data: existingNotes } = await supabase
+                .from("recipe_notes")
+                .select("recipe_id")
+                .eq("user_id", userId);
+              const existingNoteIds = new Set(
+                (existingNotes ?? []).map((r) => r.recipe_id as string)
+              );
+              const newNoteRows = candidates
+                .filter(([recipe_id]) => !existingNoteIds.has(recipe_id))
+                .map(([recipe_id, content]) => ({ user_id: userId, recipe_id, content }));
+              if (newNoteRows.length > 0) {
+                await supabase.from("recipe_notes").insert(newNoteRows);
+              }
+            }
+            localStorage.removeItem(NOTES_KEY);
+          }
         }
-        localStorage.removeItem(NOTES_KEY);
+
+        localStorage.setItem(migrationKey, "1");
       }
     } catch {
       /* migration best-effort */
