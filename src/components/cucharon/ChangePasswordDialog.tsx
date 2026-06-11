@@ -125,7 +125,7 @@ export function ChangePasswordDialog() {
                 color: "#FFFFFF",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
-                boxShadow: "0 8px 20px -10px rgba(201,106,43,0.55)",
+                boxShadow: "0 8px 20px -10px rgba(232,93,47,0.55)",
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}

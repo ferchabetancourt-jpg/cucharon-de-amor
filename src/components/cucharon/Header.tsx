@@ -55,7 +55,7 @@ export function Header() {
                   background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                   color: "#FFFFFF",
                   fontFamily: "Montserrat, sans-serif",
-                  boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
+                  boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
                 }}
                 aria-label="Menú de usuario"
               >
@@ -97,7 +97,7 @@ export function Header() {
               color: "#FFFFFF",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 600,
-              boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
+              boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
             }}
           >
             <LogIn className="w-3.5 h-3.5" />

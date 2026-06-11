@@ -77,7 +77,7 @@ export function RecipeGenerator() {
         className="relative overflow-hidden rounded-[24px] px-5 pt-5 pb-5 md:px-7 md:pt-7 md:pb-6 mb-5 shadow-card border border-cream-deep"
         style={{
           background:
-            "radial-gradient(140% 90% at 100% 0%, rgba(201,106,43,0.10), transparent 55%), radial-gradient(120% 80% at 0% 100%, rgba(111,139,114,0.08), transparent 60%), linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%)",
+            "radial-gradient(140% 90% at 100% 0%, rgba(232,93,47,0.10), transparent 55%), radial-gradient(120% 80% at 0% 100%, rgba(94,140,74,0.08), transparent 60%), linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%)",
         }}
       >
         {/* Ilustración oficial - flotando integrada al fondo */}
@@ -153,7 +153,7 @@ export function RecipeGenerator() {
             background: "linear-gradient(135deg, #E85D2F, #A84E22)",
             fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
             fontWeight: 600,
-            boxShadow: "0 10px 24px -10px rgba(201,106,43,0.55), 0 2px 6px rgba(168,78,34,0.18)",
+            boxShadow: "0 10px 24px -10px rgba(232,93,47,0.55), 0 2px 6px rgba(168,78,34,0.18)",
           }}
         >
           <span className="text-base leading-none">🧡</span>

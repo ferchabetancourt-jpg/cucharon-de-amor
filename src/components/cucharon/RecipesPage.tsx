@@ -354,7 +354,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         className="relative overflow-hidden rounded-[20px] mb-6 px-5 pt-5 pb-6 md:px-7 md:pt-6 md:pb-7"
         style={{
           background:
-            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.05), transparent 60%)",
+            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(232,93,47,0.05), transparent 60%)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
         }}
       >
@@ -389,7 +389,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                 color: "#FFFFFF",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
-                boxShadow: "0 8px 20px -10px rgba(201,106,43,0.55)",
+                boxShadow: "0 8px 20px -10px rgba(232,93,47,0.55)",
               }}
             >
               <Plus className="w-3.5 h-3.5" /> Nueva receta
@@ -486,7 +486,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         borderColor: "#A84E22",
                         color: "#FFFFFF",
                         fontWeight: 600,
-                        boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
+                        boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {

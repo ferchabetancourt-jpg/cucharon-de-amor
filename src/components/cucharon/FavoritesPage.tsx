@@ -150,11 +150,11 @@ function FavoriteCard({
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-2xl p-5 md:p-6 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(201,106,43,0.35)]"
+        className="group relative rounded-2xl p-5 md:p-6 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(232,93,47,0.35)]"
         style={{
           background: "#FFFFFF",
           border: "1px solid #EDE8DC",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(201,106,43,0.25)",
+          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(232,93,47,0.25)",
         }}
       >
         <div className="flex items-start justify-between gap-2">
@@ -300,7 +300,7 @@ export function FavoritesPage() {
         className="relative overflow-hidden rounded-[20px] mb-7 px-5 py-6 md:px-7 md:py-7"
         style={{
           background:
-            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.06), transparent 60%)",
+            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(232,93,47,0.06), transparent 60%)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
         }}
       >
