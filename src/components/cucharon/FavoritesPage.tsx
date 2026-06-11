@@ -118,7 +118,7 @@ function RecipeDetail({
             placeholder="Anota aquí tus cambios, sustituciones o trucos personales..."
             className="w-full rounded-xl p-3.5 text-sm leading-relaxed outline-none transition-colors resize-y min-h-[120px]"
             style={{
-              background: "#FEFCF8",
+              background: "#FFF6EA",
               border: "1.5px solid #EDE8DC",
               color: "#3A2A20",
               fontFamily: "'DM Sans', system-ui, sans-serif",
@@ -150,11 +150,11 @@ function FavoriteCard({
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-2xl p-5 md:p-6 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(201,106,43,0.35)]"
+        className="group relative rounded-2xl p-5 md:p-6 transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(232,93,47,0.35)]"
         style={{
           background: "#FFFFFF",
           border: "1px solid #EDE8DC",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(201,106,43,0.25)",
+          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(232,93,47,0.25)",
         }}
       >
         <div className="flex items-start justify-between gap-2">
@@ -174,7 +174,7 @@ function FavoriteCard({
           </button>
           <span
             className="rounded-full px-2.5 py-1 text-[11px]"
-            style={{ background: "#FFF6EA", color: "#6F8B72", fontFamily: "Montserrat, sans-serif", fontWeight: 500, border: "1px solid #EDE8DC" }}
+            style={{ background: "#FFF6EA", color: "#5E8C4A", fontFamily: "Montserrat, sans-serif", fontWeight: 500, border: "1px solid #EDE8DC" }}
           >
             {catLabel}
           </span>
@@ -189,7 +189,7 @@ function FavoriteCard({
 
         <div
           className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
-          style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+          style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
         >
           {recipe.methods?.map((m, i) => {
             const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
@@ -214,7 +214,7 @@ function FavoriteCard({
             type="button"
             onClick={(e) => { e.stopPropagation(); onEdit(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center"
-            style={{ background: "#FFF6EA", color: "#6F8B72" }}
+            style={{ background: "#FFF6EA", color: "#5E8C4A" }}
             aria-label="Editar"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -300,7 +300,7 @@ export function FavoritesPage() {
         className="relative overflow-hidden rounded-[20px] mb-7 px-5 py-6 md:px-7 md:py-7"
         style={{
           background:
-            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.06), transparent 60%)",
+            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(232,93,47,0.06), transparent 60%)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
         }}
       >
@@ -314,7 +314,7 @@ export function FavoritesPage() {
             </h2>
             <p
               className="mt-2 text-[13px] md:text-[14px] italic leading-[1.5]"
-              style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+              style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
             >
               Las recetas que siempre encuentran el camino de vuelta a tu mesa.
             </p>
@@ -348,14 +348,14 @@ export function FavoritesPage() {
           </h3>
           <p
             className="text-[13.5px] max-w-sm leading-[1.7]"
-            style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
+            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             Las recetas especiales aparecerán aquí.<br />
             Marca tus preferidas tocando la estrella.
           </p>
           <p
             className="mt-7 italic text-[13px]"
-            style={{ color: "#6F8B72", fontFamily: "Playfair Display, serif" }}
+            style={{ color: "#5E8C4A", fontFamily: "Playfair Display, serif" }}
           >
             Las recetas que amas viven aquí 💛
           </p>
@@ -387,7 +387,7 @@ export function FavoritesPage() {
 
           <p
             className="text-center text-[12px] italic mt-8"
-            style={{ color: "#6F8B72", fontFamily: "Playfair Display, serif" }}
+            style={{ color: "#5E8C4A", fontFamily: "Playfair Display, serif" }}
           >
             Las recetas que amas viven aquí 💛
           </p>

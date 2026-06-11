@@ -40,7 +40,7 @@ export function Header() {
           </h1>
           <p
             className="italic text-[11.5px] md:text-[13px] mt-0.5"
-            style={{ fontFamily: "Montserrat, sans-serif", color: "#6B6257" }}
+            style={{ fontFamily: "Montserrat, sans-serif", color: "#8A6B55" }}
           >
             {user ? `Hola, ${displayName} 💛` : "Recetas que viajan por generaciones"}
           </p>
@@ -55,7 +55,7 @@ export function Header() {
                   background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                   color: "#FFFFFF",
                   fontFamily: "Montserrat, sans-serif",
-                  boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
+                  boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
                 }}
                 aria-label="Menú de usuario"
               >
@@ -70,7 +70,7 @@ export function Header() {
                     <p className="truncate text-[13px] font-semibold" style={{ color: "#3A2A20" }}>
                       {displayName}
                     </p>
-                    <p className="truncate text-[11px]" style={{ color: "#6B6257" }}>
+                    <p className="truncate text-[11px]" style={{ color: "#8A6B55" }}>
                       {user.email}
                     </p>
                   </div>
@@ -97,7 +97,7 @@ export function Header() {
               color: "#FFFFFF",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 600,
-              boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
+              boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
             }}
           >
             <LogIn className="w-3.5 h-3.5" />

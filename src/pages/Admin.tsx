@@ -55,7 +55,7 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#FEFCF8" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#FFF6EA" }}>
         <Loader2 className="w-6 h-6 animate-spin" style={{ color: "#E85D2F" }} />
       </div>
     );
@@ -63,11 +63,11 @@ export default function Admin() {
 
   if (!allowed) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ background: "#FEFCF8" }}>
+      <div className="min-h-screen flex items-center justify-center px-6" style={{ background: "#FFF6EA" }}>
         <div className="max-w-md text-center">
           <div className="text-5xl mb-3">🔒</div>
           <h1 className="font-serif text-2xl mb-2" style={{ color: "#3A2A20" }}>Acceso restringido</h1>
-          <p className="text-sm mb-5" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
+          <p className="text-sm mb-5" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
             Esta área es solo para la administradora.
           </p>
           <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm" style={{ background: "#E85D2F", color: "#fff", fontFamily: "Montserrat, sans-serif" }}>
@@ -143,17 +143,17 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#FEFCF8" }}>
+    <div className="min-h-screen" style={{ background: "#FFF6EA" }}>
       <div className="max-w-5xl mx-auto px-5 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <Link to="/" className="text-xs inline-flex items-center gap-1 mb-2" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
+            <Link to="/" className="text-xs inline-flex items-center gap-1 mb-2" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
               <ArrowLeft className="w-3 h-3" /> Volver
             </Link>
             <h1 className="font-serif text-3xl" style={{ color: "#3A2A20", fontWeight: 600 }}>
               Panel de administración
             </h1>
-            <p className="text-sm mt-1" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
+            <p className="text-sm mt-1" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
               Gestiona las cuentas de tu cocina.
             </p>
           </div>
@@ -162,7 +162,7 @@ export default function Admin() {
         <section
           className="p-6 mb-8"
           style={{
-            background: "linear-gradient(135deg, #FEFCF8 0%, #FFF6EA 100%)",
+            background: "linear-gradient(135deg, #FFF6EA 0%, #FFF6EA 100%)",
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
           }}
@@ -226,7 +226,7 @@ export default function Admin() {
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
-            <span className="text-xs" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
+            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
               {users.length} cuenta(s)
             </span>
           </div>
@@ -239,7 +239,7 @@ export default function Admin() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm" style={{ fontFamily: "Montserrat, sans-serif" }}>
                 <thead>
-                  <tr style={{ color: "#6B6257" }} className="text-[11px] uppercase tracking-wider">
+                  <tr style={{ color: "#8A6B55" }} className="text-[11px] uppercase tracking-wider">
                     <th className="py-2 pr-3">Nombre</th>
                     <th className="py-2 pr-3">Correo</th>
                     <th className="py-2 pr-3">Estado</th>
@@ -265,7 +265,7 @@ export default function Admin() {
                             {banned ? "Desactivado" : "Activo"}
                           </span>
                         </td>
-                        <td className="py-3 pr-3 text-[12px]" style={{ color: "#6B6257" }}>
+                        <td className="py-3 pr-3 text-[12px]" style={{ color: "#8A6B55" }}>
                           {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString("es") : "—"}
                         </td>
                         <td className="py-3 pr-3">
@@ -275,7 +275,7 @@ export default function Admin() {
                               disabled={busy}
                               title="Resetear contraseña"
                               className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
-                              style={{ color: "#6F8B72" }}
+                              style={{ color: "#5E8C4A" }}
                             >
                               <KeyRound className="w-4 h-4" />
                             </button>
