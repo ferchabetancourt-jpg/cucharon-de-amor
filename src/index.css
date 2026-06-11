@@ -10,19 +10,19 @@
 @layer base {
   :root {
     /* Brand palette */
-    --terracotta: 22 63% 47%;          /* #C4622D */
-    --terracotta-light: 22 73% 66%;    /* #E8956A */
-    --terracotta-deep: 18 67% 40%;     /* #A84E22 */
-    --cream: 38 71% 95%;               /* #FDF6EC */
-    --cream-deep: 38 60% 89%;          /* #F5E8D0 */
-    --verde: 128 14% 42%;              /* #5A7A5E */
-    --verde-light: 128 17% 62%;        /* #8FAF93 */
-    --verde-deep: 128 25% 32%;         /* #3D6641 */
-    --ochre: 41 60% 58%;               /* #D4A853 */
-    --ink: 36 22% 13%;                 /* #2C2416 */
-    --paper: 40 56% 98%;               /* #FEFCF8 */
-    --muted-text: 36 12% 55%;
-    --muted-text-2: 36 10% 65%;
+    --terracotta: 14 81% 55%;          /* #E85D2F */
+    --terracotta-light: 18 84% 67%;    /* #F18A63 */
+    --terracotta-deep: 14 75% 44%;     /* #C44820 */
+    --cream: 36 100% 96%;              /* #FFF6EA */
+    --cream-deep: 36 70% 90%;          /* #F7E8D2 */
+    --verde: 101 31% 42%;              /* #5E8C4A */
+    --verde-light: 101 28% 60%;        /* #88B074 */
+    --verde-deep: 101 35% 30%;         /* #466A36 */
+    --ochre: 35 88% 59%;                /* #F2A93B */
+    --ink: 21 29% 18%;                  /* #3A2A20 */
+    --paper: 36 100% 97%;               /* #FFF8EF */
+    --muted-text: 24 24% 44%;           /* #8A6B55 */
+    --muted-text-2: 24 18% 58%;
 
     /* Semantic tokens */
     --background: var(--cream);
