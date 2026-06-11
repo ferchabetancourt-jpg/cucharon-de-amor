@@ -32,6 +32,22 @@ export const CATEGORIES = [
   { key: "especiales", label: "📌 Especiales" },
 ];
 
+// Color por categoría: bar = bloque superior; chipBg/chipText = pastilla
+export const CATEGORY_STYLES: Record<string, { bar: string; chipBg: string; chipText: string }> = {
+  sopas:      { bar: "#E85D2F", chipBg: "#FBE0D4", chipText: "#A83A14" },
+  rapido:     { bar: "#F2A93B", chipBg: "#FCEACB", chipText: "#7A4E0E" },
+  cuerpo:     { bar: "#5E8C4A", chipBg: "#DCE8D3", chipText: "#3A5A2C" },
+  plan:       { bar: "#F8E3C8", chipBg: "#FBEFDC", chipText: "#7A5A30" },
+  dulce:      { bar: "#F8D8CB", chipBg: "#FCE8DF", chipText: "#A8472A" },
+  colombiano: { bar: "#E85D2F", chipBg: "#FBE0D4", chipText: "#A83A14" },
+  bases:      { bar: "#E2EDD8", chipBg: "#ECF3E4", chipText: "#3A5A2C" },
+  especiales: { bar: "#F2A93B", chipBg: "#FCEACB", chipText: "#7A4E0E" },
+};
+
+export function getCategoryStyle(key?: string) {
+  return CATEGORY_STYLES[key ?? "especiales"] ?? CATEGORY_STYLES.especiales;
+}
+
 export const COOKING_METHODS = [
   { key: "airfryer", label: "🔥 Air Fryer" },
   { key: "sarten", label: "🍳 Sartén" },
