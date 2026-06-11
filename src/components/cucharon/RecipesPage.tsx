@@ -119,7 +119,7 @@ function RecipeDetail({
             style={{
               background: "#FEFCF8",
               border: "1.5px solid #EDE8DC",
-              color: "#2F2A26",
+              color: "#3A2A20",
               fontFamily: "'DM Sans', system-ui, sans-serif",
             }}
           />
@@ -169,14 +169,14 @@ function RecipeListItem({
             }}
             aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             className="text-2xl leading-none transition-transform hover:scale-110 cursor-pointer"
-            style={{ color: isFav ? "#C96A2B" : "#D6CFC1" }}
+            style={{ color: isFav ? "#E85D2F" : "#D6CFC1" }}
           >
             {isFav ? "★" : "☆"}
           </button>
           <span
             className="rounded-full px-2.5 py-1 text-[11px]"
             style={{
-              background: "#F7F3EB",
+              background: "#FFF6EA",
               color: "#6F8B72",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 500,
@@ -190,7 +190,7 @@ function RecipeListItem({
         {/* Recipe name */}
         <h3
           className="font-serif text-[19px] md:text-[21px] leading-[1.2] mt-3 mb-3"
-          style={{ color: "#2F2A26", fontWeight: 600, letterSpacing: "-0.005em" }}
+          style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "-0.005em" }}
         >
           {recipe.name}
         </h3>
@@ -224,7 +224,7 @@ function RecipeListItem({
             type="button"
             onClick={(e) => { e.stopPropagation(); onEdit(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-            style={{ background: "#F7F3EB", color: "#6F8B72" }}
+            style={{ background: "#FFF6EA", color: "#6F8B72" }}
             aria-label="Editar receta"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -233,7 +233,7 @@ function RecipeListItem({
             type="button"
             onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
             className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-            style={{ background: "#F7F3EB", color: "#C96A2B" }}
+            style={{ background: "#FFF6EA", color: "#E85D2F" }}
             aria-label="Eliminar receta"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -354,7 +354,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         className="relative overflow-hidden rounded-[20px] mb-6 px-5 pt-5 pb-6 md:px-7 md:pt-6 md:pb-7"
         style={{
           background:
-            "linear-gradient(135deg, #F7F3EB 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.05), transparent 60%)",
+            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(201,106,43,0.05), transparent 60%)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
         }}
       >
@@ -368,7 +368,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         <div className="relative z-10 max-w-[62%] md:max-w-[65%]">
           <h2
             className="font-serif text-[26px] md:text-[30px] leading-[1.15]"
-            style={{ color: "#2F2A26", letterSpacing: "-0.005em", fontWeight: 600 }}
+            style={{ color: "#3A2A20", letterSpacing: "-0.005em", fontWeight: 600 }}
           >
             📖 Mi Recetario
           </h2>
@@ -385,7 +385,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               onClick={() => { setEditing(null); setOpenForm(true); }}
               className="mt-4 rounded-full px-4 py-2 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
               style={{
-                background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+                background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                 color: "#FFFFFF",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
@@ -409,7 +409,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           style={{
             background: "#FFFFFF",
             border: "1px solid #EDE8DC",
-            color: "#2F2A26",
+            color: "#3A2A20",
             fontFamily: "Montserrat, sans-serif",
             boxShadow: "0 1px 0 rgba(0,0,0,0.02)",
           }}
@@ -467,7 +467,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
       <div className="mb-5">
         <span
           className="block text-[10px] uppercase tracking-[0.18em] font-medium mb-2"
-          style={{ color: "#C96A2B" }}
+          style={{ color: "#E85D2F" }}
         >
           Colecciones
         </span>
@@ -482,7 +482,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                 style={
                   active
                     ? {
-                        background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+                        background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                         borderColor: "#A84E22",
                         color: "#FFFFFF",
                         fontWeight: 600,
@@ -492,7 +492,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                     : {
                         background: "#FFFFFF",
                         borderColor: "#EDE8DC",
-                        color: "#2F2A26",
+                        color: "#3A2A20",
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }

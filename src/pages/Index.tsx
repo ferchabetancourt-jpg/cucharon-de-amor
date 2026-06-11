@@ -54,7 +54,7 @@ const Index = () => {
               </div>
               <p
                 className="font-serif italic text-[22px] md:text-[26px] leading-[1.6]"
-                style={{ color: "#2F2A26" }}
+                style={{ color: "#3A2A20" }}
               >
                 Sabor sobre complejidad.<br />
                 Intención sobre perfección.<br />

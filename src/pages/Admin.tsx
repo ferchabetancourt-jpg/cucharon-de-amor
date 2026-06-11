@@ -56,7 +56,7 @@ export default function Admin() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#FEFCF8" }}>
-        <Loader2 className="w-6 h-6 animate-spin" style={{ color: "#C96A2B" }} />
+        <Loader2 className="w-6 h-6 animate-spin" style={{ color: "#E85D2F" }} />
       </div>
     );
   }
@@ -66,11 +66,11 @@ export default function Admin() {
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: "#FEFCF8" }}>
         <div className="max-w-md text-center">
           <div className="text-5xl mb-3">🔒</div>
-          <h1 className="font-serif text-2xl mb-2" style={{ color: "#2F2A26" }}>Acceso restringido</h1>
+          <h1 className="font-serif text-2xl mb-2" style={{ color: "#3A2A20" }}>Acceso restringido</h1>
           <p className="text-sm mb-5" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
             Esta área es solo para la administradora.
           </p>
-          <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm" style={{ background: "#C96A2B", color: "#fff", fontFamily: "Montserrat, sans-serif" }}>
+          <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm" style={{ background: "#E85D2F", color: "#fff", fontFamily: "Montserrat, sans-serif" }}>
             <ArrowLeft className="w-4 h-4" /> Volver al inicio
           </Link>
         </div>
@@ -138,7 +138,7 @@ export default function Admin() {
   const inputStyle: React.CSSProperties = {
     background: "#FFFFFF",
     border: "1.5px solid #EDE8DC",
-    color: "#2F2A26",
+    color: "#3A2A20",
     fontFamily: "Montserrat, sans-serif",
   };
 
@@ -150,7 +150,7 @@ export default function Admin() {
             <Link to="/" className="text-xs inline-flex items-center gap-1 mb-2" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
               <ArrowLeft className="w-3 h-3" /> Volver
             </Link>
-            <h1 className="font-serif text-3xl" style={{ color: "#2F2A26", fontWeight: 600 }}>
+            <h1 className="font-serif text-3xl" style={{ color: "#3A2A20", fontWeight: 600 }}>
               Panel de administración
             </h1>
             <p className="text-sm mt-1" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
@@ -162,13 +162,13 @@ export default function Admin() {
         <section
           className="p-6 mb-8"
           style={{
-            background: "linear-gradient(135deg, #FEFCF8 0%, #F7F3EB 100%)",
+            background: "linear-gradient(135deg, #FEFCF8 0%, #FFF6EA 100%)",
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
           }}
         >
-          <h2 className="font-serif text-lg mb-4 flex items-center gap-2" style={{ color: "#2F2A26" }}>
-            <UserPlus className="w-4 h-4" style={{ color: "#C96A2B" }} /> Crear nuevo usuario
+          <h2 className="font-serif text-lg mb-4 flex items-center gap-2" style={{ color: "#3A2A20" }}>
+            <UserPlus className="w-4 h-4" style={{ color: "#E85D2F" }} /> Crear nuevo usuario
           </h2>
           <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <input
@@ -204,7 +204,7 @@ export default function Admin() {
               disabled={busy}
               className="py-2.5 rounded-full text-[13.5px] flex items-center justify-center gap-2 disabled:opacity-60"
               style={{
-                background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+                background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                 color: "#FFFFFF",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
@@ -225,7 +225,7 @@ export default function Admin() {
           }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-lg" style={{ color: "#2F2A26" }}>Usuarios</h2>
+            <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
             <span className="text-xs" style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}>
               {users.length} cuenta(s)
             </span>
@@ -233,7 +233,7 @@ export default function Admin() {
 
           {fetching ? (
             <div className="flex justify-center py-10">
-              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#C96A2B" }} />
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -251,7 +251,7 @@ export default function Admin() {
                   {users.map((u) => {
                     const banned = u.banned_until && new Date(u.banned_until) > new Date();
                     return (
-                      <tr key={u.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#2F2A26" }}>
+                      <tr key={u.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
                         <td className="py-3 pr-3">{u.display_name || "—"}</td>
                         <td className="py-3 pr-3">{u.email}</td>
                         <td className="py-3 pr-3">
@@ -274,7 +274,7 @@ export default function Admin() {
                               onClick={() => handleReset(u)}
                               disabled={busy}
                               title="Resetear contraseña"
-                              className="p-2 rounded-full hover:bg-[#F7F3EB] disabled:opacity-50"
+                              className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
                               style={{ color: "#6F8B72" }}
                             >
                               <KeyRound className="w-4 h-4" />
@@ -284,7 +284,7 @@ export default function Admin() {
                                 onClick={() => handleActivate(u)}
                                 disabled={busy}
                                 title="Reactivar"
-                                className="p-2 rounded-full hover:bg-[#F7F3EB] disabled:opacity-50"
+                                className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
                                 style={{ color: "#3F6B43" }}
                               >
                                 <CheckCircle2 className="w-4 h-4" />

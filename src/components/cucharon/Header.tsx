@@ -34,7 +34,7 @@ export function Header() {
         <div className="flex flex-col leading-tight min-w-0 flex-1">
           <h1
             className="font-serif text-[17px] md:text-[20px] truncate"
-            style={{ color: "#2F2A26", fontWeight: 600, letterSpacing: "0.005em" }}
+            style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "0.005em" }}
           >
             Un Cucharón de Amor
           </h1>
@@ -52,7 +52,7 @@ export function Header() {
               <button
                 className="shrink-0 w-10 h-10 rounded-full inline-flex items-center justify-center text-[15px] font-semibold transition-transform hover:scale-105"
                 style={{
-                  background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+                  background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                   color: "#FFFFFF",
                   fontFamily: "Montserrat, sans-serif",
                   boxShadow: "0 6px 14px -8px rgba(201,106,43,0.55)",
@@ -67,7 +67,7 @@ export function Header() {
                 <div className="flex items-center gap-2">
                   <UserIcon className="w-3.5 h-3.5" />
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-semibold" style={{ color: "#2F2A26" }}>
+                    <p className="truncate text-[13px] font-semibold" style={{ color: "#3A2A20" }}>
                       {displayName}
                     </p>
                     <p className="truncate text-[11px]" style={{ color: "#6B6257" }}>
@@ -93,7 +93,7 @@ export function Header() {
             onClick={() => setOpenAuth(true)}
             className="shrink-0 inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[12.5px] transition-all hover:scale-[1.02] active:scale-95"
             style={{
-              background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+              background: "linear-gradient(135deg, #E85D2F, #A84E22)",
               color: "#FFFFFF",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 600,

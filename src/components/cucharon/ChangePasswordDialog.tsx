@@ -54,7 +54,7 @@ export function ChangePasswordDialog() {
         <div
           className="p-6 md:p-7"
           style={{
-            background: "linear-gradient(135deg, #FEFCF8 0%, #F7F3EB 100%)",
+            background: "linear-gradient(135deg, #FEFCF8 0%, #FFF6EA 100%)",
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
             boxShadow: "0 20px 50px -20px rgba(47,42,38,0.25)",
@@ -63,7 +63,7 @@ export function ChangePasswordDialog() {
           <div className="text-center mb-5">
             <div className="text-[40px] leading-none mb-2">🔐</div>
             <DialogTitle asChild>
-              <h2 className="font-serif text-[22px] md:text-[24px]" style={{ color: "#2F2A26", fontWeight: 600 }}>
+              <h2 className="font-serif text-[22px] md:text-[24px]" style={{ color: "#3A2A20", fontWeight: 600 }}>
                 Crea tu contraseña
               </h2>
             </DialogTitle>
@@ -90,7 +90,7 @@ export function ChangePasswordDialog() {
                 style={{
                   background: "#FFFFFF",
                   border: "1.5px solid #EDE8DC",
-                  color: "#2F2A26",
+                  color: "#3A2A20",
                   fontFamily: "Montserrat, sans-serif",
                 }}
               />
@@ -110,7 +110,7 @@ export function ChangePasswordDialog() {
                 style={{
                   background: "#FFFFFF",
                   border: "1.5px solid #EDE8DC",
-                  color: "#2F2A26",
+                  color: "#3A2A20",
                   fontFamily: "Montserrat, sans-serif",
                 }}
               />
@@ -121,7 +121,7 @@ export function ChangePasswordDialog() {
               disabled={busy}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full text-[13.5px] mt-2 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-60"
               style={{
-                background: "linear-gradient(135deg, #C96A2B, #A84E22)",
+                background: "linear-gradient(135deg, #E85D2F, #A84E22)",
                 color: "#FFFFFF",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
@@ -136,8 +136,8 @@ export function ChangePasswordDialog() {
               <div
                 className="mt-3 px-3.5 py-2.5 rounded-xl text-[12.5px] text-center leading-relaxed"
                 style={{
-                  background: "linear-gradient(135deg, #FEFCF8, #F7F3EB)",
-                  border: "1px solid #C96A2B",
+                  background: "linear-gradient(135deg, #FEFCF8, #FFF6EA)",
+                  border: "1px solid #E85D2F",
                   color: "#A84E22",
                   fontFamily: "Montserrat, sans-serif",
                 }}
