@@ -7,6 +7,7 @@ import { ArrowLeft, Trash2, Star, Pencil } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
+import { track } from "@/lib/analytics";
 import favoritaCard from "@/assets/favorita-card.png.asset.json";
 import favoritaStar from "@/assets/favorita-star.png.asset.json";
 import {
@@ -64,7 +65,11 @@ function RecipeDetail({
           </div>
           <div className="flex gap-1.5 flex-shrink-0">
             <button
-              onClick={() => recipesStore.toggleFavorite(recipe.id)}
+              onClick={() => {
+                const wasFav = recipesStore.isFavorite(recipe.id);
+                recipesStore.toggleFavorite(recipe.id);
+                if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+              }}
               className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-ochre/20 transition-colors"
               aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             >
@@ -155,7 +160,12 @@ function FavoriteCard({
         <div className="flex items-start justify-between gap-2">
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); recipesStore.toggleFavorite(recipe.id); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              const wasFav = recipesStore.isFavorite(recipe.id);
+              recipesStore.toggleFavorite(recipe.id);
+              if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+            }}
             aria-label="Quitar favorita"
             className="text-2xl leading-none transition-transform hover:scale-110"
             style={{ color: "#C96A2B" }}
@@ -368,7 +378,7 @@ export function FavoritesPage() {
               <FavoriteCard
                 key={r.id}
                 recipe={r}
-                onSelect={() => setSelected(r)}
+                onSelect={() => { track("recipe_viewed", { recipe_name: r.name }); setSelected(r); }}
                 onEdit={() => openEdit(r)}
                 onAskDelete={() => setPendingDelete(r)}
               />
