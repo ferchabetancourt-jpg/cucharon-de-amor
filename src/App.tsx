@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Admin from "./pages/Admin.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ChangePasswordDialog } from "./components/cucharon/ChangePasswordDialog";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        <ChangePasswordDialog />
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
