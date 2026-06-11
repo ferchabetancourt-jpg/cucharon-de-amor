@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cucharón de Amor — Design System
+   Warm, intentional, kitchen-companion vibes.
+   All colors HSL.
+*/
+
+@layer base {
+  :root {
+    /* Brand palette */
+    --terracotta: 22 63% 47%;          /* #C4622D */
+    --terracotta-light: 22 73% 66%;    /* #E8956A */
+    --terracotta-deep: 18 67% 40%;     /* #A84E22 */
+    --cream: 38 71% 95%;               /* #FDF6EC */
+    --cream-deep: 38 60% 89%;          /* #F5E8D0 */
+    --verde: 128 14% 42%;              /* #5A7A5E */
+    --verde-light: 128 17% 62%;        /* #8FAF93 */
+    --verde-deep: 128 25% 32%;         /* #3D6641 */
+    --ochre: 41 60% 58%;               /* #D4A853 */
+    --ink: 36 22% 13%;                 /* #2C2416 */
+    --paper: 40 56% 98%;               /* #FEFCF8 */
+    --muted-text: 36 12% 55%;
+    --muted-text-2: 36 10% 65%;
+
+    /* Semantic tokens */
+    --background: var(--cream);
+    --foreground: var(--ink);
+
+    --card: var(--paper);
+    --card-foreground: var(--ink);
+
+    --popover: var(--paper);
+    --popover-foreground: var(--ink);
+
+    --primary: var(--terracotta);
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--verde);
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: var(--cream-deep);
+    --muted-foreground: var(--muted-text);
+
+    --accent: var(--ochre);
+    --accent-foreground: var(--ink);
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: var(--cream-deep);
+    --input: var(--cream-deep);
+    --ring: var(--terracotta-light);
+
+    --radius: 0.95rem;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(var(--terracotta)), hsl(var(--terracotta-light)));
+    --gradient-deep: linear-gradient(145deg, hsl(var(--terracotta)), hsl(var(--terracotta-deep)));
+    --gradient-verde: linear-gradient(135deg, hsl(var(--verde)), hsl(var(--verde-deep)));
+    --gradient-mood: linear-gradient(135deg, hsl(22 100% 96%), hsl(22 100% 92%));
+
+    /* Shadows */
+    --shadow-soft: 0 3px 18px hsl(var(--ink) / 0.08);
+    --shadow-card: 0 3px 14px hsl(var(--ink) / 0.07);
+    --shadow-warm: 0 5px 16px hsl(var(--terracotta) / 0.25);
+    --shadow-nav: 0 2px 10px hsl(var(--ink) / 0.06);
+
+    /* Motion */
+    --ease-spring: cubic-bezier(.32,.72,0,1);
+
+    /* Sidebar (kept for shadcn compat) */
+    --sidebar-background: var(--paper);
+    --sidebar-foreground: var(--ink);
+    --sidebar-primary: var(--terracotta);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: var(--cream-deep);
+    --sidebar-accent-foreground: var(--ink);
+    --sidebar-border: var(--cream-deep);
+    --sidebar-ring: var(--terracotta-light);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    background-image:
+      radial-gradient(circle at 12% 18%, hsl(var(--ochre) / 0.05) 0 2px, transparent 3px),
+      radial-gradient(circle at 78% 32%, hsl(var(--verde) / 0.045) 0 1.5px, transparent 3px),
+      radial-gradient(circle at 38% 72%, hsl(var(--terracotta) / 0.04) 0 2px, transparent 3px),
+      radial-gradient(circle at 88% 88%, hsl(var(--ochre) / 0.05) 0 1.5px, transparent 3px);
+    background-size: 220px 220px;
+  }
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+
+@layer utilities {
+  .bg-gradient-warm { background: var(--gradient-warm); }
+  .bg-gradient-deep { background: var(--gradient-deep); }
+  .bg-gradient-verde { background: var(--gradient-verde); }
+  .bg-gradient-mood { background: var(--gradient-mood); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-warm { box-shadow: var(--shadow-warm); }
+  .shadow-nav { box-shadow: var(--shadow-nav); }
+}
+
+@layer components {
+  .float-spoon {
+    animation: float-spoon 3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes float-spoon {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-7px) rotate(5deg); }
+  }
+  .dot-bounce {
+    animation: dot-bounce 1.2s infinite;
+  }
+  @keyframes dot-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-9px); }
+  }
+
+  .animate-logo-entrance {
+    animation: logo-entrance 1.2s ease-out 0.2s both;
+  }
+  @keyframes logo-entrance {
+    0% { opacity: 0; transform: scale(0.8) rotate(-5deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out both;
+  }
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-ellipsis::after {
+    content: '';
+    display: inline-block;
+    width: 1.2em;
+    text-align: left;
+    animation: ellipsis-dots 1.4s steps(4, end) infinite;
+  }
+  @keyframes ellipsis-dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+    100% { content: ''; }
+  }
+
+  .spoon-spin {
+    display: inline-block;
+    animation: spoon-spin 1.6s cubic-bezier(.5,.1,.5,.9) infinite;
+    transform-origin: 50% 60%;
+  }
+  @keyframes spoon-spin {
+    0%, 100% { transform: rotate(-18deg) translateY(0); }
+    50% { transform: rotate(18deg) translateY(-3px); }
+  }
+}
+

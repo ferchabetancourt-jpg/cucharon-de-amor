@@ -1,0 +1,43 @@
+import { ChefHat, BookOpen, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type Tab = "chef" | "recipes" | "favorites";
+
+interface NavBarProps {
+  active: Tab;
+  onChange: (tab: Tab) => void;
+  recipeCount: number;
+  favoriteCount: number;
+}
+
+export function NavBar({ active, onChange, recipeCount, favoriteCount }: NavBarProps) {
+  const tabBtn = (key: Tab, label: string, Icon: typeof ChefHat, count?: number) => (
+    <button
+      onClick={() => onChange(key)}
+      className={cn(
+        "flex-1 py-3.5 px-2 text-[13px] font-medium flex items-center justify-center gap-1.5 border-b-[3px] transition-colors",
+        active === key
+          ? "text-terracotta border-terracotta"
+          : "text-muted-foreground border-transparent hover:text-ink"
+      )}
+    >
+      <Icon className="w-4 h-4" />
+      {label}
+      {typeof count === "number" && (
+        <span className="bg-terracotta text-primary-foreground rounded-full px-1.5 py-px text-[11px] leading-none ml-0.5">
+          {count}
+        </span>
+      )}
+    </button>
+  );
+
+  return (
+    <nav className="sticky top-0 z-40 bg-paper border-b border-border shadow-nav">
+      <div className="max-w-[720px] mx-auto flex">
+        {tabBtn("chef", "Chef", ChefHat)}
+        {tabBtn("recipes", "Mis Recetas", BookOpen, recipeCount)}
+        {tabBtn("favorites", "Favoritos", Star, favoriteCount)}
+      </div>
+    </nav>
+  );
+}
