@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CATEGORIES, COOKING_METHODS } from "@/lib/cucharon-data";
+import { CATEGORIES, COOKING_METHODS, getCategoryStyle } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { cn } from "@/lib/utils";
