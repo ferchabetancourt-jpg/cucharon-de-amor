@@ -27,11 +27,12 @@ Deno.serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     if (!token) return json({ error: "No autorizado" }, 401);
 
-    const userClient = createClient(SUPABASE_URL, ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${token}` } },
-    });
-    const { data: userData, error: userErr } = await userClient.auth.getUser();
-    if (userErr || !userData.user) return json({ error: "No autorizado" }, 401);
+    const userClient = createClient(SUPABASE_URL, ANON_KEY);
+    const { data: userData, error: userErr } = await userClient.auth.getUser(token);
+    if (userErr || !userData.user) {
+      console.error("getUser error:", userErr?.message);
+      return json({ error: "Sesión expirada. Cierra sesión y vuelve a entrar." }, 401);
+    }
     if (userData.user.email?.toLowerCase() !== ADMIN_EMAIL) {
       return json({ error: "Acceso restringido" }, 403);
     }
