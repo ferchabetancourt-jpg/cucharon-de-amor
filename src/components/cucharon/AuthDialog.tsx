@@ -11,51 +11,29 @@ interface Props {
 }
 
 export function AuthDialog({ open, onClose }: Props) {
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
 
   const reset = () => {
     setEmail("");
     setPassword("");
-    setName("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin,
-            data: { display_name: name.trim() || email.split("@")[0] },
-          },
-        });
-        if (error) throw error;
-        toast.success("¡Bienvenida a la cocina! 🍳");
-        reset();
-        onClose();
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Hola de nuevo 💛");
-        reset();
-        onClose();
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      toast.success("Hola de nuevo 💛");
+      reset();
+      onClose();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Algo salió mal";
       const friendly =
         msg.includes("Invalid login")
           ? "Correo o contraseña incorrectos"
-          : msg.includes("already registered") || msg.includes("already been registered")
-          ? "Este correo ya está registrado. Inicia sesión."
-          : msg.includes("Password should be")
-          ? "La contraseña debe tener al menos 6 caracteres"
           : msg;
       toast.error(friendly);
     } finally {
@@ -107,7 +85,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="font-serif text-[22px] md:text-[24px]"
                 style={{ color: "#2F2A26", fontWeight: 600 }}
               >
-                {mode === "login" ? "Bienvenida de vuelta" : "Únete a la cocina"}
+                Bienvenida de vuelta
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
@@ -115,9 +93,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="text-[13px] mt-1 italic"
                 style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
               >
-                {mode === "login"
-                  ? "Tus recetas y favoritos te están esperando"
-                  : "Guarda tus favoritos y notas en cualquier dispositivo"}
+                Tus recetas y favoritos te están esperando
               </p>
             </DialogDescription>
           </div>
@@ -156,26 +132,6 @@ export function AuthDialog({ open, onClose }: Props) {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
-            {mode === "signup" && (
-              <div>
-                <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
-                  ¿Cómo te llamamos?
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Tu nombre"
-                  className="w-full px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8DC",
-                    color: "#2F2A26",
-                    fontFamily: "Montserrat, sans-serif",
-                  }}
-                />
-              </div>
-            )}
             <div>
               <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#6F8B72" }}>
                 Correo
@@ -229,7 +185,7 @@ export function AuthDialog({ open, onClose }: Props) {
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              {mode === "login" ? "Entrar" : "Crear cuenta"}
+              Entrar
             </button>
           </form>
 
@@ -237,15 +193,7 @@ export function AuthDialog({ open, onClose }: Props) {
             className="text-center text-[12.5px] mt-4"
             style={{ color: "#6B6257", fontFamily: "Montserrat, sans-serif" }}
           >
-            {mode === "login" ? "¿Aún no tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
-            <button
-              type="button"
-              onClick={() => setMode(mode === "login" ? "signup" : "login")}
-              className="font-semibold underline-offset-2 hover:underline"
-              style={{ color: "#C96A2B" }}
-            >
-              {mode === "login" ? "Crea una" : "Inicia sesión"}
-            </button>
+            El registro es solo por invitación. Pide acceso a la administradora.
           </p>
         </div>
       </DialogContent>
