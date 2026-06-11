@@ -33,7 +33,7 @@ export function AuthDialog({ open, onClose }: Props) {
       const msg = err instanceof Error ? err.message : "Algo salió mal";
       const friendly =
         msg.includes("Invalid login")
-          ? "Correo o contraseña incorrectos"
+          ? "Acceso solo por invitación. Contacta a la administradora."
           : msg;
       toast.error(friendly);
     } finally {
