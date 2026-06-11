@@ -7,6 +7,7 @@ import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil } from "luci
 import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
+import { track } from "@/lib/analytics";
 import recetarioBook from "@/assets/recetario-book.png";
 import {
   AlertDialog,
@@ -63,7 +64,11 @@ function RecipeDetail({
           </div>
           <div className="flex gap-1.5 flex-shrink-0">
             <button
-              onClick={() => recipesStore.toggleFavorite(recipe.id)}
+              onClick={() => {
+                const wasFav = recipesStore.isFavorite(recipe.id);
+                recipesStore.toggleFavorite(recipe.id);
+                if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+              }}
               className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-ochre/20 transition-colors"
               aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             >
@@ -158,7 +163,9 @@ function RecipeListItem({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              const wasFav = recipesStore.isFavorite(recipe.id);
               recipesStore.toggleFavorite(recipe.id);
+              if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
             }}
             aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             className="text-2xl leading-none transition-transform hover:scale-110 cursor-pointer"
@@ -253,6 +260,13 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
   useEffect(() => {
     if (initialCategory) setCat(initialCategory);
   }, [initialCategory]);
+
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) return;
+    const t = setTimeout(() => track("recipe_search", { query: q }), 600);
+    return () => clearTimeout(t);
+  }, [query]);
 
   const toggleMethod = (k: string) =>
     setMethods((m) => (m.includes(k) ? m.filter((x) => x !== k) : [...m, k]));
@@ -522,7 +536,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
             <RecipeListItem
               key={r.id}
               recipe={r}
-              onSelect={() => setSelected(r)}
+              onSelect={() => { track("recipe_viewed", { recipe_name: r.name }); setSelected(r); }}
               onEdit={() => openEdit(r)}
               onAskDelete={() => setPendingDelete(r)}
             />

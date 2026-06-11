@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { recipesStore } from "@/lib/recipes-store";
+import { identifyUser, track } from "@/lib/analytics";
 
 type AuthCtx = {
   user: User | null;
@@ -24,12 +25,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Listener first (sync only — defer async work)
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, sess) => {
       setSession(sess);
       setUser(sess?.user ?? null);
       const uid = sess?.user?.id ?? null;
       setTimeout(() => {
         recipesStore.setUser(uid).catch(() => {});
+        if (event === "SIGNED_IN" && sess?.user?.email) {
+          identifyUser(sess.user.email);
+          track("user_login", { email: sess.user.email });
+        } else if (event === "SIGNED_OUT") {
+          identifyUser(null);
+        }
       }, 0);
     });
 
@@ -38,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(data.session?.user ?? null);
       const uid = data.session?.user?.id ?? null;
       recipesStore.setUser(uid).catch(() => {});
+      if (data.session?.user?.email) identifyUser(data.session.user.email);
       setLoading(false);
     });
 

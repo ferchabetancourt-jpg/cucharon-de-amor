@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Save, Leaf, Refrigerator } from "lucide-react";
 import heroPot from "@/assets/hero-pot.png";
+import { track } from "@/lib/analytics";
 
 type GeneratedRecipe = {
   nombre: string;
@@ -34,6 +35,11 @@ export function RecipeGenerator() {
     }
     setLoading(true);
     setRecipe(null);
+    track("ingredient_assistant_used", {
+      ingredients: ingredients.trim(),
+      mood,
+      preferences: prefs,
+    });
     try {
       const { data, error } = await supabase.functions.invoke("generate-recipe", {
         body: { ingredient: ingredients.trim(), mood, prefs },
