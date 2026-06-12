@@ -4,7 +4,7 @@ import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil } from "lucide-react";
+import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil, SlidersHorizontal } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
@@ -275,6 +275,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
   const [editing, setEditing] = useState<SavedRecipe | null>(null);
   const [selected, setSelected] = useState<SavedRecipe | null>(null);
   const [pendingDelete, setPendingDelete] = useState<SavedRecipe | null>(null);
+  const [showMethodFilter, setShowMethodFilter] = useState(false);
 
   useEffect(() => {
     if (initialCategory) setCat(initialCategory);
@@ -371,27 +372,30 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
     <>
       {/* Header recetario emocional */}
       <section
-        className="relative overflow-hidden rounded-[24px] mb-8 px-5 pt-8 pb-9 md:px-9 md:pt-12 md:pb-14"
+        className="relative overflow-hidden rounded-[32px] mb-6 px-5 pt-7 pb-7 md:px-9 md:pt-10 md:pb-10"
         style={{
-          background: "#FFF6EA",
+          background:
+            "radial-gradient(120% 80% at 100% 0%, rgba(232,93,47,0.18), transparent 55%), linear-gradient(135deg, #3A2A20 0%, #4D3A2C 100%)",
+          boxShadow: "0 20px 50px -20px rgba(58,42,32,0.45)",
         }}
       >
         <img
           src={cucharonSopa.url}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[260px] h-auto object-contain"
+          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[240px] h-auto object-contain"
+          style={{ filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.35))" }}
         />
         <div className="relative z-10 max-w-[62%] md:max-w-[65%]">
           <h2
-            className="font-serif text-[30px] md:text-[44px] leading-[1.08]"
-            style={{ color: "#3A2A20", letterSpacing: "-0.015em", fontWeight: 600 }}
+            className="font-serif text-[28px] md:text-[40px] leading-[1.08]"
+            style={{ color: "#FFF6EA", letterSpacing: "-0.015em", fontWeight: 600 }}
           >
             ¿Qué te provoca hoy?
           </h2>
           <p
             className="mt-3 text-[14px] md:text-[16px] italic leading-[1.5]"
-            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
+            style={{ color: "#C9B5A4", fontFamily: "Montserrat, sans-serif" }}
           >
             {favoritesOnly
               ? "Las recetas que más quieres, siempre a mano."
@@ -415,71 +419,98 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         </div>
       </section>
 
-      <div className="relative mb-4">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" style={{ color: "#8A6B55" }} />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Busca una receta, ingrediente o recuerdo…"
-          className="w-full py-3 pl-11 pr-10 rounded-full text-[13.5px] outline-none transition-colors"
-          style={{
-            background: "#FFFFFF",
-            border: "1px solid #EDE8DC",
-            color: "#3A2A20",
-            fontFamily: "Montserrat, sans-serif",
-            boxShadow: "0 1px 0 rgba(0,0,0,0.02)",
-          }}
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            aria-label="Limpiar búsqueda"
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 inline-flex items-center justify-center rounded-full bg-cream-deep text-ink hover:bg-terracotta hover:text-primary-foreground transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
-        )}
-      </div>
-
-      <div className="mb-5">
-        <div className="flex items-center justify-between mb-2">
-          <span
-            className="text-[10px] uppercase tracking-[0.18em] font-medium"
-            style={{ color: "#5E8C4A" }}
-          >
-            Método de cocción
-          </span>
-          {methods.length > 0 && (
+      <div className="flex items-center gap-2 mb-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#8A6B55" }} />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Busca una receta, ingrediente o recuerdo…"
+            className="w-full py-3 pl-11 pr-10 rounded-full text-[13.5px] outline-none transition-colors"
+            style={{
+              background: "#FFFFFF",
+              border: "1px solid #EDE8DC",
+              color: "#3A2A20",
+              fontFamily: "Montserrat, sans-serif",
+              boxShadow: "0 1px 0 rgba(0,0,0,0.02)",
+            }}
+          />
+          {query && (
             <button
-              onClick={() => setMethods([])}
-              className="text-[11px] font-medium inline-flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors"
-              style={{ background: "#EDE8DC", color: "#8A6B55" }}
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Limpiar búsqueda"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 inline-flex items-center justify-center rounded-full bg-cream-deep text-ink hover:bg-terracotta hover:text-primary-foreground transition-colors"
             >
-              <X className="w-3 h-3" /> Limpiar
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          {COOKING_METHODS.map((m) => (
-            <button
-              key={m.key}
-              onClick={() => toggleMethod(m.key)}
-              className={cn(
-                "rounded-full px-3.5 py-1.5 text-[12px] transition-all border",
-              )}
-              style={
-                methods.includes(m.key)
-                  ? { background: "#E85D2F", borderColor: "#E85D2F", color: "#FFF6EA", fontWeight: 600, fontFamily: "Montserrat, sans-serif" }
-                  : { background: "#FFFFFF", borderColor: "#EAD9C4", color: "#3A2A20", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }
-              }
+        <button
+          type="button"
+          onClick={() => setShowMethodFilter((v) => !v)}
+          className="relative shrink-0 rounded-full inline-flex items-center gap-1.5 px-4 py-3 text-[13px] transition-all"
+          style={
+            showMethodFilter || methods.length > 0
+              ? { background: "#E85D2F", color: "#FFF6EA", border: "1px solid #E85D2F", fontWeight: 600, fontFamily: "Montserrat, sans-serif" }
+              : { background: "#FFFFFF", color: "#3A2A20", border: "1px solid #EDE8DC", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }
+          }
+          aria-label="Filtrar"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span>Filtrar</span>
+          {methods.length > 0 && (
+            <span
+              className="ml-0.5 inline-flex items-center justify-center text-[10px] rounded-full w-4 h-4"
+              style={{ background: "#FFF6EA", color: "#E85D2F", fontWeight: 700 }}
             >
-              {stripEmoji(m.label)}
-            </button>
-          ))}
-        </div>
+              {methods.length}
+            </span>
+          )}
+        </button>
       </div>
+
+      {showMethodFilter && (
+        <div
+          className="mb-5 rounded-2xl p-3.5"
+          style={{ background: "#FFFFFF", border: "1px solid #EDE8DC" }}
+        >
+          <div className="flex items-center justify-between mb-2.5">
+            <span
+              className="text-[10px] uppercase tracking-[0.18em] font-medium"
+              style={{ color: "#5E8C4A" }}
+            >
+              Método de cocción
+            </span>
+            {methods.length > 0 && (
+              <button
+                onClick={() => setMethods([])}
+                className="text-[11px] font-medium inline-flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors"
+                style={{ background: "#EDE8DC", color: "#8A6B55" }}
+              >
+                <X className="w-3 h-3" /> Limpiar
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {COOKING_METHODS.map((m) => (
+              <button
+                key={m.key}
+                onClick={() => toggleMethod(m.key)}
+                className="rounded-full px-3.5 py-1.5 text-[12px] transition-all border"
+                style={
+                  methods.includes(m.key)
+                    ? { background: "#E85D2F", borderColor: "#E85D2F", color: "#FFF6EA", fontWeight: 600, fontFamily: "Montserrat, sans-serif" }
+                    : { background: "#FFFFFF", borderColor: "#EAD9C4", color: "#3A2A20", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }
+                }
+              >
+                {stripEmoji(m.label)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mb-5">
         <span
@@ -488,14 +519,17 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         >
           Colecciones
         </span>
-        <div className="flex flex-wrap gap-2">
+        <div
+          className="flex gap-2 overflow-x-auto flex-nowrap -mx-5 px-5 pb-1"
+          style={{ scrollbarWidth: "none" }}
+        >
           {CATEGORIES.map((c) => {
             const active = cat === c.key;
             return (
               <button
                 key={c.key}
                 onClick={() => setCat(c.key)}
-                className="rounded-full px-3.5 py-1.5 text-[12.5px] transition-all border"
+                className="shrink-0 rounded-full px-3.5 py-1.5 text-[12.5px] transition-all border whitespace-nowrap"
                 style={
                   active
                     ? {
