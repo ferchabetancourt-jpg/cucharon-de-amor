@@ -364,6 +364,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           onBack={() => setSelected(null)}
           onEdit={() => openEdit(fresh)}
           onAskDelete={() => setPendingDelete(fresh)}
+          isAdmin={isAdmin}
         />
         <RecipeFormModal open={openForm} onClose={closeForm} editing={editing} />
         {deleteDialog}
