@@ -72,7 +72,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="font-serif text-[22px] md:text-[24px]"
                 style={{ color: "#3A2A20", fontWeight: 600 }}
               >
-                Bienvenida de vuelta
+                Bienvenid@ de vuelta
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
@@ -80,7 +80,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="text-[13px] mt-1 italic"
                 style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
               >
-                Tus recetas y favoritos te están esperando
+                Recetas que viajan por generaciones
               </p>
             </DialogDescription>
           </div>
