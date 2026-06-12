@@ -576,6 +576,7 @@ export const SEED_RECIPES: SavedRecipe[] = [
 2. Pica finamente todos los ingredientes y mezcla.
 3. Agrega el perejil y el jugo de limón al final.
 4. Mezcla bien y sirve.`,
+    story: `El tabule entró a casa por una vecina libanesa que nos abrió su cocina como quien abre el corazón. Nos enseñó que picar el perejil con paciencia es parte de la receta, y que comerlo en familia, con pan caliente, sabe a hogar prestado que termina siendo propio.`,
     createdAt: 29,
   },
   {
