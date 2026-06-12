@@ -484,7 +484,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               style={
                 methods.includes(m.key)
                   ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: SOLID_CHIP_STYLES[i % 3].bg, borderColor: SOLID_CHIP_STYLES[i % 3].bg, color: SOLID_CHIP_STYLES[i % 3].text }
+                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
               }
             >
               {m.label}
@@ -519,9 +519,9 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: SOLID_CHIP_STYLES[i % 3].bg,
-                        borderColor: SOLID_CHIP_STYLES[i % 3].bg,
-                        color: SOLID_CHIP_STYLES[i % 3].text,
+                        background: SOFT_CHIP_STYLES[i % 3].bg,
+                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
+                        color: SOFT_CHIP_STYLES[i % 3].text,
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
