@@ -217,7 +217,7 @@ export function RecipeGenerator() {
         </h3>
         <div className="grid grid-cols-3 gap-2.5">
           {MOODS.map((m, i) => {
-            const bg = MOOD_BG[i % MOOD_BG.length];
+            const accent = MOOD_ACCENTS[i % MOOD_ACCENTS.length];
             const selected = mood === m.key;
             return (
               <button
@@ -228,20 +228,21 @@ export function RecipeGenerator() {
                   selected ? "ring-2 ring-[#E85D2F]" : ""
                 )}
                 style={{
-                  background: bg,
+                  background: "#FFFFFF",
                   boxShadow: selected
                     ? "0 8px 18px -8px rgba(232,93,47,0.45)"
                     : "0 2px 6px rgba(58,42,32,0.08)",
-                  border: "none",
+                  border: "1px solid rgba(58,42,32,0.08)",
                 }}
               >
-                <img
-                  src={MOOD_PHOTOS[m.key]}
-                  alt=""
-                  aria-hidden
-                  loading="lazy"
-                  className="w-14 h-14 object-contain"
-                />
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ background: `${accent}14` }}
+                >
+                  <span style={{ color: accent, fontSize: 22, lineHeight: 1 }}>
+                    {m.icon ?? "•"}
+                  </span>
+                </div>
                 <span className="text-[11.5px] font-medium leading-tight" style={{ color: "#3A2A20" }}>
                   {m.label}
                 </span>
