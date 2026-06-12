@@ -32,12 +32,12 @@ const MOOD_PHOTOS: Record<string, string> = {
   sorpresa: moodSorpresa.url,
 };
 
-const MOOD_BG = ["#F8D8CB", "#F8E3C8", "#E2EDD8"];
 const CHIP_PALETTE = [
-  { bg: "#F8D8CB", text: "#A83A14" },
-  { bg: "#F8E3C8", text: "#7A4E0E" },
-  { bg: "#E2EDD8", text: "#3A5A2C" },
+  { bg: "#E85D2F", text: "#FFFFFF" }, // papaya
+  { bg: "#F2A93B", text: "#3A2A20" }, // golden honey
+  { bg: "#5E8C4A", text: "#FFFFFF" }, // olive green
 ];
+const MOOD_ACCENTS = ["#5E8C4A", "#E85D2F", "#F2A93B"];
 
 export function RecipeGenerator() {
   const [mood, setMood] = useState<MoodKey | null>(null);
