@@ -82,7 +82,7 @@ function RecipeDetail({
               className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-ochre/20 transition-colors"
               aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             >
-              <Star className={cn("w-4 h-4", isFav ? "fill-ochre text-ochre" : "text-muted-foreground")} />
+              <Star className={cn("w-4 h-4", isFav ? "fill-[#E85D2F] text-[#E85D2F]" : "text-muted-foreground")} />
             </button>
             {isAdmin && (
               <button
@@ -415,8 +415,8 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               onClick={() => { setEditing(null); setOpenForm(true); }}
               className="mt-4 rounded-full px-4 py-2 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
               style={{
-                background: "linear-gradient(135deg, #E85D2F, #A84E22)",
-                color: "#FFFFFF",
+                background: "#E85D2F",
+                color: "#FFF6EA",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
                 boxShadow: "0 8px 20px -10px rgba(232,93,47,0.55)",
@@ -497,7 +497,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
       <div className="mb-5">
         <span
           className="block text-[10px] uppercase tracking-[0.18em] font-medium mb-2"
-          style={{ color: "#E85D2F" }}
+          style={{ color: "#5E8C4A" }}
         >
           Colecciones
         </span>
