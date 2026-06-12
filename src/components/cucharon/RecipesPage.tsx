@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
-const SOLID_CHIP_STYLES = [
-  { bg: "#E85D2F", text: "#FFF6EA" },
-  { bg: "#F2A93B", text: "#3A2A20" },
-  { bg: "#5E8C4A", text: "#FFF6EA" },
+const SOFT_CHIP_STYLES = [
+  { bg: "#F8D8CB", text: "#7A2E12" },
+  { bg: "#F8E3C8", text: "#7A4E0E" },
+  { bg: "#E2EDD8", text: "#2F4A1F" },
 ];
 
 function RecipeDetail({
@@ -169,21 +169,14 @@ function RecipeListItem({
         onClick={onSelect}
         className="group relative rounded-[24px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
         style={{
-          background: "#FFFFFF",
-          border: "1px solid #EDE8DC",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(47,42,38,0.15)",
+          background: "#FFFDF9",
+          border: "1px solid #F2ECE0",
+          boxShadow: "0 1px 2px rgba(47,42,38,0.04), 0 4px 14px -10px rgba(47,42,38,0.10)",
         }}
       >
-        {/* Bloque de color superior según categoría */}
-        <div
-          aria-hidden
-          className="h-20 md:h-24 w-full"
-          style={{ background: catStyle.bar }}
-        />
-
         <div className="p-5 md:p-6">
           {/* Top row: star + category badge */}
-          <div className="flex items-start justify-between gap-2 -mt-2">
+          <div className="flex items-start justify-between gap-2">
             <button
               type="button"
               onClick={(e) => {
@@ -381,28 +374,26 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
     <>
       {/* Header recetario emocional */}
       <section
-        className="relative overflow-hidden rounded-[20px] mb-6 px-5 pt-5 pb-6 md:px-7 md:pt-6 md:pb-7"
+        className="relative overflow-hidden rounded-[24px] mb-8 px-5 pt-8 pb-9 md:px-9 md:pt-12 md:pb-14"
         style={{
-          background:
-            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(232,93,47,0.05), transparent 60%)",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
+          background: "#FFF6EA",
         }}
       >
         <img
           src={cucharonSopa.url}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-2 md:right-4 w-[150px] md:w-[200px] h-auto object-contain"
+          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[260px] h-auto object-contain"
         />
         <div className="relative z-10 max-w-[62%] md:max-w-[65%]">
           <h2
-            className="font-serif text-[26px] md:text-[30px] leading-[1.15]"
-            style={{ color: "#3A2A20", letterSpacing: "-0.005em", fontWeight: 600 }}
+            className="font-serif text-[30px] md:text-[44px] leading-[1.08]"
+            style={{ color: "#3A2A20", letterSpacing: "-0.015em", fontWeight: 600 }}
           >
-            Mi Recetario
+            ¿Qué te provoca hoy?
           </h2>
           <p
-            className="mt-1.5 text-[13px] md:text-[14px] italic leading-[1.5]"
+            className="mt-3 text-[14px] md:text-[16px] italic leading-[1.5]"
             style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             {favoritesOnly
@@ -412,7 +403,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           {!favoritesOnly && (
             <button
               onClick={() => { setEditing(null); setOpenForm(true); }}
-              className="mt-4 rounded-full px-4 py-2 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
+              className="mt-6 rounded-full px-5 py-2.5 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
               style={{
                 background: "#E85D2F",
                 color: "#FFF6EA",
@@ -484,7 +475,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               style={
                 methods.includes(m.key)
                   ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: SOLID_CHIP_STYLES[i % 3].bg, borderColor: SOLID_CHIP_STYLES[i % 3].bg, color: SOLID_CHIP_STYLES[i % 3].text }
+                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
               }
             >
               {m.label}
@@ -519,9 +510,9 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: SOLID_CHIP_STYLES[i % 3].bg,
-                        borderColor: SOLID_CHIP_STYLES[i % 3].bg,
-                        color: SOLID_CHIP_STYLES[i % 3].text,
+                        background: SOFT_CHIP_STYLES[i % 3].bg,
+                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
+                        color: SOFT_CHIP_STYLES[i % 3].text,
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
