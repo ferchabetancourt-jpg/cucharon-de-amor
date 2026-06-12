@@ -11,6 +11,8 @@ export type SavedRecipe = {
   ingredients?: string;
   preparation?: string;
   notes?: string;
+  story?: string;
+  image?: string;
   createdAt: number;
 };
 

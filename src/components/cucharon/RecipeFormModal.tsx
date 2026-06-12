@@ -19,6 +19,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
   const [ingredients, setIngredients] = useState("");
   const [preparation, setPreparation] = useState("");
   const [notes, setNotes] = useState("");
+  const [story, setStory] = useState("");
 
   useEffect(() => {
     if (open) {
@@ -30,6 +31,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
         setIngredients(editing.ingredients ?? "");
         setPreparation(editing.preparation ?? "");
         setNotes(editing.notes ?? "");
+        setStory(editing.story ?? "");
       } else {
         setName(initial?.name ?? "");
         setCategory(initial?.category ?? "especiales");
@@ -38,6 +40,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
         setIngredients(initial?.ingredients ?? "");
         setPreparation(initial?.preparation ?? "");
         setNotes(initial?.notes ?? "");
+        setStory(initial?.story ?? "");
       }
     }
   }, [open, editing, initial]);
@@ -64,6 +67,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
       ingredients: ingredients.trim() || undefined,
       preparation: preparation.trim() || undefined,
       notes: notes.trim() || undefined,
+      story: story.trim() || undefined,
     };
     if (editing) {
       recipesStore.update(editing.id, payload);
@@ -191,6 +195,17 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
+            className="w-full px-3.5 py-2.5 border-2 border-input rounded-xl bg-cream text-sm outline-none resize-y focus:border-terracotta-light transition-colors"
+          />
+
+          <label className="block text-[11px] font-medium text-verde uppercase tracking-[0.08em] mb-1.5 mt-3">
+            Historia
+          </label>
+          <textarea
+            value={story}
+            onChange={(e) => setStory(e.target.value)}
+            rows={3}
+            placeholder="¿De dónde viene esta receta? ¿Quién te la enseñó?"
             className="w-full px-3.5 py-2.5 border-2 border-input rounded-xl bg-cream text-sm outline-none resize-y focus:border-terracotta-light transition-colors"
           />
 

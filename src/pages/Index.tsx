@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavBar } from "@/components/cucharon/NavBar";
 import { Header } from "@/components/cucharon/Header";
 import { InspirationCard } from "@/components/cucharon/InspirationCard";
@@ -13,9 +13,22 @@ import { WelcomeScreen } from "@/components/cucharon/WelcomeScreen";
 const Index = () => {
   const [tab, setTab] = useState<"chef" | "recipes" | "favorites">("chef");
   const [initialCat, setInitialCat] = useState<string | undefined>(undefined);
+  const [initialRecipeId, setInitialRecipeId] = useState<string | undefined>(undefined);
   const recipes = useRecipes();
   const favoriteCount = recipes.filter((r) => recipesStore.isFavorite(r.id)).length;
   const { user, loading } = useAuth();
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ recipeId?: string }>).detail;
+      if (!detail?.recipeId) return;
+      setInitialCat(undefined);
+      setInitialRecipeId(detail.recipeId);
+      setTab("recipes");
+    };
+    window.addEventListener("cucharon:open-recipe", handler as EventListener);
+    return () => window.removeEventListener("cucharon:open-recipe", handler as EventListener);
+  }, []);
 
   if (loading) {
     return <div className="min-h-screen bg-background" />;
@@ -42,6 +55,7 @@ const Index = () => {
           onChange={(t) => {
             setTab(t);
             if (t !== "recipes") setInitialCat(undefined);
+            if (t !== "recipes") setInitialRecipeId(undefined);
           }}
           recipeCount={recipes.length}
           favoriteCount={favoriteCount}
@@ -76,7 +90,7 @@ const Index = () => {
             </section>
           </>
         ) : tab === "recipes" ? (
-          <RecipesPage initialCategory={initialCat} />
+          <RecipesPage initialCategory={initialCat} initialRecipeId={initialRecipeId} />
         ) : (
           <FavoritesPage />
         )}
