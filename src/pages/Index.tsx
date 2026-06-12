@@ -7,12 +7,22 @@ import { RecipesPage } from "@/components/cucharon/RecipesPage";
 import { FavoritesPage } from "@/components/cucharon/FavoritesPage";
 import { useRecipes } from "@/hooks/use-recipes";
 import { recipesStore } from "@/lib/recipes-store";
+import { useAuth } from "@/contexts/AuthContext";
+import { WelcomeScreen } from "@/components/cucharon/WelcomeScreen";
 
 const Index = () => {
   const [tab, setTab] = useState<"chef" | "recipes" | "favorites">("chef");
   const [initialCat, setInitialCat] = useState<string | undefined>(undefined);
   const recipes = useRecipes();
   const favoriteCount = recipes.filter((r) => recipesStore.isFavorite(r.id)).length;
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="min-h-screen bg-background" />;
+  }
+  if (!user) {
+    return <WelcomeScreen />;
+  }
 
   // Sticky header wrapper
   return (
