@@ -5,6 +5,7 @@ import { InspirationCard } from "@/components/cucharon/InspirationCard";
 import { RecipeGenerator } from "@/components/cucharon/RecipeGenerator";
 import { RecipesPage } from "@/components/cucharon/RecipesPage";
 import { FavoritesPage } from "@/components/cucharon/FavoritesPage";
+import { HeroSection } from "@/components/cucharon/HeroSection";
 import { useRecipes } from "@/hooks/use-recipes";
 import { recipesStore } from "@/lib/recipes-store";
 
