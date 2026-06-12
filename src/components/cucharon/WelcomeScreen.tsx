@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Lock } from "lucide-react";
 import { AuthDialog } from "./AuthDialog";
-import logoSymbol from "@/assets/cucharon-logo-symbol.png.asset.json";
+import logoSymbol from "@/assets/cucharon-logo-circle.png.asset.json";
 import bg from "@/assets/welcome-bg.png.asset.json";
 
 export function WelcomeScreen() {
@@ -21,7 +21,7 @@ export function WelcomeScreen() {
           src={logoSymbol.url}
           alt="Un Cucharón de Amor"
           className="object-contain mb-4"
-          style={{ width: "160px", height: "auto" }}
+          style={{ width: "240px", height: "auto" }}
         />
         <h1
           className="font-serif text-[28px] md:text-[32px] leading-tight"
