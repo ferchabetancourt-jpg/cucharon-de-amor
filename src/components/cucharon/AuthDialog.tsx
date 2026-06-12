@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import logoFull from "@/assets/cucharon-logo-full.png.asset.json";
 
 interface Props {
   open: boolean;
@@ -35,7 +36,7 @@ export function AuthDialog({ open, onClose }: Props) {
       const msg = err instanceof Error ? err.message : "Algo salió mal";
       const friendly =
         msg.includes("Invalid login")
-          ? "Acceso solo por invitación. Contacta a la administradora."
+          ? "Credenciales incorrectas. Contacta a la administradora."
           : msg;
       setError(friendly);
     } finally {
@@ -60,7 +61,12 @@ export function AuthDialog({ open, onClose }: Props) {
           }}
         >
           <div className="text-center mb-5">
-            <div className="text-[40px] leading-none mb-2">🥄</div>
+            <img
+              src={logoFull.url}
+              alt="Un Cucharón de Amor"
+              className="mx-auto mb-3 object-contain"
+              style={{ width: "200px", height: "auto" }}
+            />
             <DialogTitle asChild>
               <h2
                 className="font-serif text-[22px] md:text-[24px]"
