@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Save, Leaf, Refrigerator, Feather, Heart, Timer, Cookie, Sparkles, Gift } from "lucide-react";
 import sartenHero from "@/assets/sarten-hero.png.asset.json";
-import { HistoryRecipeCard } from "./HistoryRecipeCard";
 import moodLiviano from "@/assets/mood-liviano.png.asset.json";
 import moodConfort from "@/assets/mood-confort.png.asset.json";
 import moodRapido from "@/assets/mood-rapido.png.asset.json";
@@ -220,8 +219,6 @@ export function RecipeGenerator() {
 
 
       {/* Estado emocional - Grid 3x2 */}
-      <HistoryRecipeCard />
-
       <section className="mb-4">
         <h3 className="text-[11px] uppercase tracking-[0.16em] font-medium mb-3 px-1" style={{ color: "#5E8C4A" }}>
           ¿Cómo está tu cuerpo hoy?

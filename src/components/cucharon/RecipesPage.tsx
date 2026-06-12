@@ -253,7 +253,7 @@ function RecipeListItem({
   );
 }
 
-export function RecipesPage({ favoritesOnly = false, initialCategory, initialRecipeId }: { favoritesOnly?: boolean; initialCategory?: string; initialRecipeId?: string } = {}) {
+export function RecipesPage({ favoritesOnly = false, initialCategory }: { favoritesOnly?: boolean; initialCategory?: string } = {}) {
   const allRecipes = useRecipes();
   const recipes = favoritesOnly
     ? allRecipes.filter((r) => recipesStore.isFavorite(r.id))
@@ -269,12 +269,6 @@ export function RecipesPage({ favoritesOnly = false, initialCategory, initialRec
   useEffect(() => {
     if (initialCategory) setCat(initialCategory);
   }, [initialCategory]);
-
-  useEffect(() => {
-    if (!initialRecipeId) return;
-    const found = allRecipes.find((r) => r.id === initialRecipeId);
-    if (found) setSelected(found);
-  }, [initialRecipeId, allRecipes]);
 
   useEffect(() => {
     const q = query.trim();

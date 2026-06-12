@@ -23,7 +23,6 @@ export const SEED_RECIPES: SavedRecipe[] = [
 3. Disuelve la harina en la leche y agrégala poco a poco.
 4. Cocina a fuego medio hasta que espese.
 5. Ajusta la sal y la pimienta.`,
-    story: `Esta crema nació en la cocina de mi abuela los domingos de lluvia. Decía que el apio "limpia el alma" y que una buena crema se hace despacio, escuchando hervir la olla. Era su forma de juntarnos a todos alrededor de la mesa.`,
     createdAt: 1,
   },
   {
@@ -103,7 +102,6 @@ export const SEED_RECIPES: SavedRecipe[] = [
 2. Agrega la cebolla finamente picada.
 3. Mezcla y ajusta la sal.
 4. Sirve para acompañar carnes.`,
-    story: `El chimichurri es ritual de asado de los domingos. Lo aprendí mirando a mi tío preparar el suyo en un frasco viejo, mezclando con paciencia mientras contaba historias. Cada cucharada huele a familia, a sobremesa larga y a risas compartidas.`,
     createdAt: 5,
   },
   {
@@ -576,7 +574,6 @@ export const SEED_RECIPES: SavedRecipe[] = [
 2. Pica finamente todos los ingredientes y mezcla.
 3. Agrega el perejil y el jugo de limón al final.
 4. Mezcla bien y sirve.`,
-    story: `El tabule entró a casa por una vecina libanesa que nos abrió su cocina como quien abre el corazón. Nos enseñó que picar el perejil con paciencia es parte de la receta, y que comerlo en familia, con pan caliente, sabe a hogar prestado que termina siendo propio.`,
     createdAt: 29,
   },
   {
