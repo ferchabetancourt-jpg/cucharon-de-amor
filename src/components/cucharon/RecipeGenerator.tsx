@@ -220,6 +220,8 @@ export function RecipeGenerator() {
 
 
       {/* Estado emocional - Grid 3x2 */}
+      <HistoryRecipeCard />
+
       <section className="mb-4">
         <h3 className="text-[11px] uppercase tracking-[0.16em] font-medium mb-3 px-1" style={{ color: "#5E8C4A" }}>
           ¿Cómo está tu cuerpo hoy?
