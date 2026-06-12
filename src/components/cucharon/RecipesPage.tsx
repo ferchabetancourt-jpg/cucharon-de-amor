@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CATEGORIES, COOKING_METHODS, getCategoryStyle } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
@@ -20,16 +21,20 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
+
 function RecipeDetail({
   recipe,
   onBack,
   onEdit,
   onAskDelete,
+  isAdmin,
 }: {
   recipe: SavedRecipe;
   onBack: () => void;
   onEdit: () => void;
   onAskDelete: () => void;
+  isAdmin: boolean;
 }) {
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
   const isFav = recipesStore.isFavorite(recipe.id);
@@ -74,20 +79,24 @@ function RecipeDetail({
             >
               <Star className={cn("w-4 h-4", isFav ? "fill-ochre text-ochre" : "text-muted-foreground")} />
             </button>
-            <button
-              onClick={onEdit}
-              className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-verde/10 hover:text-verde transition-colors"
-              aria-label="Editar"
-            >
-              <Pencil className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onAskDelete}
-              className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors"
-              aria-label="Eliminar"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {isAdmin && (
+              <button
+                onClick={onEdit}
+                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-verde/10 hover:text-verde transition-colors"
+                aria-label="Editar"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+            )}
+            {isAdmin && (
+              <button
+                onClick={onAskDelete}
+                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors"
+                aria-label="Eliminar"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -137,11 +146,13 @@ function RecipeListItem({
   onSelect,
   onEdit,
   onAskDelete,
+  isAdmin,
 }: {
   recipe: SavedRecipe;
   onSelect: () => void;
   onEdit: () => void;
   onAskDelete: () => void;
+  isAdmin: boolean;
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
@@ -227,26 +238,28 @@ function RecipeListItem({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onEdit(); }}
-              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-              style={{ background: "#FFF6EA", color: "#5E8C4A" }}
-              aria-label="Editar receta"
-            >
-              <Pencil className="w-3.5 h-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
-              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-              style={{ background: "#FFF6EA", color: "#E85D2F" }}
-              aria-label="Eliminar receta"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {isAdmin && (
+            <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+                style={{ background: "#FFF6EA", color: "#5E8C4A" }}
+                aria-label="Editar receta"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
+                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+                style={{ background: "#FFF6EA", color: "#E85D2F" }}
+                aria-label="Eliminar receta"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </li>
@@ -254,6 +267,8 @@ function RecipeListItem({
 }
 
 export function RecipesPage({ favoritesOnly = false, initialCategory }: { favoritesOnly?: boolean; initialCategory?: string } = {}) {
+  const { user } = useAuth();
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
   const allRecipes = useRecipes();
   const recipes = favoritesOnly
     ? allRecipes.filter((r) => recipesStore.isFavorite(r.id))
@@ -349,6 +364,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           onBack={() => setSelected(null)}
           onEdit={() => openEdit(fresh)}
           onAskDelete={() => setPendingDelete(fresh)}
+          isAdmin={isAdmin}
         />
         <RecipeFormModal open={openForm} onClose={closeForm} editing={editing} />
         {deleteDialog}
@@ -548,6 +564,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               onSelect={() => { track("recipe_viewed", { recipe_name: r.name }); setSelected(r); }}
               onEdit={() => openEdit(r)}
               onAskDelete={() => setPendingDelete(r)}
+              isAdmin={isAdmin}
             />
           ))}
         </ul>
