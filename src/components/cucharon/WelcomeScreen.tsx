@@ -12,7 +12,7 @@ export function WelcomeScreen() {
       style={{
         backgroundImage: `url(${bg.url})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "center bottom",
         backgroundRepeat: "no-repeat",
       }}
     >
@@ -21,7 +21,7 @@ export function WelcomeScreen() {
           src={logoSymbol.url}
           alt="Un Cucharón de Amor"
           className="object-contain mb-4"
-          style={{ width: "240px", height: "auto" }}
+          style={{ width: "240px", height: "auto", border: "none", background: "transparent", boxShadow: "none" }}
         />
         <h1
           className="font-serif text-[28px] md:text-[32px] leading-tight"
