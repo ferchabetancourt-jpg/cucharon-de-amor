@@ -22,11 +22,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
-const SOFT_CHIP_STYLES = [
-  { bg: "#F8D8CB", text: "#7A2E12" },
-  { bg: "#F8E3C8", text: "#7A4E0E" },
-  { bg: "#E2EDD8", text: "#2F4A1F" },
-];
+const stripEmoji = (s: string) =>
+  s.replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\uFE0F]+/u, "").trim();
 
 function RecipeDetail({
   recipe,
@@ -161,16 +158,15 @@ function RecipeListItem({
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
-  const catStyle = getCategoryStyle(recipe.category);
 
   return (
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-[24px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
+        className="group relative rounded-[18px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
         style={{
-          background: "#FFFDF9",
-          border: "1px solid #F2ECE0",
+          background: "#FFFFFF",
+          border: "1px solid #EAD9C4",
           boxShadow: "0 1px 2px rgba(47,42,38,0.04), 0 4px 14px -10px rgba(47,42,38,0.10)",
         }}
       >
@@ -192,15 +188,16 @@ function RecipeListItem({
               {isFav ? "★" : "☆"}
             </button>
             <span
-              className="rounded-full px-2.5 py-1 text-[11px]"
+              className="rounded-full px-2.5 py-1 text-[10.5px]"
               style={{
-                background: catStyle.chipBg,
-                color: catStyle.chipText,
+                background: "#3A2A20",
+                color: "#FFF6EA",
                 fontFamily: "Montserrat, sans-serif",
-                fontWeight: 600,
+                fontWeight: 500,
+                letterSpacing: "0.02em",
               }}
             >
-              {catLabel}
+              {stripEmoji(catLabel)}
             </span>
           </div>
 
@@ -214,7 +211,7 @@ function RecipeListItem({
 
           {/* Metadata */}
           <div
-            className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
+            className="flex items-center gap-x-2 text-[12px] whitespace-nowrap overflow-hidden text-ellipsis"
             style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             {recipe.methods?.map((m, i) => {
@@ -223,14 +220,14 @@ function RecipeListItem({
               return (
                 <span key={m} className="inline-flex items-center gap-1">
                   {i > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                  <span>{ml}</span>
+                  <span>{stripEmoji(ml)}</span>
                 </span>
               );
             })}
             {recipe.time && (
               <>
                 {(recipe.methods?.length ?? 0) > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                <span className="inline-flex items-center gap-1">⏱️ {recipe.time}</span>
+                <span className="inline-flex items-center gap-1">{recipe.time}</span>
               </>
             )}
           </div>
@@ -464,21 +461,21 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          {COOKING_METHODS.map((m, i) => (
+        <div className="flex flex-wrap gap-2">
+          {COOKING_METHODS.map((m) => (
             <button
               key={m.key}
               onClick={() => toggleMethod(m.key)}
               className={cn(
-                "rounded-full px-2.5 py-1 text-[11px] transition-all border",
+                "rounded-full px-3.5 py-1.5 text-[12px] transition-all border",
               )}
               style={
                 methods.includes(m.key)
-                  ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
+                  ? { background: "#E85D2F", borderColor: "#E85D2F", color: "#FFF6EA", fontWeight: 600, fontFamily: "Montserrat, sans-serif" }
+                  : { background: "#FFFFFF", borderColor: "#EAD9C4", color: "#3A2A20", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }
               }
             >
-              {m.label}
+              {stripEmoji(m.label)}
             </button>
           ))}
         </div>
@@ -492,7 +489,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           Colecciones
         </span>
         <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c, i) => {
+          {CATEGORIES.map((c) => {
             const active = cat === c.key;
             return (
               <button
@@ -510,15 +507,15 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: SOFT_CHIP_STYLES[i % 3].bg,
-                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
-                        color: SOFT_CHIP_STYLES[i % 3].text,
+                        background: "#FFFFFF",
+                        borderColor: "#EAD9C4",
+                        color: "#3A2A20",
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
                 }
               >
-                {c.label}
+                {stripEmoji(c.label)}
               </button>
             );
           })}
