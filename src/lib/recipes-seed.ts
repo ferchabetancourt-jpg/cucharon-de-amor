@@ -103,6 +103,7 @@ export const SEED_RECIPES: SavedRecipe[] = [
 2. Agrega la cebolla finamente picada.
 3. Mezcla y ajusta la sal.
 4. Sirve para acompañar carnes.`,
+    story: `El chimichurri es ritual de asado de los domingos. Lo aprendí mirando a mi tío preparar el suyo en un frasco viejo, mezclando con paciencia mientras contaba historias. Cada cucharada huele a familia, a sobremesa larga y a risas compartidas.`,
     createdAt: 5,
   },
   {
