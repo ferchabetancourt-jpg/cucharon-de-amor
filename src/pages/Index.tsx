@@ -5,6 +5,7 @@ import { InspirationCard } from "@/components/cucharon/InspirationCard";
 import { RecipeGenerator } from "@/components/cucharon/RecipeGenerator";
 import { RecipesPage } from "@/components/cucharon/RecipesPage";
 import { FavoritesPage } from "@/components/cucharon/FavoritesPage";
+import { HeroSection } from "@/components/cucharon/HeroSection";
 import { useRecipes } from "@/hooks/use-recipes";
 import { recipesStore } from "@/lib/recipes-store";
 
@@ -38,38 +39,49 @@ const Index = () => {
         />
       </div>
 
-      <main className="max-w-[720px] mx-auto px-4 sm:px-5 pt-6 pb-24">
-        {tab === "chef" ? (
-          <>
-            <RecipeGenerator />
-            <InspirationCard />
+      {tab === "chef" && (
+        <HeroSection
+          onNavigateToRecipes={({ category }) => {
+            setTab("recipes");
+            if (category) setInitialCat(category);
+          }}
+        />
+      )}
 
-            <section className="my-12 md:my-16 px-4 text-center relative">
-              <div className="flex items-center justify-center gap-3 mb-5">
-                <span className="h-px w-10 bg-cream-deep" />
-                <p className="text-[10px] uppercase tracking-[0.28em] text-verde font-medium">
-                  Filosofía Cucharón
+      <main className="max-w-[720px] mx-auto px-4 sm:px-5 pb-24">
+        <div className="pt-6">
+          {tab === "chef" ? (
+            <>
+              <RecipeGenerator />
+              <InspirationCard />
+
+              <section className="my-12 md:my-16 px-4 text-center relative">
+                <div className="flex items-center justify-center gap-3 mb-5">
+                  <span className="h-px w-10 bg-cream-deep" />
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-verde font-medium">
+                    Filosofía Cucharón
+                  </p>
+                  <span className="h-px w-10 bg-cream-deep" />
+                </div>
+                <p
+                  className="font-serif italic text-[22px] md:text-[26px] leading-[1.6]"
+                  style={{ color: "#3A2A20" }}
+                >
+                  Sabor sobre complejidad.<br />
+                  Intención sobre perfección.<br />
+                  Amor sobre todo.
                 </p>
-                <span className="h-px w-10 bg-cream-deep" />
-              </div>
-              <p
-                className="font-serif italic text-[22px] md:text-[26px] leading-[1.6]"
-                style={{ color: "#3A2A20" }}
-              >
-                Sabor sobre complejidad.<br />
-                Intención sobre perfección.<br />
-                Amor sobre todo.
-              </p>
-              <p className="text-center text-[11px] text-verde italic mt-6 tracking-wide">
-                Hecho con amor 🍳
-              </p>
-            </section>
-          </>
-        ) : tab === "recipes" ? (
-          <RecipesPage initialCategory={initialCat} />
-        ) : (
-          <FavoritesPage />
-        )}
+                <p className="text-center text-[11px] text-verde italic mt-6 tracking-wide">
+                  Hecho con amor 🍳
+                </p>
+              </section>
+            </>
+          ) : tab === "recipes" ? (
+            <RecipesPage initialCategory={initialCat} />
+          ) : (
+            <FavoritesPage />
+          )}
+        </div>
       </main>
     </div>
   );
