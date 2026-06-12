@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logoAsset from "@/assets/cucharon-logo.png.asset.json";
+import logoAsset from "@/assets/cucharon-logo-circle.png.asset.json";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthDialog } from "./AuthDialog";
 import { LogIn, LogOut, User as UserIcon } from "lucide-react";
@@ -30,6 +30,7 @@ export function Header() {
           src={logoAsset.url}
           alt="Un Cucharón de Amor"
           className="object-contain h-[72px] w-auto shrink-0"
+          style={{ border: "none", background: "transparent", boxShadow: "none" }}
         />
         <div className="flex flex-col leading-tight min-w-0 flex-1">
           <h1
