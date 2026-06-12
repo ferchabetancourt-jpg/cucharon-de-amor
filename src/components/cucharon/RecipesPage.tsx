@@ -564,6 +564,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               onSelect={() => { track("recipe_viewed", { recipe_name: r.name }); setSelected(r); }}
               onEdit={() => openEdit(r)}
               onAskDelete={() => setPendingDelete(r)}
+              isAdmin={isAdmin}
             />
           ))}
         </ul>
