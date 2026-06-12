@@ -23,6 +23,7 @@ export const SEED_RECIPES: SavedRecipe[] = [
 3. Disuelve la harina en la leche y agrégala poco a poco.
 4. Cocina a fuego medio hasta que espese.
 5. Ajusta la sal y la pimienta.`,
+    story: `Esta crema nació en la cocina de mi abuela los domingos de lluvia. Decía que el apio "limpia el alma" y que una buena crema se hace despacio, escuchando hervir la olla. Era su forma de juntarnos a todos alrededor de la mesa.`,
     createdAt: 1,
   },
   {
