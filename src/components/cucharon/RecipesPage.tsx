@@ -22,6 +22,11 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
+const SOFT_CHIP_STYLES = [
+  { bg: "#F8E3C8", text: "#7A4E0E" },
+  { bg: "#E2EDD8", text: "#2F4A1F" },
+  { bg: "#F8D8CB", text: "#7A2E12" },
+];
 
 function RecipeDetail({
   recipe,
@@ -77,7 +82,7 @@ function RecipeDetail({
               className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-ochre/20 transition-colors"
               aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             >
-              <Star className={cn("w-4 h-4", isFav ? "fill-ochre text-ochre" : "text-muted-foreground")} />
+              <Star className={cn("w-4 h-4", isFav ? "fill-[#E85D2F] text-[#E85D2F]" : "text-muted-foreground")} />
             </button>
             {isAdmin && (
               <button
@@ -410,8 +415,8 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               onClick={() => { setEditing(null); setOpenForm(true); }}
               className="mt-4 rounded-full px-4 py-2 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
               style={{
-                background: "linear-gradient(135deg, #E85D2F, #A84E22)",
-                color: "#FFFFFF",
+                background: "#E85D2F",
+                color: "#FFF6EA",
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: 600,
                 boxShadow: "0 8px 20px -10px rgba(232,93,47,0.55)",
@@ -470,7 +475,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           )}
         </div>
         <div className="flex flex-wrap gap-1.5">
-          {COOKING_METHODS.map((m) => (
+          {COOKING_METHODS.map((m, i) => (
             <button
               key={m.key}
               onClick={() => toggleMethod(m.key)}
@@ -480,7 +485,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               style={
                 methods.includes(m.key)
                   ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: "#FFFFFF", borderColor: "#EDE8DC", color: "#8A6B55" }
+                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
               }
             >
               {m.label}
@@ -492,12 +497,12 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
       <div className="mb-5">
         <span
           className="block text-[10px] uppercase tracking-[0.18em] font-medium mb-2"
-          style={{ color: "#E85D2F" }}
+          style={{ color: "#5E8C4A" }}
         >
           Colecciones
         </span>
         <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => {
+          {CATEGORIES.map((c, i) => {
             const active = cat === c.key;
             return (
               <button
@@ -507,17 +512,17 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                 style={
                   active
                     ? {
-                        background: "linear-gradient(135deg, #E85D2F, #A84E22)",
-                        borderColor: "#A84E22",
-                        color: "#FFFFFF",
+                        background: "#E85D2F",
+                        borderColor: "#E85D2F",
+                        color: "#FFF6EA",
                         fontWeight: 600,
                         boxShadow: "0 6px 14px -8px rgba(232,93,47,0.55)",
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: "#FFFFFF",
-                        borderColor: "#EDE8DC",
-                        color: "#3A2A20",
+                        background: SOFT_CHIP_STYLES[i % 3].bg,
+                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
+                        color: SOFT_CHIP_STYLES[i % 3].text,
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
