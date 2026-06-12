@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Lock } from "lucide-react";
 import { AuthDialog } from "./AuthDialog";
-import logoFull from "@/assets/cucharon-logo-full.png.asset.json";
+import logoSymbol from "@/assets/cucharon-logo-symbol.png.asset.json";
 import bg from "@/assets/welcome-bg.png.asset.json";
 
 export function WelcomeScreen() {
@@ -18,10 +18,10 @@ export function WelcomeScreen() {
     >
       <div className="flex-1 flex flex-col items-center px-6 pt-[12vh] text-center">
         <img
-          src={logoFull.url}
+          src={logoSymbol.url}
           alt="Un Cucharón de Amor"
           className="object-contain mb-4"
-          style={{ width: "200px", height: "auto" }}
+          style={{ width: "160px", height: "auto" }}
         />
         <h1
           className="font-serif text-[28px] md:text-[32px] leading-tight"
@@ -31,15 +31,9 @@ export function WelcomeScreen() {
         </h1>
         <p
           className="italic mt-2 text-[15px] md:text-[16px]"
-          style={{ color: "#C9B5A4", fontFamily: "Playfair Display, serif" }}
+          style={{ color: "#FFF6EA", fontFamily: "Playfair Display, serif" }}
         >
-          Las recetas de mamá, pero ligeras
-        </p>
-        <p
-          className="mt-3 text-[12px] tracking-wide"
-          style={{ color: "#C9B5A4", fontFamily: "Montserrat, sans-serif" }}
-        >
-          149 recetas que viajan por generaciones
+          Recetas que viajan por generaciones
         </p>
       </div>
 
@@ -62,7 +56,7 @@ export function WelcomeScreen() {
           style={{ color: "#C9B5A4", fontFamily: "Montserrat, sans-serif" }}
         >
           <Lock className="w-3 h-3" />
-          <span>Una cocina privada, solo por invitación</span>
+          <span>Una cocina privada. Tu invitación es la llave.</span>
         </div>
       </div>
 
