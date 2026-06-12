@@ -5,7 +5,13 @@ import { RecipeFormModal } from "./RecipeFormModal";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Save, Leaf, Refrigerator } from "lucide-react";
-import heroPot from "@/assets/hero-pot.png";
+import sartenHero from "@/assets/sarten-hero.png.asset.json";
+import moodLiviano from "@/assets/mood-liviano.png.asset.json";
+import moodConfort from "@/assets/mood-confort.png.asset.json";
+import moodRapido from "@/assets/mood-rapido.png.asset.json";
+import moodDulce from "@/assets/mood-dulce.png.asset.json";
+import moodSinculpa from "@/assets/mood-sinculpa.png.asset.json";
+import moodSorpresa from "@/assets/mood-sorpresa.png.asset.json";
 import { track } from "@/lib/analytics";
 
 type GeneratedRecipe = {
@@ -16,6 +22,22 @@ type GeneratedRecipe = {
   secreto_cucharon: string;
   sentimiento: string;
 };
+
+const MOOD_PHOTOS: Record<string, string> = {
+  liviano: moodLiviano.url,
+  confort: moodConfort.url,
+  rapido: moodRapido.url,
+  dulce: moodDulce.url,
+  sinculpa: moodSinculpa.url,
+  sorpresa: moodSorpresa.url,
+};
+
+const MOOD_BG = ["#F8D8CB", "#F8E3C8", "#E2EDD8"];
+const CHIP_PALETTE = [
+  { bg: "#F8D8CB", text: "#A83A14" },
+  { bg: "#F8E3C8", text: "#7A4E0E" },
+  { bg: "#E2EDD8", text: "#3A5A2C" },
+];
 
 export function RecipeGenerator() {
   const [mood, setMood] = useState<MoodKey | null>(null);
@@ -72,34 +94,35 @@ export function RecipeGenerator() {
 
   return (
     <>
-      {/* Hero emocional - watercolor editorial */}
+      {/* Hero emocional premium - dark cacao + foto sartén */}
       <section
-        className="relative overflow-hidden rounded-[24px] px-5 pt-5 pb-5 md:px-7 md:pt-7 md:pb-6 mb-5 shadow-card border border-cream-deep"
+        className="relative overflow-hidden rounded-[32px] px-5 pt-5 pb-5 md:px-7 md:pt-7 md:pb-6 mb-5"
         style={{
           background:
-            "radial-gradient(140% 90% at 100% 0%, rgba(232,93,47,0.10), transparent 55%), radial-gradient(120% 80% at 0% 100%, rgba(94,140,74,0.08), transparent 60%), linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%)",
+            "radial-gradient(120% 80% at 100% 0%, rgba(232,93,47,0.18), transparent 55%), linear-gradient(135deg, #3A2A20 0%, #4D3A2C 100%)",
+          boxShadow: "0 20px 50px -20px rgba(58,42,32,0.45)",
         }}
       >
-        {/* Ilustración oficial - flotando integrada al fondo */}
+        {/* Fotografía hiperrealista del sartén */}
         <img
-          src={heroPot}
+          src={sartenHero.url}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-1 right-0 w-[140px] md:w-[180px] object-contain opacity-95 mix-blend-multiply"
-          style={{ maxHeight: "78%" }}
+          className="pointer-events-none select-none absolute -top-2 -right-4 md:-right-6 w-[150px] md:w-[210px] object-contain"
+          style={{ maxHeight: "95%", filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.35))" }}
         />
 
         {/* Texto */}
-        <div className="relative z-10 pr-[120px] md:pr-[170px] mb-4">
+        <div className="relative z-10 pr-[130px] md:pr-[200px] mb-4">
           <h2
             className="font-serif text-[26px] md:text-[32px] leading-[1.08] mb-2"
-            style={{ color: "#3A2A20", letterSpacing: "-0.005em" }}
+            style={{ color: "#FFF6EA", letterSpacing: "-0.005em", fontWeight: 600 }}
           >
             ¿Qué cocinamos hoy?
           </h2>
           <p
             className="text-[13px] md:text-[14.5px] leading-relaxed"
-            style={{ fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif", color: "#8A6B55" }}
+            style={{ fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif", color: "#C9B5A4" }}
           >
             Cuéntame qué tienes en casa y encontraremos algo rico para ti.
           </p>
@@ -108,52 +131,69 @@ export function RecipeGenerator() {
         {/* Input con iconos */}
         <div className="relative z-10 mb-3">
           <Leaf
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-verde/70"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4"
             strokeWidth={2}
+            style={{ color: "#C9B5A4" }}
           />
           <input
             type="text"
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
             placeholder="Abre la nevera y cuéntame qué encontraste…"
-            className="w-full pl-10 pr-10 py-3 border border-cream-deep rounded-2xl bg-white text-sm outline-none focus:border-terracotta-light focus:ring-2 focus:ring-terracotta/15 transition shadow-sm placeholder:text-[#A89F92]"
-            style={{ color: "#3A2A20" }}
+            className="w-full pl-10 pr-10 py-3 rounded-2xl text-sm outline-none transition placeholder:text-[#C9B5A4]"
+            style={{
+              background: "#4D3A2C",
+              border: "1px solid rgba(201,181,164,0.18)",
+              color: "#FFF6EA",
+            }}
           />
           <Refrigerator
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-terracotta/70"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4"
             strokeWidth={2}
+            style={{ color: "#E85D2F" }}
           />
         </div>
 
         {/* Chips de preferencias */}
         <div className="relative z-10 flex flex-wrap gap-1.5 mb-3">
-          {PREFERENCES.map((p) => (
-            <button
-              key={p.key}
-              onClick={() => togglePref(p.key)}
-              className={cn(
-                "rounded-full px-2.5 py-[3px] border text-[10.5px] font-medium transition-all",
-                prefs.includes(p.key)
-                  ? "bg-verde/90 border-verde/90 text-primary-foreground"
-                  : "bg-white/80 border-cream-deep text-muted-foreground hover:border-verde-light hover:text-ink"
-              )}
-              style={{ fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif" }}
-            >
-              {p.label}
-            </button>
-          ))}
+          {PREFERENCES.map((p, i) => {
+            const palette = CHIP_PALETTE[i % CHIP_PALETTE.length];
+            const selected = prefs.includes(p.key);
+            return (
+              <button
+                key={p.key}
+                onClick={() => togglePref(p.key)}
+                className={cn(
+                  "rounded-full px-3.5 py-[5px] text-[11px] font-medium transition-all active:scale-95",
+                  selected ? "ring-2 ring-offset-1 ring-offset-[#3A2A20]" : ""
+                )}
+                style={{
+                  fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
+                  background: palette.bg,
+                  color: palette.text,
+                  boxShadow: selected
+                    ? "0 0 0 2px #E85D2F inset"
+                    : "0 1px 2px rgba(0,0,0,0.15)",
+                  border: "none",
+                }}
+              >
+                {p.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Botón principal */}
         <button
           onClick={cook}
           disabled={loading}
-          className="relative z-10 w-full text-white py-3.5 rounded-2xl text-[15px] shadow-warm hover:opacity-95 hover:scale-[1.01] hover:shadow-lg active:scale-[.98] transition-all duration-200 ease-out cursor-pointer disabled:opacity-65 disabled:cursor-wait inline-flex items-center justify-center gap-2"
+          className="relative z-10 w-full py-3.5 rounded-full text-[15px] hover:opacity-95 hover:scale-[1.01] active:scale-[.98] transition-all duration-200 ease-out cursor-pointer disabled:opacity-65 disabled:cursor-wait inline-flex items-center justify-center gap-2"
           style={{
-            background: "linear-gradient(135deg, #E85D2F, #A84E22)",
+            background: "#E85D2F",
+            color: "#FFF6EA",
             fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
             fontWeight: 600,
-            boxShadow: "0 10px 24px -10px rgba(232,93,47,0.55), 0 2px 6px rgba(168,78,34,0.18)",
+            boxShadow: "0 12px 28px -10px rgba(232,93,47,0.7), 0 2px 6px rgba(168,78,34,0.25)",
           }}
         >
           <span className="text-base leading-none">🧡</span>
@@ -172,25 +212,42 @@ export function RecipeGenerator() {
 
       {/* Estado emocional - Grid 3x2 */}
       <section className="mb-4">
-        <h3 className="text-[11px] uppercase tracking-[0.12em] text-verde font-medium mb-3 px-1">
-          🌿 ¿Cómo está tu cuerpo hoy?
+        <h3 className="text-[11px] uppercase tracking-[0.16em] font-medium mb-3 px-1" style={{ color: "#5E8C4A" }}>
+          ¿Cómo está tu cuerpo hoy?
         </h3>
         <div className="grid grid-cols-3 gap-2.5">
-          {MOODS.map((m) => (
-            <button
-              key={m.key}
-              onClick={() => setMood((cur) => (cur === m.key ? null : m.key))}
-              className={cn(
-                "rounded-[12px] px-2 py-3 text-center transition-all border bg-white shadow-sm flex flex-col items-center gap-1.5 active:scale-95 hover:shadow-md",
-                mood === m.key
-                  ? "border-terracotta ring-2 ring-terracotta/20"
-                  : "border-cream-deep hover:border-terracotta-light"
-              )}
-            >
-              <span className="text-2xl block leading-none">{m.emoji}</span>
-              <span className="text-[11.5px] font-medium leading-tight text-ink">{m.label}</span>
-            </button>
-          ))}
+          {MOODS.map((m, i) => {
+            const bg = MOOD_BG[i % MOOD_BG.length];
+            const selected = mood === m.key;
+            return (
+              <button
+                key={m.key}
+                onClick={() => setMood((cur) => (cur === m.key ? null : m.key))}
+                className={cn(
+                  "rounded-[24px] px-2 pt-3 pb-2.5 text-center transition-all flex flex-col items-center gap-1.5 active:scale-95 hover:shadow-md",
+                  selected ? "ring-2 ring-[#E85D2F]" : ""
+                )}
+                style={{
+                  background: bg,
+                  boxShadow: selected
+                    ? "0 8px 18px -8px rgba(232,93,47,0.45)"
+                    : "0 2px 6px rgba(58,42,32,0.08)",
+                  border: "none",
+                }}
+              >
+                <img
+                  src={MOOD_PHOTOS[m.key]}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  className="w-14 h-14 object-contain"
+                />
+                <span className="text-[11.5px] font-medium leading-tight" style={{ color: "#3A2A20" }}>
+                  {m.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </section>
 

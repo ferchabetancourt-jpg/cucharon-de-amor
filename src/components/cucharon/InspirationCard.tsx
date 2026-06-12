@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { INSPIRATIONS } from "@/lib/cucharon-data";
 import { RotateCw, Loader2 } from "lucide-react";
-import sprig from "@/assets/inspiration-sprig.png";
+import inspirationHero from "@/assets/inspiration-hero.jpg.asset.json";
 
 const HISTORY_SIZE = Math.min(8, Math.max(1, INSPIRATIONS.length - 1));
 
@@ -31,20 +31,25 @@ export function InspirationCard() {
 
   return (
     <article
-      className="relative overflow-hidden rounded-[18px] px-5 py-6 mb-4 border border-cream-deep shadow-sm transition-all duration-300 ease-out hover:shadow-md"
-      style={{ background: "#FFF6EA" }}
+      className="relative overflow-hidden rounded-[24px] mb-4 transition-all duration-300 ease-out hover:shadow-lg"
+      style={{ background: "#FFF6EA", boxShadow: "0 8px 24px -12px rgba(58,42,32,0.18)" }}
     >
-      <img
-        src={sprig}
-        alt=""
-        aria-hidden
-        loading="lazy"
-        width={512}
-        height={512}
-        className="pointer-events-none select-none absolute -top-2 -right-3 w-[88px] md:w-[104px] opacity-80 mix-blend-multiply"
-      />
-      <p className="relative text-[11px] uppercase tracking-[0.16em] text-verde font-medium mb-3">
-        ✨ Inspiración del momento
+      <div className="relative w-full h-[180px] md:h-[220px] overflow-hidden">
+        <img
+          src={inspirationHero.url}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(180deg, transparent 60%, rgba(58,42,32,0.25) 100%)" }}
+        />
+      </div>
+      <div className="px-5 py-5">
+      <p className="text-[11px] uppercase tracking-[0.16em] font-medium mb-3" style={{ color: "#5E8C4A" }}>
+        Inspiración del momento
       </p>
       <div className="relative min-h-[80px]">
         {loading && (
@@ -76,11 +81,13 @@ export function InspirationCard() {
       <button
         onClick={next}
         disabled={loading}
-        className="mt-4 inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-deep text-[12px] font-medium transition-colors disabled:opacity-60 disabled:cursor-wait"
+        className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-medium transition-colors disabled:opacity-60 disabled:cursor-wait"
+        style={{ color: "#B5431E" }}
       >
         {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCw className="w-3 h-3" />}
         {loading ? "Generando…" : "Otra inspiración"}
       </button>
+      </div>
     </article>
   );
 }
