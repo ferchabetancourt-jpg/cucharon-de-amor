@@ -12,7 +12,7 @@ export function WelcomeScreen() {
       style={{
         backgroundImage: `url(${bg.url})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "center bottom",
         backgroundRepeat: "no-repeat",
       }}
     >
