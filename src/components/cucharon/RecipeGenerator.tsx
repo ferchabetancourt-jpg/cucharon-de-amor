@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Save, Leaf, Refrigerator } from "lucide-react";
+import { Save, Leaf, Refrigerator, Feather, Heart, Timer, Cookie, Sparkles, Gift } from "lucide-react";
 import sartenHero from "@/assets/sarten-hero.png.asset.json";
 import moodLiviano from "@/assets/mood-liviano.png.asset.json";
 import moodConfort from "@/assets/mood-confort.png.asset.json";
@@ -32,12 +32,20 @@ const MOOD_PHOTOS: Record<string, string> = {
   sorpresa: moodSorpresa.url,
 };
 
-const MOOD_BG = ["#F8D8CB", "#F8E3C8", "#E2EDD8"];
 const CHIP_PALETTE = [
-  { bg: "#F8D8CB", text: "#A83A14" },
-  { bg: "#F8E3C8", text: "#7A4E0E" },
-  { bg: "#E2EDD8", text: "#3A5A2C" },
+  { bg: "#E85D2F", text: "#FFFFFF" }, // papaya
+  { bg: "#F2A93B", text: "#3A2A20" }, // golden honey
+  { bg: "#5E8C4A", text: "#FFFFFF" }, // olive green
 ];
+const MOOD_ACCENTS = ["#5E8C4A", "#E85D2F", "#F2A93B"];
+const MOOD_ICONS: Record<string, typeof Feather> = {
+  liviano: Feather,
+  confort: Heart,
+  rapido: Timer,
+  dulce: Cookie,
+  sinculpa: Sparkles,
+  sorpresa: Gift,
+};
 
 export function RecipeGenerator() {
   const [mood, setMood] = useState<MoodKey | null>(null);
@@ -217,7 +225,7 @@ export function RecipeGenerator() {
         </h3>
         <div className="grid grid-cols-3 gap-2.5">
           {MOODS.map((m, i) => {
-            const bg = MOOD_BG[i % MOOD_BG.length];
+            const accent = MOOD_ACCENTS[i % MOOD_ACCENTS.length];
             const selected = mood === m.key;
             return (
               <button
@@ -228,20 +236,24 @@ export function RecipeGenerator() {
                   selected ? "ring-2 ring-[#E85D2F]" : ""
                 )}
                 style={{
-                  background: bg,
+                  background: "#FFFFFF",
                   boxShadow: selected
                     ? "0 8px 18px -8px rgba(232,93,47,0.45)"
                     : "0 2px 6px rgba(58,42,32,0.08)",
-                  border: "none",
+                  border: "1px solid rgba(58,42,32,0.08)",
                 }}
               >
-                <img
-                  src={MOOD_PHOTOS[m.key]}
-                  alt=""
-                  aria-hidden
-                  loading="lazy"
-                  className="w-14 h-14 object-contain"
-                />
+                {(() => {
+                  const Icon = MOOD_ICONS[m.key] ?? Sparkles;
+                  return (
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center"
+                      style={{ background: `${accent}14` }}
+                    >
+                      <Icon size={24} strokeWidth={1.5} style={{ color: accent }} />
+                    </div>
+                  );
+                })()}
                 <span className="text-[11.5px] font-medium leading-tight" style={{ color: "#3A2A20" }}>
                   {m.label}
                 </span>
