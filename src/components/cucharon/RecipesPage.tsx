@@ -146,11 +146,13 @@ function RecipeListItem({
   onSelect,
   onEdit,
   onAskDelete,
+  isAdmin,
 }: {
   recipe: SavedRecipe;
   onSelect: () => void;
   onEdit: () => void;
   onAskDelete: () => void;
+  isAdmin: boolean;
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
