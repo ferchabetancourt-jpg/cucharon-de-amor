@@ -22,11 +22,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
-const SOFT_CHIP_STYLES = [
-  { bg: "#F8D8CB", text: "#7A2E12" },
-  { bg: "#F8E3C8", text: "#7A4E0E" },
-  { bg: "#E2EDD8", text: "#2F4A1F" },
-];
+const stripEmoji = (s: string) =>
+  s.replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\uFE0F]+/u, "").trim();
 
 function RecipeDetail({
   recipe,
