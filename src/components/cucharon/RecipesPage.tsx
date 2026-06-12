@@ -79,20 +79,24 @@ function RecipeDetail({
             >
               <Star className={cn("w-4 h-4", isFav ? "fill-ochre text-ochre" : "text-muted-foreground")} />
             </button>
-            <button
-              onClick={onEdit}
-              className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-verde/10 hover:text-verde transition-colors"
-              aria-label="Editar"
-            >
-              <Pencil className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onAskDelete}
-              className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors"
-              aria-label="Eliminar"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {isAdmin && (
+              <button
+                onClick={onEdit}
+                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-verde/10 hover:text-verde transition-colors"
+                aria-label="Editar"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+            )}
+            {isAdmin && (
+              <button
+                onClick={onAskDelete}
+                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors"
+                aria-label="Eliminar"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
