@@ -381,28 +381,26 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
     <>
       {/* Header recetario emocional */}
       <section
-        className="relative overflow-hidden rounded-[20px] mb-6 px-5 pt-5 pb-6 md:px-7 md:pt-6 md:pb-7"
+        className="relative overflow-hidden rounded-[24px] mb-8 px-5 pt-8 pb-9 md:px-9 md:pt-12 md:pb-14"
         style={{
-          background:
-            "linear-gradient(135deg, #FFF6EA 0%, #EDE8DC 100%), radial-gradient(circle at 80% 20%, rgba(232,93,47,0.05), transparent 60%)",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 8px 24px -16px rgba(47,42,38,0.12)",
+          background: "#FFF6EA",
         }}
       >
         <img
           src={cucharonSopa.url}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-2 md:right-4 w-[150px] md:w-[200px] h-auto object-contain"
+          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[260px] h-auto object-contain"
         />
         <div className="relative z-10 max-w-[62%] md:max-w-[65%]">
           <h2
-            className="font-serif text-[26px] md:text-[30px] leading-[1.15]"
-            style={{ color: "#3A2A20", letterSpacing: "-0.005em", fontWeight: 600 }}
+            className="font-serif text-[30px] md:text-[44px] leading-[1.08]"
+            style={{ color: "#3A2A20", letterSpacing: "-0.015em", fontWeight: 600 }}
           >
-            Mi Recetario
+            ¿Qué te provoca hoy?
           </h2>
           <p
-            className="mt-1.5 text-[13px] md:text-[14px] italic leading-[1.5]"
+            className="mt-3 text-[14px] md:text-[16px] italic leading-[1.5]"
             style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             {favoritesOnly
@@ -412,7 +410,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           {!favoritesOnly && (
             <button
               onClick={() => { setEditing(null); setOpenForm(true); }}
-              className="mt-4 rounded-full px-4 py-2 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
+              className="mt-6 rounded-full px-5 py-2.5 text-[13px] font-medium inline-flex items-center gap-1.5 hover:scale-[1.02] active:scale-95 transition-all duration-200 ease-out cursor-pointer"
               style={{
                 background: "#E85D2F",
                 color: "#FFF6EA",
