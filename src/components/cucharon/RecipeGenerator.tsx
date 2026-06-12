@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Save, Leaf, Refrigerator, Feather, Heart, Timer, Cookie, Sparkles, Gift } from "lucide-react";
 import sartenHero from "@/assets/sarten-hero.png.asset.json";
+import { HistoryRecipeCard } from "./HistoryRecipeCard";
 import moodLiviano from "@/assets/mood-liviano.png.asset.json";
 import moodConfort from "@/assets/mood-confort.png.asset.json";
 import moodRapido from "@/assets/mood-rapido.png.asset.json";
