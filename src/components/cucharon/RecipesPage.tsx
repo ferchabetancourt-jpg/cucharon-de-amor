@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
-const SOFT_CHIP_STYLES = [
-  { bg: "#F8E3C8", text: "#7A4E0E" },
-  { bg: "#E2EDD8", text: "#2F4A1F" },
-  { bg: "#F8D8CB", text: "#7A2E12" },
+const SOLID_CHIP_STYLES = [
+  { bg: "#E85D2F", text: "#FFF6EA" },
+  { bg: "#F2A93B", text: "#3A2A20" },
+  { bg: "#5E8C4A", text: "#FFF6EA" },
 ];
 
 function RecipeDetail({
@@ -485,7 +485,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               style={
                 methods.includes(m.key)
                   ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
+                  : { background: SOLID_CHIP_STYLES[i % 3].bg, borderColor: SOLID_CHIP_STYLES[i % 3].bg, color: SOLID_CHIP_STYLES[i % 3].text }
               }
             >
               {m.label}
@@ -520,9 +520,9 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: SOFT_CHIP_STYLES[i % 3].bg,
-                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
-                        color: SOFT_CHIP_STYLES[i % 3].text,
+                        background: SOLID_CHIP_STYLES[i % 3].bg,
+                        borderColor: SOLID_CHIP_STYLES[i % 3].bg,
+                        color: SOLID_CHIP_STYLES[i % 3].text,
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
