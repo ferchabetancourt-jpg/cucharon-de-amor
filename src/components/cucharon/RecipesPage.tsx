@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CATEGORIES, COOKING_METHODS, getCategoryStyle } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
