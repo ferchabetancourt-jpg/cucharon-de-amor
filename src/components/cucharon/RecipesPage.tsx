@@ -21,16 +21,20 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
+
 function RecipeDetail({
   recipe,
   onBack,
   onEdit,
   onAskDelete,
+  isAdmin,
 }: {
   recipe: SavedRecipe;
   onBack: () => void;
   onEdit: () => void;
   onAskDelete: () => void;
+  isAdmin: boolean;
 }) {
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
   const isFav = recipesStore.isFavorite(recipe.id);
