@@ -9,7 +9,7 @@ import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
 import { track } from "@/lib/analytics";
-import recetarioBook from "@/assets/recetario-book.png";
+import cucharonSopa from "@/assets/cucharon-sopa.png.asset.json";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -389,18 +389,17 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         }}
       >
         <img
-          src={recetarioBook}
+          src={cucharonSopa.url}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute -top-2 -right-4 w-[170px] md:w-[210px] opacity-90 mix-blend-multiply"
-          style={{ filter: "drop-shadow(0 6px 14px rgba(107,98,87,0.15))" }}
+          className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-2 md:right-4 w-[150px] md:w-[200px] h-auto object-contain"
         />
         <div className="relative z-10 max-w-[62%] md:max-w-[65%]">
           <h2
             className="font-serif text-[26px] md:text-[30px] leading-[1.15]"
             style={{ color: "#3A2A20", letterSpacing: "-0.005em", fontWeight: 600 }}
           >
-            📖 Mi Recetario
+            Mi Recetario
           </h2>
           <p
             className="mt-1.5 text-[13px] md:text-[14px] italic leading-[1.5]"
