@@ -137,7 +137,7 @@ export function RecipeGenerator() {
         </div>
 
         {/* Input con iconos */}
-        <div className="relative z-10 mb-3">
+        <div className="relative z-10 mb-3 md:w-[62%]">
           <Leaf
             className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4"
             strokeWidth={2}
@@ -163,7 +163,7 @@ export function RecipeGenerator() {
         </div>
 
         {/* Chips de preferencias */}
-        <div className="relative z-10 flex flex-wrap gap-1.5 mb-3">
+        <div className="relative z-10 flex flex-wrap gap-1.5 mb-3 md:w-[62%]">
           {PREFERENCES.map((p, i) => {
             const palette = CHIP_PALETTE[i % CHIP_PALETTE.length];
             const selected = prefs.includes(p.key);
