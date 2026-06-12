@@ -34,14 +34,14 @@ export const CATEGORIES = [
 
 // Color por categoría: bar = bloque superior; chipBg/chipText = pastilla
 export const CATEGORY_STYLES: Record<string, { bar: string; chipBg: string; chipText: string }> = {
-  sopas:      { bar: "#E85D2F", chipBg: "#FBE0D4", chipText: "#A83A14" },
-  rapido:     { bar: "#F2A93B", chipBg: "#FCEACB", chipText: "#7A4E0E" },
-  cuerpo:     { bar: "#5E8C4A", chipBg: "#DCE8D3", chipText: "#3A5A2C" },
-  plan:       { bar: "#F8E3C8", chipBg: "#FBEFDC", chipText: "#7A5A30" },
-  dulce:      { bar: "#F8D8CB", chipBg: "#FCE8DF", chipText: "#A8472A" },
-  colombiano: { bar: "#E85D2F", chipBg: "#FBE0D4", chipText: "#A83A14" },
-  bases:      { bar: "#E2EDD8", chipBg: "#ECF3E4", chipText: "#3A5A2C" },
-  especiales: { bar: "#F2A93B", chipBg: "#FCEACB", chipText: "#7A4E0E" },
+  sopas:      { bar: "#E85D2F", chipBg: "#F8D8CB", chipText: "#7A2E12" },
+  rapido:     { bar: "#F2A93B", chipBg: "#F8E3C8", chipText: "#7A4E0E" },
+  cuerpo:     { bar: "#5E8C4A", chipBg: "#E2EDD8", chipText: "#2F4A1F" },
+  plan:       { bar: "#F8E3C8", chipBg: "#F8E3C8", chipText: "#7A4E0E" },
+  dulce:      { bar: "#F8D8CB", chipBg: "#F8D8CB", chipText: "#7A2E12" },
+  colombiano: { bar: "#E85D2F", chipBg: "#F8D8CB", chipText: "#7A2E12" },
+  bases:      { bar: "#E2EDD8", chipBg: "#E2EDD8", chipText: "#2F4A1F" },
+  especiales: { bar: "#F2A93B", chipBg: "#F8E3C8", chipText: "#7A4E0E" },
 };
 
 export function getCategoryStyle(key?: string) {
