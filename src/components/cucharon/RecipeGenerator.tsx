@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Save, Leaf, Refrigerator } from "lucide-react";
+import { Save, Leaf, Refrigerator, Feather, Heart, Timer, Cookie, Sparkles, Gift } from "lucide-react";
 import sartenHero from "@/assets/sarten-hero.png.asset.json";
 import moodLiviano from "@/assets/mood-liviano.png.asset.json";
 import moodConfort from "@/assets/mood-confort.png.asset.json";
@@ -38,6 +38,14 @@ const CHIP_PALETTE = [
   { bg: "#5E8C4A", text: "#FFFFFF" }, // olive green
 ];
 const MOOD_ACCENTS = ["#5E8C4A", "#E85D2F", "#F2A93B"];
+const MOOD_ICONS: Record<string, typeof Feather> = {
+  liviano: Feather,
+  confort: Heart,
+  rapido: Timer,
+  dulce: Cookie,
+  sinculpa: Sparkles,
+  sorpresa: Gift,
+};
 
 export function RecipeGenerator() {
   const [mood, setMood] = useState<MoodKey | null>(null);
@@ -235,14 +243,17 @@ export function RecipeGenerator() {
                   border: "1px solid rgba(58,42,32,0.08)",
                 }}
               >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center"
-                  style={{ background: `${accent}14` }}
-                >
-                  <span style={{ color: accent, fontSize: 22, lineHeight: 1 }}>
-                    {m.icon ?? "•"}
-                  </span>
-                </div>
+                {(() => {
+                  const Icon = MOOD_ICONS[m.key] ?? Sparkles;
+                  return (
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center"
+                      style={{ background: `${accent}14` }}
+                    >
+                      <Icon size={24} strokeWidth={1.5} style={{ color: accent }} />
+                    </div>
+                  );
+                })()}
                 <span className="text-[11.5px] font-medium leading-tight" style={{ color: "#3A2A20" }}>
                   {m.label}
                 </span>
