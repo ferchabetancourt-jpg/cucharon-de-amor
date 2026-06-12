@@ -267,6 +267,8 @@ function RecipeListItem({
 }
 
 export function RecipesPage({ favoritesOnly = false, initialCategory }: { favoritesOnly?: boolean; initialCategory?: string } = {}) {
+  const { user } = useAuth();
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
   const allRecipes = useRecipes();
   const recipes = favoritesOnly
     ? allRecipes.filter((r) => recipesStore.isFavorite(r.id))
