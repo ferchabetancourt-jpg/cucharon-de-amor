@@ -461,21 +461,21 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          {COOKING_METHODS.map((m, i) => (
+        <div className="flex flex-wrap gap-2">
+          {COOKING_METHODS.map((m) => (
             <button
               key={m.key}
               onClick={() => toggleMethod(m.key)}
               className={cn(
-                "rounded-full px-2.5 py-1 text-[11px] transition-all border",
+                "rounded-full px-3.5 py-1.5 text-[12px] transition-all border",
               )}
               style={
                 methods.includes(m.key)
-                  ? { background: "#5E8C4A", borderColor: "#5E8C4A", color: "#FFFFFF", fontWeight: 500 }
-                  : { background: SOFT_CHIP_STYLES[i % 3].bg, borderColor: SOFT_CHIP_STYLES[i % 3].bg, color: SOFT_CHIP_STYLES[i % 3].text }
+                  ? { background: "#E85D2F", borderColor: "#E85D2F", color: "#FFF6EA", fontWeight: 600, fontFamily: "Montserrat, sans-serif" }
+                  : { background: "#FFFFFF", borderColor: "#EAD9C4", color: "#3A2A20", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }
               }
             >
-              {m.label}
+              {stripEmoji(m.label)}
             </button>
           ))}
         </div>
@@ -489,7 +489,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
           Colecciones
         </span>
         <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c, i) => {
+          {CATEGORIES.map((c) => {
             const active = cat === c.key;
             return (
               <button
@@ -507,15 +507,15 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
                         fontFamily: "Montserrat, sans-serif",
                       }
                     : {
-                        background: SOFT_CHIP_STYLES[i % 3].bg,
-                        borderColor: SOFT_CHIP_STYLES[i % 3].bg,
-                        color: SOFT_CHIP_STYLES[i % 3].text,
+                        background: "#FFFFFF",
+                        borderColor: "#EAD9C4",
+                        color: "#3A2A20",
                         fontWeight: 500,
                         fontFamily: "Montserrat, sans-serif",
                       }
                 }
               >
-                {c.label}
+                {stripEmoji(c.label)}
               </button>
             );
           })}
