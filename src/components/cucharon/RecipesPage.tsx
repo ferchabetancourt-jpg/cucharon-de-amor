@@ -169,21 +169,14 @@ function RecipeListItem({
         onClick={onSelect}
         className="group relative rounded-[24px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
         style={{
-          background: "#FFFFFF",
-          border: "1px solid #EDE8DC",
-          boxShadow: "0 1px 0 rgba(0,0,0,0.02), 0 6px 18px -14px rgba(47,42,38,0.15)",
+          background: "#FFFDF9",
+          border: "1px solid #F2ECE0",
+          boxShadow: "0 1px 2px rgba(47,42,38,0.04), 0 4px 14px -10px rgba(47,42,38,0.10)",
         }}
       >
-        {/* Bloque de color superior según categoría */}
-        <div
-          aria-hidden
-          className="h-20 md:h-24 w-full"
-          style={{ background: catStyle.bar }}
-        />
-
         <div className="p-5 md:p-6">
           {/* Top row: star + category badge */}
-          <div className="flex items-start justify-between gap-2 -mt-2">
+          <div className="flex items-start justify-between gap-2">
             <button
               type="button"
               onClick={(e) => {
