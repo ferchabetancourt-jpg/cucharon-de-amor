@@ -238,26 +238,28 @@ function RecipeListItem({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onEdit(); }}
-              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-              style={{ background: "#FFF6EA", color: "#5E8C4A" }}
-              aria-label="Editar receta"
-            >
-              <Pencil className="w-3.5 h-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
-              className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-              style={{ background: "#FFF6EA", color: "#E85D2F" }}
-              aria-label="Eliminar receta"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {isAdmin && (
+            <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+                style={{ background: "#FFF6EA", color: "#5E8C4A" }}
+                aria-label="Editar receta"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
+                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
+                style={{ background: "#FFF6EA", color: "#E85D2F" }}
+                aria-label="Eliminar receta"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </li>
