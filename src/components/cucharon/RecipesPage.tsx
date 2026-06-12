@@ -158,16 +158,15 @@ function RecipeListItem({
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
-  const catStyle = getCategoryStyle(recipe.category);
 
   return (
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-[24px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
+        className="group relative rounded-[18px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
         style={{
-          background: "#FFFDF9",
-          border: "1px solid #F2ECE0",
+          background: "#FFFFFF",
+          border: "1px solid #EAD9C4",
           boxShadow: "0 1px 2px rgba(47,42,38,0.04), 0 4px 14px -10px rgba(47,42,38,0.10)",
         }}
       >
@@ -189,15 +188,16 @@ function RecipeListItem({
               {isFav ? "★" : "☆"}
             </button>
             <span
-              className="rounded-full px-2.5 py-1 text-[11px]"
+              className="rounded-full px-2.5 py-1 text-[10.5px]"
               style={{
-                background: catStyle.chipBg,
-                color: catStyle.chipText,
+                background: "#3A2A20",
+                color: "#FFF6EA",
                 fontFamily: "Montserrat, sans-serif",
-                fontWeight: 600,
+                fontWeight: 500,
+                letterSpacing: "0.02em",
               }}
             >
-              {catLabel}
+              {stripEmoji(catLabel)}
             </span>
           </div>
 
@@ -211,7 +211,7 @@ function RecipeListItem({
 
           {/* Metadata */}
           <div
-            className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12.5px]"
+            className="flex items-center gap-x-2 text-[12px] whitespace-nowrap overflow-hidden text-ellipsis"
             style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
             {recipe.methods?.map((m, i) => {
@@ -220,14 +220,14 @@ function RecipeListItem({
               return (
                 <span key={m} className="inline-flex items-center gap-1">
                   {i > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                  <span>{ml}</span>
+                  <span>{stripEmoji(ml)}</span>
                 </span>
               );
             })}
             {recipe.time && (
               <>
                 {(recipe.methods?.length ?? 0) > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                <span className="inline-flex items-center gap-1">⏱️ {recipe.time}</span>
+                <span className="inline-flex items-center gap-1">{recipe.time}</span>
               </>
             )}
           </div>
