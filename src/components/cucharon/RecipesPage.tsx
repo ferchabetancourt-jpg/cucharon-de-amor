@@ -4,7 +4,7 @@ import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil, SlidersHorizontal } from "lucide-react";
+import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil, SlidersHorizontal, Clock, Utensils } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
