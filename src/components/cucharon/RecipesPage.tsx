@@ -551,10 +551,11 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         >
           Colecciones
         </span>
-        <div
-          className="flex gap-2 overflow-x-auto flex-nowrap -mx-5 px-5 pb-1"
-          style={{ scrollbarWidth: "none" }}
-        >
+        <div className="relative -mx-5">
+          <div
+            className="flex gap-2 overflow-x-auto flex-nowrap px-5 pb-1 no-scrollbar"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+          >
           {CATEGORIES.map((c) => {
             const active = cat === c.key;
             return (
@@ -585,6 +586,12 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
               </button>
             );
           })}
+          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-0 right-0 h-full w-10"
+            style={{ background: "linear-gradient(to left, #FFF6EA 0%, rgba(255,246,234,0) 100%)" }}
+          />
         </div>
       </div>
 
