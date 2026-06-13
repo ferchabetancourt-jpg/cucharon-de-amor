@@ -158,83 +158,115 @@ function RecipeListItem({
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
   const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
+  const image = (recipe as unknown as { image?: string; imageUrl?: string; photo?: string }).image
+    ?? (recipe as unknown as { imageUrl?: string }).imageUrl
+    ?? (recipe as unknown as { photo?: string }).photo;
+
+  const FavStar = (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        const wasFav = recipesStore.isFavorite(recipe.id);
+        recipesStore.toggleFavorite(recipe.id);
+        if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+      }}
+      aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
+      className="text-[20px] leading-none transition-transform hover:scale-110 cursor-pointer"
+      style={{ color: isFav ? "#E85D2F" : image ? "#FFF6EA" : "#D6CFC1", textShadow: image ? "0 1px 3px rgba(0,0,0,0.35)" : "none" }}
+    >
+      {isFav ? "★" : "☆"}
+    </button>
+  );
+
+  const CatBadge = (
+    <span
+      className="rounded-full px-2.5 py-1 text-[10.5px]"
+      style={{
+        background: "#3A2A20",
+        color: "#FFF6EA",
+        fontFamily: "Montserrat, sans-serif",
+        fontWeight: 500,
+        letterSpacing: "0.02em",
+      }}
+    >
+      {stripEmoji(catLabel)}
+    </span>
+  );
 
   return (
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-[18px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(47,42,38,0.25)]"
+        className="group relative rounded-[18px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-14px_rgba(47,42,38,0.22)]"
         style={{
           background: "#FFFFFF",
           border: "1px solid #EAD9C4",
-          boxShadow: "0 1px 2px rgba(47,42,38,0.04), 0 4px 14px -10px rgba(47,42,38,0.10)",
+          boxShadow: "0 1px 2px rgba(47,42,38,0.03), 0 4px 12px -10px rgba(47,42,38,0.08)",
         }}
       >
-        <div className="p-5 md:p-6">
-          {/* Top row: star + category badge */}
-          <div className="flex items-start justify-between gap-2">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                const wasFav = recipesStore.isFavorite(recipe.id);
-                recipesStore.toggleFavorite(recipe.id);
-                if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
-              }}
-              aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
-              className="text-2xl leading-none transition-transform hover:scale-110 cursor-pointer"
-              style={{ color: isFav ? "#E85D2F" : "#D6CFC1" }}
-            >
-              {isFav ? "★" : "☆"}
-            </button>
-            <span
-              className="rounded-full px-2.5 py-1 text-[10.5px]"
-              style={{
-                background: "#3A2A20",
-                color: "#FFF6EA",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 500,
-                letterSpacing: "0.02em",
-              }}
-            >
-              {stripEmoji(catLabel)}
-            </span>
+        {image && (
+          <div className="relative w-full" style={{ height: 110 }}>
+            <img
+              src={image}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{ borderTopLeftRadius: 18, borderTopRightRadius: 18 }}
+            />
+            <div className="absolute top-2 left-2 z-10">{FavStar}</div>
+            <div className="absolute top-2 right-2 z-10">{CatBadge}</div>
           </div>
+        )}
+
+        <div className={image ? "p-3.5" : "p-4"}>
+          {!image && (
+            <div className="flex items-start justify-between gap-2 mb-2">
+              {FavStar}
+              {CatBadge}
+            </div>
+          )}
 
           {/* Recipe name */}
           <h3
-            className="font-serif text-[19px] md:text-[21px] leading-[1.2] mt-3 mb-3"
-            style={{ color: "#3A2A20", fontWeight: 600, letterSpacing: "-0.005em" }}
+            className="text-[16px] md:text-[17px] leading-[1.25] mb-1.5"
+            style={{
+              color: "#3A2A20",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: 700,
+              letterSpacing: "-0.005em",
+            }}
           >
             {recipe.name}
           </h3>
 
           {/* Metadata */}
           <div
-            className="flex items-center gap-x-2 text-[12px] whitespace-nowrap overflow-hidden text-ellipsis"
+            className="flex items-center gap-x-2 text-[11.5px] whitespace-nowrap overflow-hidden text-ellipsis"
             style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
           >
-            {recipe.methods?.map((m, i) => {
-              const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
-              if (!ml) return null;
-              return (
-                <span key={m} className="inline-flex items-center gap-1">
-                  {i > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
+            {recipe.methods?.[0] && (() => {
+              const ml = COOKING_METHODS.find((x) => x.key === recipe.methods![0])?.label;
+              return ml ? (
+                <span className="inline-flex items-center gap-1">
+                  <Utensils className="w-3 h-3" strokeWidth={1.75} />
                   <span>{stripEmoji(ml)}</span>
                 </span>
-              );
-            })}
+              ) : null;
+            })()}
             {recipe.time && (
               <>
-                {(recipe.methods?.length ?? 0) > 0 && <span style={{ color: "#C9C0AE" }}>•</span>}
-                <span className="inline-flex items-center gap-1">{recipe.time}</span>
+                {recipe.methods?.[0] && <span style={{ color: "#C9C0AE" }}>·</span>}
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3 h-3" strokeWidth={1.75} />
+                  {recipe.time}
+                </span>
               </>
             )}
           </div>
 
           {/* Actions */}
           {isAdmin && (
-            <div className="flex justify-end gap-1.5 mt-4 pt-3 border-t" style={{ borderColor: "#F2ECE0" }}>
+            <div className="flex justify-end gap-1.5 mt-3 pt-2.5 border-t" style={{ borderColor: "#F2ECE0" }}>
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); onEdit(); }}
