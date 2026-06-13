@@ -48,6 +48,22 @@ export function getCategoryStyle(key?: string) {
   return CATEGORY_STYLES[key ?? "especiales"] ?? CATEGORY_STYLES.especiales;
 }
 
+// Bloque sólido por categoría (cuando la receta no tiene foto)
+export const CATEGORY_BLOCKS: Record<string, string> = {
+  sopas:      "#E85D2F",
+  rapido:     "#F2A93B",
+  cuerpo:     "#5E8C4A",
+  plan:       "#E85D2F",
+  dulce:      "#F2A93B",
+  colombiano: "#E85D2F",
+  bases:      "#5E8C4A",
+  especiales: "#F2A93B",
+};
+
+export function getCategoryBlock(key?: string) {
+  return CATEGORY_BLOCKS[key ?? "especiales"] ?? CATEGORY_BLOCKS.especiales;
+}
+
 export const COOKING_METHODS = [
   { key: "airfryer", label: "🔥 Air Fryer" },
   { key: "sarten", label: "🍳 Sartén" },
