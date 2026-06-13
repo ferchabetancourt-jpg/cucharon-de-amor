@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
-import { CATEGORIES, COOKING_METHODS, getCategoryStyle } from "@/lib/cucharon-data";
+import { CATEGORIES, COOKING_METHODS, getCategoryBlock } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Trash2, ArrowLeft, BookOpen, X, Star, Pencil, SlidersHorizontal, Clock, Utensils } from "lucide-react";
+import {
+  Search, Plus, Trash2, ArrowLeft, X, Star, Pencil, SlidersHorizontal, Clock, Utensils,
+  Soup, Zap, Leaf, ChefHat, IceCream2, Flag, Carrot, Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
@@ -21,11 +25,56 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
+export const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 const stripEmoji = (s: string) =>
   s.replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\uFE0F]+/u, "").trim();
 
-function RecipeDetail({
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  sopas: Soup,
+  rapido: Zap,
+  cuerpo: Leaf,
+  plan: ChefHat,
+  dulce: IceCream2,
+  colombiano: Flag,
+  bases: Carrot,
+  especiales: Sparkles,
+};
+
+function getRecipeImage(r: SavedRecipe): string | undefined {
+  const x = r as unknown as { image?: string; imageUrl?: string; photo?: string };
+  return x.image ?? x.imageUrl ?? x.photo;
+}
+
+function CategoryBlock({ catKey, className = "", iconSize = 40 }: { catKey: string; className?: string; iconSize?: number }) {
+  const Icon = CATEGORY_ICONS[catKey] ?? Sparkles;
+  return (
+    <div
+      className={cn("w-full h-full flex items-center justify-center", className)}
+      style={{ background: getCategoryBlock(catKey) }}
+    >
+      <Icon strokeWidth={1.5} style={{ width: iconSize, height: iconSize, color: "#FFF6EA", opacity: 0.92 }} />
+    </div>
+  );
+}
+
+function CatChip({ label }: { label: string }) {
+  return (
+    <span
+      className="inline-flex items-center rounded-full px-2.5 py-1 text-[10.5px] whitespace-nowrap"
+      style={{
+        background: "#3A2A20",
+        color: "#FFF6EA",
+        fontFamily: "Montserrat, sans-serif",
+        fontWeight: 500,
+        letterSpacing: "0.02em",
+      }}
+    >
+      {stripEmoji(label)}
+    </span>
+  );
+}
+
+export function RecipeDetail({
   recipe,
   onBack,
   onEdit,
@@ -38,9 +87,10 @@ function RecipeDetail({
   onAskDelete: () => void;
   isAdmin: boolean;
 }) {
-  const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
+  const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "Especiales";
   const isFav = recipesStore.isFavorite(recipe.id);
   const [personalNote, setPersonalNote] = useRecipeNotes(recipe.id);
+  const image = getRecipeImage(recipe);
 
   return (
     <>
@@ -50,41 +100,35 @@ function RecipeDetail({
       >
         <ArrowLeft className="w-3.5 h-3.5" /> Volver
       </button>
-      <article className="bg-card rounded-[var(--radius)] p-5 shadow-soft animate-fade-in">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div>
-            <h2 className="font-serif text-[21px] text-terracotta leading-tight">{recipe.name}</h2>
-            <div className="flex gap-2 items-center flex-wrap mt-1.5">
-              <span className="bg-cream-deep text-verde rounded-full px-2.5 py-0.5 text-[11px] font-medium">
-                {catLabel}
-              </span>
-              {recipe.methods?.map((m) => {
-                const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
-                return ml ? (
-                  <span key={m} className="bg-cream text-ink rounded-full px-2 py-0.5 text-[11px] font-medium border border-cream-deep">
-                    {ml}
-                  </span>
-                ) : null;
-              })}
-              {recipe.time && <span className="text-[11px] text-muted-foreground">⏱ {recipe.time}</span>}
-            </div>
-          </div>
-          <div className="flex gap-1.5 flex-shrink-0">
+      <article
+        className="rounded-[20px] overflow-hidden animate-fade-in"
+        style={{ background: "#FFFFFF", border: "1px solid #EAD9C4", boxShadow: "0 8px 24px -16px rgba(47,42,38,0.18)" }}
+      >
+        {/* Top media zone */}
+        <div className="relative w-full" style={{ height: 200 }}>
+          {image ? (
+            <img src={image} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <CategoryBlock catKey={recipe.category} iconSize={64} />
+          )}
+          <div className="absolute top-3 right-3 flex gap-1.5">
             <button
               onClick={() => {
                 const wasFav = recipesStore.isFavorite(recipe.id);
                 recipesStore.toggleFavorite(recipe.id);
                 if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
               }}
-              className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-ochre/20 transition-colors"
+              className="rounded-full w-9 h-9 inline-flex items-center justify-center transition-transform hover:scale-105"
+              style={{ background: "rgba(255,246,234,0.95)", boxShadow: "0 4px 10px -4px rgba(0,0,0,0.25)" }}
               aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
             >
-              <Star className={cn("w-4 h-4", isFav ? "fill-[#E85D2F] text-[#E85D2F]" : "text-muted-foreground")} />
+              <Star className={cn("w-4 h-4", isFav ? "fill-[#E85D2F] text-[#E85D2F]" : "text-[#8A6B55]")} />
             </button>
             {isAdmin && (
               <button
                 onClick={onEdit}
-                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-verde/10 hover:text-verde transition-colors"
+                className="rounded-full w-9 h-9 inline-flex items-center justify-center transition-transform hover:scale-105"
+                style={{ background: "rgba(255,246,234,0.95)", color: "#5E8C4A", boxShadow: "0 4px 10px -4px rgba(0,0,0,0.25)" }}
                 aria-label="Editar"
               >
                 <Pencil className="w-4 h-4" />
@@ -93,7 +137,8 @@ function RecipeDetail({
             {isAdmin && (
               <button
                 onClick={onAskDelete}
-                className="bg-cream rounded-lg w-9 h-9 inline-flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors"
+                className="rounded-full w-9 h-9 inline-flex items-center justify-center transition-transform hover:scale-105"
+                style={{ background: "rgba(255,246,234,0.95)", color: "#E85D2F", boxShadow: "0 4px 10px -4px rgba(0,0,0,0.25)" }}
                 aria-label="Eliminar"
               >
                 <Trash2 className="w-4 h-4" />
@@ -102,48 +147,98 @@ function RecipeDetail({
           </div>
         </div>
 
-        {recipe.ingredients && (
-          <section className="mb-4">
-            <h3 className="text-[11px] uppercase tracking-[0.12em] text-verde font-medium mb-1.5">Ingredientes</h3>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">{recipe.ingredients}</p>
-          </section>
-        )}
-        {recipe.preparation && (
-          <section className="mb-4">
-            <h3 className="text-[11px] uppercase tracking-[0.12em] text-verde font-medium mb-1.5">Preparación</h3>
-            <pre className="font-sans text-sm leading-[1.8] whitespace-pre-wrap text-ink">{recipe.preparation}</pre>
-          </section>
-        )}
-        {recipe.notes && (
-          <section className="bg-cream rounded-xl p-3.5 border-l-[3px] border-ochre">
-            <h3 className="text-[11px] uppercase tracking-[0.12em] text-verde font-medium mb-1">💛 Secretos</h3>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">{recipe.notes}</p>
-          </section>
-        )}
-        <section className="mt-4 pt-4 border-t border-cream-deep">
-          <h3 className="text-[11px] uppercase tracking-[0.12em] text-terracotta font-medium mb-2">📝 Mis notas</h3>
-          <textarea
-            value={personalNote}
-            onChange={(e) => setPersonalNote(e.target.value)}
-            placeholder="Anota aquí tus cambios, sustituciones o trucos personales..."
-            className="w-full rounded-xl p-3.5 text-sm leading-relaxed outline-none transition-colors resize-y min-h-[120px]"
-            style={{
-              background: "#FFF6EA",
-              border: "1.5px solid #EDE8DC",
-              color: "#3A2A20",
-              fontFamily: "'DM Sans', system-ui, sans-serif",
-            }}
-          />
-          {personalNote.trim() && (
-            <p className="text-[10px] text-muted-foreground mt-1.5 italic">Guardado automáticamente en este dispositivo</p>
+        <div className="p-5 md:p-6">
+          <h2
+            className="text-[22px] md:text-[24px] leading-[1.2] mb-3"
+            style={{ color: "#3A2A20", fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: "-0.01em" }}
+          >
+            {recipe.name}
+          </h2>
+          <div className="flex gap-2 items-center flex-wrap mb-5">
+            <CatChip label={catLabel} />
+            {recipe.methods?.map((m) => {
+              const ml = COOKING_METHODS.find((x) => x.key === m)?.label;
+              return ml ? <CatChip key={m} label={ml} /> : null;
+            })}
+            {recipe.time && (
+              <span
+                className="inline-flex items-center gap-1 text-[11.5px]"
+                style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
+              >
+                <Clock className="w-3 h-3" strokeWidth={1.75} /> {recipe.time}
+              </span>
+            )}
+          </div>
+
+          {recipe.ingredients && (
+            <section className="mb-5">
+              <h3
+                className="text-[11px] uppercase font-medium mb-2"
+                style={{ color: "#5E8C4A", letterSpacing: "0.22em", fontFamily: "Montserrat, sans-serif" }}
+              >
+                Ingredientes
+              </h3>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "#3A2A20" }}>
+                {recipe.ingredients}
+              </p>
+            </section>
           )}
-        </section>
+          {recipe.preparation && (
+            <section className="mb-5">
+              <h3
+                className="text-[11px] uppercase font-medium mb-2"
+                style={{ color: "#5E8C4A", letterSpacing: "0.22em", fontFamily: "Montserrat, sans-serif" }}
+              >
+                Preparación
+              </h3>
+              <pre className="font-sans text-sm leading-[1.8] whitespace-pre-wrap" style={{ color: "#3A2A20" }}>
+                {recipe.preparation}
+              </pre>
+            </section>
+          )}
+          {recipe.notes && (
+            <section className="bg-cream rounded-xl p-3.5 border-l-[3px] border-ochre mb-2">
+              <h3
+                className="text-[11px] uppercase font-medium mb-1"
+                style={{ color: "#5E8C4A", letterSpacing: "0.22em", fontFamily: "Montserrat, sans-serif" }}
+              >
+                Secretos
+              </h3>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "#3A2A20" }}>
+                {recipe.notes}
+              </p>
+            </section>
+          )}
+          <section className="mt-5 pt-4" style={{ borderTop: "2px solid #E85D2F" }}>
+            <h3
+              className="text-[11px] uppercase font-semibold mb-2"
+              style={{ color: "#B5431E", letterSpacing: "0.22em", fontFamily: "Montserrat, sans-serif" }}
+            >
+              Mis notas
+            </h3>
+            <textarea
+              value={personalNote}
+              onChange={(e) => setPersonalNote(e.target.value)}
+              placeholder="Anota aquí tus cambios, sustituciones o trucos personales..."
+              className="w-full rounded-xl p-3.5 text-sm leading-relaxed outline-none transition-colors resize-y min-h-[120px]"
+              style={{
+                background: "#FFF6EA",
+                border: "1.5px solid #EDE8DC",
+                color: "#3A2A20",
+                fontFamily: "'DM Sans', system-ui, sans-serif",
+              }}
+            />
+            {personalNote.trim() && (
+              <p className="text-[10px] text-muted-foreground mt-1.5 italic">Guardado automáticamente en este dispositivo</p>
+            )}
+          </section>
+        </div>
       </article>
     </>
   );
 }
 
-function RecipeListItem({
+export function RecipeListItem({
   recipe,
   onSelect,
   onEdit,
@@ -157,136 +252,112 @@ function RecipeListItem({
   isAdmin: boolean;
 }) {
   const isFav = recipesStore.isFavorite(recipe.id);
-  const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "📌 Especiales";
-  const image = (recipe as unknown as { image?: string; imageUrl?: string; photo?: string }).image
-    ?? (recipe as unknown as { imageUrl?: string }).imageUrl
-    ?? (recipe as unknown as { photo?: string }).photo;
-
-  const FavStar = (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation();
-        const wasFav = recipesStore.isFavorite(recipe.id);
-        recipesStore.toggleFavorite(recipe.id);
-        if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
-      }}
-      aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
-      className="text-[20px] leading-none transition-transform hover:scale-110 cursor-pointer"
-      style={{ color: isFav ? "#E85D2F" : image ? "#FFF6EA" : "#D6CFC1", textShadow: image ? "0 1px 3px rgba(0,0,0,0.35)" : "none" }}
-    >
-      {isFav ? "★" : "☆"}
-    </button>
-  );
-
-  const CatBadge = (
-    <span
-      className="rounded-full px-2.5 py-1 text-[10.5px]"
-      style={{
-        background: "#3A2A20",
-        color: "#FFF6EA",
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: 500,
-        letterSpacing: "0.02em",
-      }}
-    >
-      {stripEmoji(catLabel)}
-    </span>
-  );
+  const catLabel = CATEGORIES.find((c) => c.key === recipe.category)?.label ?? "Especiales";
+  const image = getRecipeImage(recipe);
+  const methodLabel = recipe.methods?.[0]
+    ? COOKING_METHODS.find((x) => x.key === recipe.methods![0])?.label
+    : undefined;
 
   return (
     <li>
       <div
         onClick={onSelect}
-        className="group relative rounded-[18px] overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-14px_rgba(47,42,38,0.22)]"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === "Enter") onSelect(); }}
+        className="group relative flex rounded-[18px] overflow-hidden cursor-pointer transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-14px_rgba(47,42,38,0.22)]"
         style={{
+          height: 110,
           background: "#FFFFFF",
           border: "1px solid #EAD9C4",
           boxShadow: "0 1px 2px rgba(47,42,38,0.03), 0 4px 12px -10px rgba(47,42,38,0.08)",
         }}
       >
-        {image && (
-          <div className="relative w-full" style={{ height: 110 }}>
-            <img
-              src={image}
-              alt=""
-              className="w-full h-full object-cover"
-              style={{ borderTopLeftRadius: 18, borderTopRightRadius: 18 }}
-            />
-            <div className="absolute top-2 left-2 z-10">{FavStar}</div>
-            <div className="absolute top-2 right-2 z-10">{CatBadge}</div>
-          </div>
-        )}
-
-        <div className={image ? "p-3.5" : "p-4"}>
-          {!image && (
-            <div className="flex items-start justify-between gap-2 mb-2">
-              {FavStar}
-              {CatBadge}
-            </div>
+        {/* Left 42% — photo or color block */}
+        <div className="relative shrink-0" style={{ width: "42%" }}>
+          {image ? (
+            <img src={image} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <CategoryBlock catKey={recipe.category} iconSize={36} />
           )}
+        </div>
 
-          {/* Recipe name */}
-          <h3
-            className="text-[16px] md:text-[17px] leading-[1.25] mb-1.5"
-            style={{
-              color: "#3A2A20",
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 700,
-              letterSpacing: "-0.005em",
-            }}
-          >
-            {recipe.name}
-          </h3>
+        {/* Right 58% — content */}
+        <div className="flex-1 min-w-0 flex flex-col justify-between p-3">
+          <div className="flex items-start justify-between gap-2 min-w-0">
+            <CatChip label={catLabel} />
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                const wasFav = recipesStore.isFavorite(recipe.id);
+                recipesStore.toggleFavorite(recipe.id);
+                if (!wasFav) track("recipe_favorited", { recipe_name: recipe.name });
+              }}
+              aria-label={isFav ? "Quitar favorita" : "Marcar favorita"}
+              className="text-[18px] leading-none transition-transform hover:scale-110 shrink-0"
+              style={{ color: isFav ? "#E85D2F" : "#D6CFC1" }}
+            >
+              {isFav ? "★" : "☆"}
+            </button>
+          </div>
 
-          {/* Metadata */}
-          <div
-            className="flex items-center gap-x-2 text-[11.5px] whitespace-nowrap overflow-hidden text-ellipsis"
-            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
-          >
-            {recipe.methods?.[0] && (() => {
-              const ml = COOKING_METHODS.find((x) => x.key === recipe.methods![0])?.label;
-              return ml ? (
+          <div className="min-w-0">
+            <h3
+              className="text-[14.5px] leading-[1.2] mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
+              style={{
+                color: "#3A2A20",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 700,
+                letterSpacing: "-0.005em",
+              }}
+              title={recipe.name}
+            >
+              {recipe.name}
+            </h3>
+            <div
+              className="flex items-center gap-x-1.5 text-[11px] whitespace-nowrap overflow-hidden text-ellipsis"
+              style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
+            >
+              {methodLabel && (
                 <span className="inline-flex items-center gap-1">
                   <Utensils className="w-3 h-3" strokeWidth={1.75} />
-                  <span>{stripEmoji(ml)}</span>
+                  <span>{stripEmoji(methodLabel)}</span>
                 </span>
-              ) : null;
-            })()}
-            {recipe.time && (
-              <>
-                {recipe.methods?.[0] && <span style={{ color: "#C9C0AE" }}>·</span>}
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="w-3 h-3" strokeWidth={1.75} />
-                  {recipe.time}
+              )}
+              {recipe.time && (
+                <>
+                  {methodLabel && <span style={{ color: "#C9C0AE" }}>·</span>}
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="w-3 h-3" strokeWidth={1.75} />
+                    {recipe.time}
+                  </span>
+                </>
+              )}
+              {isAdmin && (
+                <span className="ml-auto inline-flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                    className="rounded-md w-6 h-6 inline-flex items-center justify-center transition-colors"
+                    style={{ color: "#5E8C4A" }}
+                    aria-label="Editar receta"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
+                    className="rounded-md w-6 h-6 inline-flex items-center justify-center transition-colors"
+                    style={{ color: "#E85D2F" }}
+                    aria-label="Eliminar receta"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
                 </span>
-              </>
-            )}
-          </div>
-
-          {/* Actions */}
-          {isAdmin && (
-            <div className="flex justify-end gap-1.5 mt-3 pt-2.5 border-t" style={{ borderColor: "#F2ECE0" }}>
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-                style={{ background: "#FFF6EA", color: "#5E8C4A" }}
-                aria-label="Editar receta"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); onAskDelete(); }}
-                className="rounded-lg w-8 h-8 inline-flex items-center justify-center transition-colors"
-                style={{ background: "#FFF6EA", color: "#E85D2F" }}
-                aria-label="Eliminar receta"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </li>
