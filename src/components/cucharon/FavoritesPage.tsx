@@ -6,7 +6,7 @@ import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics";
 import { RecipeDetail, RecipeListItem, ADMIN_EMAIL } from "./RecipesPage";
-import libroAbierto from "@/assets/libro-abierto.png.asset.json";
+import paellaHero from "@/assets/paella-hero.png.asset.json";
 import favoritaStar from "@/assets/favorita-star.png.asset.json";
 import {
   AlertDialog,
@@ -93,7 +93,7 @@ export function FavoritesPage() {
         }}
       >
         <img
-          src={libroAbierto.url}
+          src={paellaHero.url}
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[240px] h-auto object-contain"
