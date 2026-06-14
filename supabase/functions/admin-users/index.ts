@@ -99,7 +99,10 @@ Deno.serve(async (req) => {
 
     return json({ error: "Acción desconocida" }, 400);
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Error";
+    let msg = e instanceof Error ? e.message : "Error";
+    if (/weak|pwned|known to be|easy to guess/i.test(msg)) {
+      msg = "Esa contraseña es muy común o ha sido filtrada. Usa una más fuerte (mezcla mayúsculas, números y símbolos).";
+    }
     return json({ error: msg }, 500);
   }
 });
