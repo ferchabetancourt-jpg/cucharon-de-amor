@@ -962,6 +962,7 @@ Para la salsa napolitana:
 4. Cocina con el resto de ingredientes.
 5. Cocina las albóndigas con la salsa napolitana.`,
     createdAt: 45,
+    image: albondigasImg.url,
   },
   {
     id: "seed-carne-brasa",
