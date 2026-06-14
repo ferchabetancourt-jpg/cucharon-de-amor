@@ -1,4 +1,8 @@
 import type { SavedRecipe } from "./recipes-store";
+import ajiacoImg from "@/assets/ajiaco.png.asset.json";
+import alfajoresImg from "@/assets/alfajores.png.asset.json";
+import postaNegraImg from "@/assets/posta-negra.png.asset.json";
+import albondigasImg from "@/assets/albondigas-napolitanas.png.asset.json";
 
 // Recetas semilla: siempre presentes al abrir la app.
 // id con prefijo "seed-" para identificarlas y no duplicarlas.
