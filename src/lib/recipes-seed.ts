@@ -1,4 +1,8 @@
 import type { SavedRecipe } from "./recipes-store";
+import ajiacoImg from "@/assets/ajiaco.png.asset.json";
+import alfajoresImg from "@/assets/alfajores.png.asset.json";
+import postaNegraImg from "@/assets/posta-negra.png.asset.json";
+import albondigasImg from "@/assets/albondigas-napolitanas.png.asset.json";
 
 // Recetas semilla: siempre presentes al abrir la app.
 // id con prefijo "seed-" para identificarlas y no duplicarlas.
@@ -958,6 +962,7 @@ Para la salsa napolitana:
 4. Cocina con el resto de ingredientes.
 5. Cocina las albóndigas con la salsa napolitana.`,
     createdAt: 45,
+    image: albondigasImg.url,
   },
   {
     id: "seed-carne-brasa",
@@ -1178,6 +1183,7 @@ Para la salsa napolitana:
 8. Baña con la salsa que queda en la olla.
 9. Acompaña con arroz con coco y ensalada.`,
     createdAt: 54,
+    image: postaNegraImg.url,
   },
   {
     id: "seed-sobrebarriga",
@@ -2526,6 +2532,7 @@ Cocción:
 8. Deja enfriar y une con dulce de leche.
 9. Pasa los bordes por coco rallado.`,
     createdAt: 107,
+    image: alfajoresImg.url,
   },
   {
     id: "seed-polvorones",
@@ -2850,6 +2857,7 @@ Está lista cuando:
 10. Desmecha el pollo.
 11. Sirve la crema de leche y las alcaparras aparte.`,
     createdAt: 117,
+    image: ajiacoImg.url,
   },
   {
     id: "seed-sancocho",

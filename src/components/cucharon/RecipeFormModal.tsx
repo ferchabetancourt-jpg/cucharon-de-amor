@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { CATEGORIES, COOKING_METHODS } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
 interface Props {
   open: boolean;
@@ -12,6 +15,8 @@ interface Props {
 }
 
 export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
+  const { user } = useAuth();
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
   const [name, setName] = useState("");
   const [category, setCategory] = useState("especiales");
   const [methods, setMethods] = useState<string[]>([]);
@@ -19,6 +24,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
   const [ingredients, setIngredients] = useState("");
   const [preparation, setPreparation] = useState("");
   const [notes, setNotes] = useState("");
+  const [image, setImage] = useState<string>("");
 
   useEffect(() => {
     if (open) {
@@ -30,6 +36,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
         setIngredients(editing.ingredients ?? "");
         setPreparation(editing.preparation ?? "");
         setNotes(editing.notes ?? "");
+        setImage(editing.image ?? "");
       } else {
         setName(initial?.name ?? "");
         setCategory(initial?.category ?? "especiales");
@@ -38,6 +45,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
         setIngredients(initial?.ingredients ?? "");
         setPreparation(initial?.preparation ?? "");
         setNotes(initial?.notes ?? "");
+        setImage("");
       }
     }
   }, [open, editing, initial]);
@@ -64,6 +72,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
       ingredients: ingredients.trim() || undefined,
       preparation: preparation.trim() || undefined,
       notes: notes.trim() || undefined,
+      image: image.trim() || undefined,
     };
     if (editing) {
       recipesStore.update(editing.id, payload);
@@ -193,6 +202,51 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
             rows={2}
             className="w-full px-3.5 py-2.5 border-2 border-input rounded-xl bg-cream text-sm outline-none resize-y focus:border-terracotta-light transition-colors"
           />
+
+          {isAdmin && (
+            <>
+              <label className="block text-[11px] font-medium text-verde uppercase tracking-[0.08em] mb-1.5 mt-3">
+                Foto de la receta
+              </label>
+              {image && (
+                <div className="mb-2 relative inline-block">
+                  <img
+                    src={image}
+                    alt=""
+                    className="rounded-xl object-cover"
+                    style={{ width: 120, height: 90, border: "1px solid #EAD9C4" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setImage("")}
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border border-[#EAD9C4] text-[#E85D2F] text-xs shadow-sm hover:bg-cream"
+                    aria-label="Quitar foto"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (!f) return;
+                  if (f.size > 2 * 1024 * 1024) {
+                    toast.error("La imagen debe pesar menos de 2 MB");
+                    return;
+                  }
+                  const reader = new FileReader();
+                  reader.onload = () => setImage(String(reader.result ?? ""));
+                  reader.readAsDataURL(f);
+                }}
+                className="block w-full text-[12px] text-ink file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-cream-deep file:text-ink file:cursor-pointer hover:file:bg-cream"
+              />
+              <p className="text-[10.5px] text-muted-foreground mt-1 italic">
+                Visible solo para administradores. Máx 2 MB.
+              </p>
+            </>
+          )}
 
           <button
             type="submit"
