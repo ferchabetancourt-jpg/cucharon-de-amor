@@ -123,7 +123,7 @@ export default function Admin() {
   const handleReset = async (u: AdminUser) => {
     const pwd = prompt(`Nueva contraseña temporal para ${u.email}:`);
     if (!pwd) return;
-    if (pwd.length < 6) { toast.error("Mínimo 6 caracteres"); return; }
+    if (pwd.length < 8) { toast.error("Mínimo 8 caracteres"); return; }
     setBusy(true);
     try {
       await call("reset_password", { user_id: u.id, password: pwd });
@@ -192,8 +192,8 @@ export default function Admin() {
             <input
               type="text"
               required
-              minLength={6}
-              placeholder="Contraseña temporal"
+              minLength={8}
+              placeholder="Contraseña temporal (mín. 8, evita comunes)"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
