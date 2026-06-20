@@ -53,9 +53,10 @@ Deno.serve(async (req) => {
   try {
     const { ingredient, mood, prefs } = await req.json();
 
-    if (!ingredient || !String(ingredient).trim()) {
+    const ingredientClean = ingredient ? String(ingredient).trim() : "";
+    if (!ingredientClean && !mood) {
       return new Response(
-        JSON.stringify({ error: "Cuéntame qué ingrediente tienes" }),
+        JSON.stringify({ error: "Cuéntame qué ingrediente tienes o elige un estado" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -70,7 +71,11 @@ Deno.serve(async (req) => {
       .join("\n- ");
     const prefHint = prefList ? `Restricciones / preferencias:\n- ${prefList}` : "";
 
-    const userPrompt = `Crea UNA receta nueva y única usando como ingrediente principal: ${ingredient}.
+    const ingredientLine = ingredientClean
+      ? `Crea UNA receta nueva y única usando como ingrediente principal: ${ingredientClean}.`
+      : `Crea UNA receta nueva, creativa y sorprendente. El usuario no especificó ingrediente: elige tú una combinación rica y accesible que encaje con su estado.`;
+
+    const userPrompt = `${ingredientLine}
 
 ${moodHint}
 ${prefHint}

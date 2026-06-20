@@ -58,21 +58,25 @@ export function RecipeGenerator() {
   const togglePref = (k: string) =>
     setPrefs((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
 
-  const cook = async () => {
-    if (!ingredients.trim()) {
-      toast.error("Cuéntame qué ingrediente tienes");
+  const cook = async (overrides?: { ingredient?: string; mood?: MoodKey | null }) => {
+    const ingredientToUse =
+      overrides?.ingredient !== undefined ? overrides.ingredient : ingredients.trim();
+    const moodToUse = overrides?.mood !== undefined ? overrides.mood : mood;
+    if (!ingredientToUse && !moodToUse) {
+      toast.error("Cuéntame qué ingrediente tienes o elige cómo te sientes");
       return;
     }
+    const finalIngredient = ingredientToUse || "sorpréndeme";
     setLoading(true);
     setRecipe(null);
     track("ingredient_assistant_used", {
-      ingredients: ingredients.trim(),
-      mood,
+      ingredients: finalIngredient,
+      mood: moodToUse,
       preferences: prefs,
     });
     try {
       const { data, error } = await supabase.functions.invoke("generate-recipe", {
-        body: { ingredient: ingredients.trim(), mood, prefs },
+        body: { ingredient: finalIngredient, mood: moodToUse, prefs },
       });
       if (error) throw error;
       if (data?.error) {
@@ -86,6 +90,15 @@ export function RecipeGenerator() {
       toast.error("No pude crear la receta ahora. Intenta de nuevo en un momento 💛");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMoodSelect = (key: MoodKey) => {
+    const isDeselect = mood === key;
+    const next = isDeselect ? null : key;
+    setMood(next);
+    if (!isDeselect && !loading) {
+      cook({ mood: key });
     }
   };
 
@@ -165,7 +178,7 @@ export function RecipeGenerator() {
 
         {/* Botón principal */}
         <button
-          onClick={cook}
+          onClick={() => cook()}
           disabled={loading}
           className="relative z-10 w-full py-3.5 rounded-full text-[15px] hover:opacity-95 hover:scale-[1.01] active:scale-[.98] transition-all duration-200 ease-out cursor-pointer disabled:opacity-65 disabled:cursor-wait inline-flex items-center justify-center gap-2"
           style={{
@@ -227,7 +240,7 @@ export function RecipeGenerator() {
             return (
               <button
                 key={m.key}
-                onClick={() => setMood((cur) => (cur === m.key ? null : m.key))}
+                onClick={() => handleMoodSelect(m.key)}
                 className={cn(
                   "rounded-[24px] px-2 pt-3 pb-2.5 text-center transition-all flex flex-col items-center gap-1.5 active:scale-95 hover:shadow-md",
                   selected ? "ring-2 ring-[#E85D2F]" : ""
