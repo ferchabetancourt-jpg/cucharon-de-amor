@@ -176,7 +176,6 @@ export function RecipeGenerator() {
             boxShadow: "0 12px 28px -10px rgba(232,93,47,0.7), 0 2px 6px rgba(168,78,34,0.25)",
           }}
         >
-          <span className="text-base leading-none">🧡</span>
           {loading ? "Creando tu receta con amor…" : "Cocinar con amor"}
         </button>
 
@@ -187,6 +186,32 @@ export function RecipeGenerator() {
             <span className="w-2.5 h-2.5 bg-terracotta-light rounded-full dot-bounce" style={{ animationDelay: ".4s" }} />
           </div>
         )}
+      </section>
+
+      {/* Chips de preferencias - fuera del cacao, sobre crema */}
+      <section className="rounded-[32px] px-5 py-4 md:px-7 md:py-5 mb-5 -mt-1" style={{ background: "#FFF6EA" }}>
+        <div className="flex flex-wrap gap-2">
+          {PREFERENCES.map((p) => {
+            const selected = prefs.includes(p.key);
+            return (
+              <button
+                key={p.key}
+                onClick={() => togglePref(p.key)}
+                className={cn(
+                  "rounded-full px-3.5 py-[5px] text-[11px] font-medium transition-all active:scale-95"
+                )}
+                style={{
+                  fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
+                  background: selected ? "#E85D2F" : "#FFFFFF",
+                  color: selected ? "#FFF6EA" : "#3A2A20",
+                  border: selected ? "1px solid #E85D2F" : "1px solid #EAD9C4",
+                }}
+              >
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
       </section>
 
 
