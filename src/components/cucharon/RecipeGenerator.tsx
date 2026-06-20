@@ -162,34 +162,6 @@ export function RecipeGenerator() {
           />
         </div>
 
-        {/* Chips de preferencias */}
-        <div className="relative z-10 flex flex-wrap gap-1.5 mb-3 md:w-[62%]">
-          {PREFERENCES.map((p, i) => {
-            const palette = CHIP_PALETTE[i % CHIP_PALETTE.length];
-            const selected = prefs.includes(p.key);
-            return (
-              <button
-                key={p.key}
-                onClick={() => togglePref(p.key)}
-                className={cn(
-                  "rounded-full px-3.5 py-[5px] text-[11px] font-medium transition-all active:scale-95",
-                  selected ? "ring-2 ring-offset-1 ring-offset-[#3A2A20]" : ""
-                )}
-                style={{
-                  fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif",
-                  background: palette.bg,
-                  color: palette.text,
-                  boxShadow: selected
-                    ? "0 0 0 2px #E85D2F inset"
-                    : "0 1px 2px rgba(0,0,0,0.15)",
-                  border: "none",
-                }}
-              >
-                {p.label}
-              </button>
-            );
-          })}
-        </div>
 
         {/* Botón principal */}
         <button
