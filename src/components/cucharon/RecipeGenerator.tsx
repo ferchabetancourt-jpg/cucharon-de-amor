@@ -58,21 +58,25 @@ export function RecipeGenerator() {
   const togglePref = (k: string) =>
     setPrefs((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
 
-  const cook = async () => {
-    if (!ingredients.trim()) {
-      toast.error("Cuéntame qué ingrediente tienes");
+  const cook = async (overrides?: { ingredient?: string; mood?: MoodKey | null }) => {
+    const ingredientToUse =
+      overrides?.ingredient !== undefined ? overrides.ingredient : ingredients.trim();
+    const moodToUse = overrides?.mood !== undefined ? overrides.mood : mood;
+    if (!ingredientToUse && !moodToUse) {
+      toast.error("Cuéntame qué ingrediente tienes o elige cómo te sientes");
       return;
     }
+    const finalIngredient = ingredientToUse || "sorpréndeme";
     setLoading(true);
     setRecipe(null);
     track("ingredient_assistant_used", {
-      ingredients: ingredients.trim(),
-      mood,
+      ingredients: finalIngredient,
+      mood: moodToUse,
       preferences: prefs,
     });
     try {
       const { data, error } = await supabase.functions.invoke("generate-recipe", {
-        body: { ingredient: ingredients.trim(), mood, prefs },
+        body: { ingredient: finalIngredient, mood: moodToUse, prefs },
       });
       if (error) throw error;
       if (data?.error) {
@@ -86,6 +90,15 @@ export function RecipeGenerator() {
       toast.error("No pude crear la receta ahora. Intenta de nuevo en un momento 💛");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMoodSelect = (key: MoodKey) => {
+    const isDeselect = mood === key;
+    const next = isDeselect ? null : key;
+    setMood(next);
+    if (!isDeselect && !loading) {
+      cook({ mood: key });
     }
   };
 
