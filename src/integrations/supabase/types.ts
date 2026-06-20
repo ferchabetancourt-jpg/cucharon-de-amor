@@ -83,6 +83,51 @@ export type Database = {
         }
         Relationships: []
       }
+      recipes_staging: {
+        Row: {
+          category: string | null
+          category_raw: string | null
+          created_at: string | null
+          id: string
+          image_url: string | null
+          ingredients: string | null
+          methods_raw: string | null
+          name: string
+          notes: string | null
+          preparation: string | null
+          servings: string | null
+          time: string | null
+        }
+        Insert: {
+          category?: string | null
+          category_raw?: string | null
+          created_at?: string | null
+          id: string
+          image_url?: string | null
+          ingredients?: string | null
+          methods_raw?: string | null
+          name: string
+          notes?: string | null
+          preparation?: string | null
+          servings?: string | null
+          time?: string | null
+        }
+        Update: {
+          category?: string | null
+          category_raw?: string | null
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string | null
+          methods_raw?: string | null
+          name?: string
+          notes?: string | null
+          preparation?: string | null
+          servings?: string | null
+          time?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
