@@ -178,7 +178,7 @@ export function RecipeGenerator() {
 
         {/* Botón principal */}
         <button
-          onClick={cook}
+          onClick={() => cook()}
           disabled={loading}
           className="relative z-10 w-full py-3.5 rounded-full text-[15px] hover:opacity-95 hover:scale-[1.01] active:scale-[.98] transition-all duration-200 ease-out cursor-pointer disabled:opacity-65 disabled:cursor-wait inline-flex items-center justify-center gap-2"
           style={{
@@ -240,7 +240,7 @@ export function RecipeGenerator() {
             return (
               <button
                 key={m.key}
-                onClick={() => setMood((cur) => (cur === m.key ? null : m.key))}
+                onClick={() => handleMoodSelect(m.key)}
                 className={cn(
                   "rounded-[24px] px-2 pt-3 pb-2.5 text-center transition-all flex flex-col items-center gap-1.5 active:scale-95 hover:shadow-md",
                   selected ? "ring-2 ring-[#E85D2F]" : ""
