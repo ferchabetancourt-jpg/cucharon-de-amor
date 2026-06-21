@@ -1,7 +1,5 @@
-import { SEED_RECIPES } from "./recipes-seed";
 import { supabase } from "@/integrations/supabase/client";
 
-// Recipe store with localStorage persistence + seed recipes
 export type SavedRecipe = {
   id: string;
   name: string;
@@ -38,7 +36,11 @@ if (typeof window !== "undefined") {
   }
 }
 
-let recipes: SavedRecipe[] = load();
+// Recetas base, traídas de recipes_staging. Vacío hasta que loadBaseRecipes() resuelva.
+let baseRecipes: SavedRecipe[] = [];
+let baseRecipeIds = new Set<string>();
+
+let recipes: SavedRecipe[] = loadUserRecipes();
 const listeners = new Set<Listener>();
 
 // --- Remote sync state ---
@@ -63,8 +65,8 @@ function persistRemovedSeeds(set: Set<string>) {
   }
 }
 
-function load(): SavedRecipe[] {
-  if (typeof window === "undefined") return [...SEED_RECIPES];
+function loadUserRecipes(): SavedRecipe[] {
+  if (typeof window === "undefined") return [];
   let userRecipes: SavedRecipe[] = [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -82,20 +84,54 @@ function load(): SavedRecipe[] {
   } catch {
     /* ignore */
   }
+  return userRecipes;
+}
 
+function mergeAndSet() {
+  const userRecipes = loadUserRecipes();
   const removed = loadRemovedSeeds();
-  const seeds = SEED_RECIPES.filter((s) => !removed.has(s.id));
+  const seeds = baseRecipes.filter((s) => !removed.has(s.id));
   const userIds = new Set(userRecipes.map((r) => r.id));
   const seedsToAdd = seeds.filter((s) => !userIds.has(s.id));
-  return [...userRecipes, ...seedsToAdd].sort((a, b) => b.createdAt - a.createdAt);
+  recipes = [...userRecipes, ...seedsToAdd].sort((a, b) => b.createdAt - a.createdAt);
+  emit();
+}
+
+async function loadBaseRecipes() {
+  try {
+    const { data, error } = await supabase
+      .from("recipes_staging")
+      .select("id, name, category, methods, time, ingredients, preparation, notes, image_url, created_at");
+    if (error) throw error;
+    baseRecipes = (data ?? []).map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      category: row.category,
+      methods: row.methods ?? [],
+      time: row.time ?? undefined,
+      ingredients: row.ingredients ?? undefined,
+      preparation: row.preparation ?? undefined,
+      notes: row.notes ?? undefined,
+      image: row.image_url ?? undefined,
+      createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
+    }));
+    baseRecipeIds = new Set(baseRecipes.map((r) => r.id));
+    mergeAndSet();
+  } catch (e) {
+    console.error("No se pudieron cargar las recetas base desde Supabase", e);
+  }
+}
+
+if (typeof window !== "undefined") {
+  loadBaseRecipes();
 }
 
 function persist() {
   try {
-    const seedMap = new Map(SEED_RECIPES.map((s) => [s.id, s]));
+    const baseMap = new Map(baseRecipes.map((s) => [s.id, s]));
     const toSave = recipes.filter((r) => {
-      if (!r.id.startsWith("seed-")) return true;
-      const orig = seedMap.get(r.id);
+      if (!baseRecipeIds.has(r.id)) return true;
+      const orig = baseMap.get(r.id);
       if (!orig) return true;
       return JSON.stringify(orig) !== JSON.stringify(r);
     });
@@ -122,7 +158,9 @@ function localFavoritesSet(): Set<string> {
 function persistLocalFavorites(set: Set<string>) {
   try {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify([...set]));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 export const recipesStore = {
@@ -150,7 +188,7 @@ export const recipesStore = {
   },
   remove(id: string) {
     recipes = recipes.filter((r) => r.id !== id);
-    if (id.startsWith("seed-")) {
+    if (baseRecipeIds.has(id)) {
       const removed = loadRemovedSeeds();
       removed.add(id);
       persistRemovedSeeds(removed);
@@ -169,7 +207,6 @@ export const recipesStore = {
   toggleFavorite(id: string) {
     if (currentUserId && remoteFavorites) {
       const has = remoteFavorites.has(id);
-      // optimistic
       if (has) remoteFavorites.delete(id);
       else remoteFavorites.add(id);
       emit();
@@ -179,13 +216,11 @@ export const recipesStore = {
           if (has) {
             await supabase.from("favorites").delete().eq("user_id", uid).eq("recipe_id", id);
           } else {
-            await supabase.from("favorites").upsert(
-              { user_id: uid, recipe_id: id },
-              { onConflict: "user_id,recipe_id" }
-            );
+            await supabase
+              .from("favorites")
+              .upsert({ user_id: uid, recipe_id: id }, { onConflict: "user_id,recipe_id" });
           }
         } catch {
-          // revert on failure
           if (has) remoteFavorites?.add(id);
           else remoteFavorites?.delete(id);
           emit();
@@ -199,7 +234,6 @@ export const recipesStore = {
     persistLocalFavorites(favs);
     emit();
   },
-  // Auth-aware sync. Called when user signs in/out.
   async setUser(userId: string | null) {
     if (userId === currentUserId) return;
     currentUserId = userId;
@@ -208,8 +242,6 @@ export const recipesStore = {
       emit();
       return;
     }
-    // One-time migration of pre-login localStorage data into the user's account.
-    // If the Supabase row already exists, keep the Supabase version (no overwrite).
     try {
       const migrationKey = `${MIGRATION_FLAG_KEY}:${userId}`;
       const alreadyMigrated = localStorage.getItem(migrationKey) === "1";
@@ -219,12 +251,8 @@ export const recipesStore = {
         const hasLocalData = localFavs.size > 0 || !!rawNotes;
 
         if (hasLocalData) {
-          // Favorites: only insert recipe_ids not already present remotely
           if (localFavs.size > 0) {
-            const { data: existingFavs } = await supabase
-              .from("favorites")
-              .select("recipe_id")
-              .eq("user_id", userId);
+            const { data: existingFavs } = await supabase.from("favorites").select("recipe_id").eq("user_id", userId);
             const existingFavIds = new Set((existingFavs ?? []).map((r) => r.recipe_id as string));
             const newFavRows = [...localFavs]
               .filter((rid) => !existingFavIds.has(rid))
@@ -235,20 +263,15 @@ export const recipesStore = {
             localStorage.removeItem(FAVORITES_KEY);
           }
 
-          // Notes: only insert recipe_ids not already present remotely
           if (rawNotes) {
             const map = JSON.parse(rawNotes) as Record<string, string>;
-            const candidates = Object.entries(map).filter(
-              ([, v]) => v && v.trim().length > 0
-            );
+            const candidates = Object.entries(map).filter(([, v]) => v && v.trim().length > 0);
             if (candidates.length > 0) {
               const { data: existingNotes } = await supabase
                 .from("recipe_notes")
                 .select("recipe_id")
                 .eq("user_id", userId);
-              const existingNoteIds = new Set(
-                (existingNotes ?? []).map((r) => r.recipe_id as string)
-              );
+              const existingNoteIds = new Set((existingNotes ?? []).map((r) => r.recipe_id as string));
               const newNoteRows = candidates
                 .filter(([recipe_id]) => !existingNoteIds.has(recipe_id))
                 .map(([recipe_id, content]) => ({ user_id: userId, recipe_id, content }));
@@ -265,12 +288,8 @@ export const recipesStore = {
     } catch {
       /* migration best-effort */
     }
-    // Load remote favorites
     try {
-      const { data } = await supabase
-        .from("favorites")
-        .select("recipe_id")
-        .eq("user_id", userId);
+      const { data } = await supabase.from("favorites").select("recipe_id").eq("user_id", userId);
       remoteFavorites = new Set((data ?? []).map((r) => r.recipe_id as string));
     } catch {
       remoteFavorites = new Set();
