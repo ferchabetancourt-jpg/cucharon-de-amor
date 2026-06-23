@@ -137,7 +137,22 @@ export default function Admin() {
     }
   };
 
-  if (loading) {
+  const handleApprove = async (recipe: PendingRecipe) => {
+    setApprovingId(recipe.id);
+    try {
+      const { error } = await supabase
+        .from("recipes_staging")
+        .update({ status: "published" })
+        .eq("id", recipe.id);
+      if (error) throw error;
+      toast.success(`"${recipe.name}" aprobada`);
+      refreshPendingRecipes();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al aprobar");
+    } finally {
+      setApprovingId(null);
+    }
+  };
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#FFF6EA" }}>
         <Loader2 className="w-6 h-6 animate-spin" style={{ color: "#E85D2F" }} />
