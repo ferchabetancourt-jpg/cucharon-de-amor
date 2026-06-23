@@ -209,6 +209,19 @@ export function RecipeDetail({
               </p>
             </section>
           )}
+          {(recipe as any).sirve_con && (
+            <section className="bg-cream rounded-xl p-3.5 border-l-[3px] border-ochre mb-2">
+              <h3
+                className="text-[11px] uppercase font-medium mb-1"
+                style={{ color: "#5E8C4A", letterSpacing: "0.22em", fontFamily: "Montserrat, sans-serif" }}
+              >
+                Sirve con
+              </h3>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "#3A2A20" }}>
+                {(recipe as any).sirve_con}
+              </p>
+            </section>
+          )}
           <section className="mt-5 pt-4" style={{ borderTop: "2px solid #E85D2F" }}>
             <h3
               className="text-[11px] uppercase font-semibold mb-2"
