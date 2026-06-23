@@ -96,6 +96,27 @@ export default function Admin() {
     if (allowed) refreshAdmins();
   }, [allowed]);
 
+  const refreshPendingRecipes = async () => {
+    setFetchingPending(true);
+    try {
+      const { data, error } = await supabase
+        .from("recipes_staging")
+        .select("id, name, category, created_by")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      setPendingRecipes((data ?? []) as PendingRecipe[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al cargar recetas pendientes");
+    } finally {
+      setFetchingPending(false);
+    }
+  };
+
+  useEffect(() => {
+    if (allowed) refreshPendingRecipes();
+  }, [allowed]);
+
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     const email = newAdminEmail.trim().toLowerCase();
