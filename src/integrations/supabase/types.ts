@@ -98,6 +98,7 @@ export type Database = {
           preparation: string | null
           servings: string | null
           sirve_con: string | null
+          status: string | null
           time: string | null
         }
         Insert: {
@@ -114,6 +115,7 @@ export type Database = {
           preparation?: string | null
           servings?: string | null
           sirve_con?: string | null
+          status?: string | null
           time?: string | null
         }
         Update: {
@@ -130,6 +132,7 @@ export type Database = {
           preparation?: string | null
           servings?: string | null
           sirve_con?: string | null
+          status?: string | null
           time?: string | null
         }
         Relationships: []
