@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat } from "lucide-react";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
