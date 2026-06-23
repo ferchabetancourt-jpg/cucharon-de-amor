@@ -23,6 +23,13 @@ type AdminRole = {
   created_at: string | null;
 };
 
+type PendingRecipe = {
+  id: string;
+  name: string;
+  category: string | null;
+  created_by: string | null;
+};
+
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
