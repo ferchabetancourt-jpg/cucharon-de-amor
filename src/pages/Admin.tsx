@@ -16,6 +16,13 @@ type AdminUser = {
   banned_until: string | null;
 };
 
+type AdminRole = {
+  id: string;
+  email: string;
+  role: string;
+  created_at: string | null;
+};
+
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -25,6 +32,11 @@ export default function Admin() {
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
+  const [adminRoles, setAdminRoles] = useState<AdminRole[]>([]);
+  const [fetchingRoles, setFetchingRoles] = useState(true);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [addingAdmin, setAddingAdmin] = useState(false);
 
   const allowed = !!user && user.email?.toLowerCase() === ADMIN_EMAIL;
 
@@ -52,6 +64,46 @@ export default function Admin() {
   useEffect(() => {
     if (allowed) refresh();
   }, [allowed]);
+
+  const refreshAdmins = async () => {
+    setFetchingRoles(true);
+    try {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("id, email, role, created_at")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      setAdminRoles((data ?? []) as AdminRole[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al cargar administradores");
+    } finally {
+      setFetchingRoles(false);
+    }
+  };
+
+  useEffect(() => {
+    if (allowed) refreshAdmins();
+  }, [allowed]);
+
+  const handleAddAdmin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = newAdminEmail.trim().toLowerCase();
+    if (!email) return;
+    setAddingAdmin(true);
+    try {
+      const { error } = await supabase
+        .from("user_roles")
+        .insert({ email, role: "admin" });
+      if (error) throw error;
+      toast.success("Administrador agregado");
+      setNewAdminEmail("");
+      refreshAdmins();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Error al agregar");
+    } finally {
+      setAddingAdmin(false);
+    }
+  };
 
   if (loading) {
     return (
