@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CATEGORIES, COOKING_METHODS } from "@/lib/cucharon-data";
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -58,7 +59,7 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       toast.error("Ponele un nombre a la receta");
@@ -76,9 +77,51 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
     };
     if (editing) {
       recipesStore.update(editing.id, payload);
+      if (isAdmin) {
+        const { error } = await supabase
+          .from("recipes_staging")
+          .update({
+            name: payload.name,
+            category: payload.category,
+            methods: payload.methods ?? [],
+            time: payload.time ?? null,
+            ingredients: payload.ingredients ?? null,
+            preparation: payload.preparation ?? null,
+            notes: payload.notes ?? null,
+            image_url: payload.image ?? null,
+            status: "published",
+          })
+          .eq("id", editing.id);
+        if (error) {
+          toast.error("No se pudo sincronizar con la nube");
+          return;
+        }
+      }
       toast.success("Receta actualizada 💛");
     } else {
       recipesStore.add(payload);
+      const status = isAdmin ? "published" : "pending";
+      const id =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const { error } = await supabase.from("recipes_staging").insert({
+        id,
+        name: payload.name,
+        category: payload.category,
+        methods: payload.methods ?? [],
+        time: payload.time ?? null,
+        ingredients: payload.ingredients ?? null,
+        preparation: payload.preparation ?? null,
+        notes: payload.notes ?? null,
+        image_url: payload.image ?? null,
+        status,
+        created_by: user?.email ?? null,
+      } as never);
+      if (error) {
+        toast.error("No se pudo guardar la receta en la nube");
+        return;
+      }
       toast.success("Receta guardada 💛");
     }
     onClose();
