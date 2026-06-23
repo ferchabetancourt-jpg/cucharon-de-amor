@@ -153,6 +153,7 @@ export default function Admin() {
       setApprovingId(null);
     }
   };
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#FFF6EA" }}>
         <Loader2 className="w-6 h-6 animate-spin" style={{ color: "#E85D2F" }} />
