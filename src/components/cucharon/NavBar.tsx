@@ -14,7 +14,6 @@ interface NavBarProps {
   favoriteCount: number;
 }
 
-
 export function NavBar({ active, onChange, recipeCount, favoriteCount }: NavBarProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
