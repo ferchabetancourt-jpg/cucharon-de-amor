@@ -4,6 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat } from "lucide-react";
+import { Pencil } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
@@ -30,6 +38,15 @@ type PendingRecipe = {
   created_by: string | null;
 };
 
+type EditableRecipe = {
+  id: string;
+  name: string;
+  category: string | null;
+  ingredients: string | null;
+  preparation: string | null;
+  notes: string | null;
+};
+
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -48,6 +65,11 @@ export default function Admin() {
   const [pendingRecipes, setPendingRecipes] = useState<PendingRecipe[]>([]);
   const [fetchingPending, setFetchingPending] = useState(true);
   const [approvingId, setApprovingId] = useState<string | null>(null);
+
+  const [editingRecipe, setEditingRecipe] = useState<EditableRecipe | null>(null);
+  const [loadingEdit, setLoadingEdit] = useState(false);
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [approvingEdit, setApprovingEdit] = useState(false);
 
   const allowed = !!user && user.email?.toLowerCase() === ADMIN_EMAIL;
 
@@ -151,6 +173,60 @@ export default function Admin() {
       toast.error(e instanceof Error ? e.message : "Error al aprobar");
     } finally {
       setApprovingId(null);
+    }
+  };
+
+  const openEditRecipe = async (recipe: PendingRecipe) => {
+    setLoadingEdit(true);
+    setEditingRecipe({
+      id: recipe.id,
+      name: recipe.name,
+      category: recipe.category,
+      ingredients: "",
+      preparation: "",
+      notes: "",
+    });
+    try {
+      const { data, error } = await supabase
+        .from("recipes_staging")
+        .select("id, name, category, ingredients, preparation, notes")
+        .eq("id", recipe.id)
+        .maybeSingle();
+      if (error) throw error;
+      if (data) setEditingRecipe(data as EditableRecipe);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al cargar receta");
+    } finally {
+      setLoadingEdit(false);
+    }
+  };
+
+  const handleSaveEdit = async (alsoPublish: boolean) => {
+    if (!editingRecipe) return;
+    if (alsoPublish) setApprovingEdit(true);
+    else setSavingEdit(true);
+    try {
+      const payload: Record<string, unknown> = {
+        name: editingRecipe.name,
+        category: editingRecipe.category,
+        ingredients: editingRecipe.ingredients,
+        preparation: editingRecipe.preparation,
+        notes: editingRecipe.notes,
+      };
+      if (alsoPublish) payload.status = "published";
+      const { error } = await supabase
+        .from("recipes_staging")
+        .update(payload)
+        .eq("id", editingRecipe.id);
+      if (error) throw error;
+      toast.success(alsoPublish ? "Receta aprobada" : "Cambios guardados");
+      setEditingRecipe(null);
+      refreshPendingRecipes();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al guardar");
+    } finally {
+      setSavingEdit(false);
+      setApprovingEdit(false);
     }
   };
   if (loading) {
@@ -539,24 +615,40 @@ export default function Admin() {
                         {recipe.created_by || "—"}
                       </td>
                       <td className="py-3 pr-3 text-right">
-                        <button
-                          onClick={() => handleApprove(recipe)}
-                          disabled={approvingId === recipe.id}
-                          className="px-3 py-1.5 rounded-full text-[11px] flex items-center justify-center gap-1.5 disabled:opacity-60"
-                          style={{
-                            background: "#3F6B43",
-                            color: "#FFFFFF",
-                            fontFamily: "Montserrat, sans-serif",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {approvingId === recipe.id ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <CheckCircle2 className="w-3 h-3" />
-                          )}
-                          Aprobar
-                        </button>
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => openEditRecipe(recipe)}
+                            className="px-3 py-1.5 rounded-full text-[11px] inline-flex items-center justify-center gap-1.5"
+                            style={{
+                              background: "#FFFFFF",
+                              border: "1.5px solid #E85D2F",
+                              color: "#A84E22",
+                              fontFamily: "Montserrat, sans-serif",
+                              fontWeight: 600,
+                            }}
+                          >
+                            <Pencil className="w-3 h-3" />
+                            Ver/Editar
+                          </button>
+                          <button
+                            onClick={() => handleApprove(recipe)}
+                            disabled={approvingId === recipe.id}
+                            className="px-3 py-1.5 rounded-full text-[11px] inline-flex items-center justify-center gap-1.5 disabled:opacity-60"
+                            style={{
+                              background: "#3F6B43",
+                              color: "#FFFFFF",
+                              fontFamily: "Montserrat, sans-serif",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {approvingId === recipe.id ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <CheckCircle2 className="w-3 h-3" />
+                            )}
+                            Aprobar
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -573,6 +665,105 @@ export default function Admin() {
           )}
         </section>
       </div>
+
+      <Dialog open={!!editingRecipe} onOpenChange={(o) => { if (!o) setEditingRecipe(null); }}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: "#FFF6EA" }}>
+          <DialogHeader>
+            <DialogTitle className="font-serif" style={{ color: "#3A2A20" }}>
+              Editar receta
+            </DialogTitle>
+          </DialogHeader>
+          {loadingEdit || !editingRecipe ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
+            </div>
+          ) : (
+            <div className="space-y-3" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              <div>
+                <label className="text-[12px] uppercase tracking-wider" style={{ color: "#8A6B55" }}>Nombre</label>
+                <input
+                  type="text"
+                  value={editingRecipe.name ?? ""}
+                  onChange={(e) => setEditingRecipe({ ...editingRecipe, name: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label className="text-[12px] uppercase tracking-wider" style={{ color: "#8A6B55" }}>Categoría</label>
+                <input
+                  type="text"
+                  value={editingRecipe.category ?? ""}
+                  onChange={(e) => setEditingRecipe({ ...editingRecipe, category: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label className="text-[12px] uppercase tracking-wider" style={{ color: "#8A6B55" }}>Ingredientes</label>
+                <textarea
+                  rows={6}
+                  value={editingRecipe.ingredients ?? ""}
+                  onChange={(e) => setEditingRecipe({ ...editingRecipe, ingredients: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label className="text-[12px] uppercase tracking-wider" style={{ color: "#8A6B55" }}>Preparación</label>
+                <textarea
+                  rows={8}
+                  value={editingRecipe.preparation ?? ""}
+                  onChange={(e) => setEditingRecipe({ ...editingRecipe, preparation: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label className="text-[12px] uppercase tracking-wider" style={{ color: "#8A6B55" }}>Notas</label>
+                <textarea
+                  rows={4}
+                  value={editingRecipe.notes ?? ""}
+                  onChange={(e) => setEditingRecipe({ ...editingRecipe, notes: e.target.value })}
+                  className="w-full mt-1 px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={inputStyle}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              onClick={() => handleSaveEdit(false)}
+              disabled={savingEdit || approvingEdit || loadingEdit || !editingRecipe}
+              className="px-4 py-2 rounded-full text-[13px] inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              style={{
+                background: "#FFFFFF",
+                border: "1.5px solid #E85D2F",
+                color: "#A84E22",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              {savingEdit ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Pencil className="w-3.5 h-3.5" />}
+              Guardar cambios
+            </button>
+            <button
+              onClick={() => handleSaveEdit(true)}
+              disabled={savingEdit || approvingEdit || loadingEdit || !editingRecipe}
+              className="px-4 py-2 rounded-full text-[13px] inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              style={{
+                background: "#3F6B43",
+                color: "#FFFFFF",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              {approvingEdit ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+              Aprobar
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
