@@ -1,7 +1,11 @@
-import { ChefHat, BookOpen, Star } from "lucide-react";
+import { ChefHat, BookOpen, Star, KeyRound } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Tab = "chef" | "recipes" | "favorites";
+
+const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
 interface NavBarProps {
   active: Tab;
@@ -9,6 +13,7 @@ interface NavBarProps {
   recipeCount: number;
   favoriteCount: number;
 }
+
 
 export function NavBar({ active, onChange, recipeCount, favoriteCount }: NavBarProps) {
   const tabBtn = (key: Tab, label: string, Icon: typeof ChefHat, count?: number) => (
