@@ -45,6 +45,10 @@ export default function Admin() {
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [addingAdmin, setAddingAdmin] = useState(false);
 
+  const [pendingRecipes, setPendingRecipes] = useState<PendingRecipe[]>([]);
+  const [fetchingPending, setFetchingPending] = useState(true);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
+
   const allowed = !!user && user.email?.toLowerCase() === ADMIN_EMAIL;
 
   const call = async (action: string, payload: Record<string, unknown> = {}) => {
