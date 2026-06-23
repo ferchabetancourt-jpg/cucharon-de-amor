@@ -45,6 +45,14 @@ export function Header() {
           >
             Recetas que viajan por generaciones
           </p>
+          {user && (
+            <p
+              className="italic text-[11.5px] md:text-[13px] mt-0.5"
+              style={{ fontFamily: "Montserrat, sans-serif", color: "#8A6B55" }}
+            >
+              Hola, {displayName} 🧡
+            </p>
+          )}
         </div>
 
         {user ? (
