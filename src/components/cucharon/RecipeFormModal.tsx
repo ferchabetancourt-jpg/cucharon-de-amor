@@ -99,7 +99,9 @@ export function RecipeFormModal({ open, onClose, editing, initial }: Props) {
       }
       toast.success("Receta actualizada 💛");
     } else {
-      recipesStore.add(payload);
+      if (isAdmin) {
+        recipesStore.add(payload);
+      }
       const status = isAdmin ? "published" : "pending";
       const id =
         typeof crypto !== "undefined" && "randomUUID" in crypto
