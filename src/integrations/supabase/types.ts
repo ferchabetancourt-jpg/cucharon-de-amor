@@ -88,6 +88,7 @@ export type Database = {
           category: string | null
           category_raw: string | null
           created_at: string | null
+          created_by: string | null
           id: string
           image_url: string | null
           ingredients: string | null
@@ -105,6 +106,7 @@ export type Database = {
           category?: string | null
           category_raw?: string | null
           created_at?: string | null
+          created_by?: string | null
           id: string
           image_url?: string | null
           ingredients?: string | null
@@ -122,6 +124,7 @@ export type Database = {
           category?: string | null
           category_raw?: string | null
           created_at?: string | null
+          created_by?: string | null
           id?: string
           image_url?: string | null
           ingredients?: string | null
