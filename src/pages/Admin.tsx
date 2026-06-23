@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat } from "lucide-react";
 
 const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
@@ -23,6 +23,13 @@ type AdminRole = {
   created_at: string | null;
 };
 
+type PendingRecipe = {
+  id: string;
+  name: string;
+  category: string | null;
+  created_by: string | null;
+};
+
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -37,6 +44,10 @@ export default function Admin() {
   const [fetchingRoles, setFetchingRoles] = useState(true);
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [addingAdmin, setAddingAdmin] = useState(false);
+
+  const [pendingRecipes, setPendingRecipes] = useState<PendingRecipe[]>([]);
+  const [fetchingPending, setFetchingPending] = useState(true);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
 
   const allowed = !!user && user.email?.toLowerCase() === ADMIN_EMAIL;
 
@@ -85,6 +96,27 @@ export default function Admin() {
     if (allowed) refreshAdmins();
   }, [allowed]);
 
+  const refreshPendingRecipes = async () => {
+    setFetchingPending(true);
+    try {
+      const { data, error } = await supabase
+        .from("recipes_staging")
+        .select("id, name, category, created_by")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      setPendingRecipes((data ?? []) as PendingRecipe[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al cargar recetas pendientes");
+    } finally {
+      setFetchingPending(false);
+    }
+  };
+
+  useEffect(() => {
+    if (allowed) refreshPendingRecipes();
+  }, [allowed]);
+
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     const email = newAdminEmail.trim().toLowerCase();
@@ -105,6 +137,22 @@ export default function Admin() {
     }
   };
 
+  const handleApprove = async (recipe: PendingRecipe) => {
+    setApprovingId(recipe.id);
+    try {
+      const { error } = await supabase
+        .from("recipes_staging")
+        .update({ status: "published" })
+        .eq("id", recipe.id);
+      if (error) throw error;
+      toast.success(`"${recipe.name}" aprobada`);
+      refreshPendingRecipes();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al aprobar");
+    } finally {
+      setApprovingId(null);
+    }
+  };
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#FFF6EA" }}>
@@ -441,6 +489,81 @@ export default function Admin() {
                     <tr>
                       <td colSpan={3} className="py-6 text-center text-[13px]" style={{ color: "#8A6B55" }}>
                         Sin administradores registrados.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <section
+          className="p-6 mt-8"
+          style={{
+            background: "#FFFFFF",
+            border: "1px solid #EDE8DC",
+            borderRadius: "20px",
+          }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-lg flex items-center gap-2" style={{ color: "#3A2A20" }}>
+              <ChefHat className="w-4 h-4" style={{ color: "#E85D2F" }} /> Recetas pendientes
+            </h2>
+            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+              {pendingRecipes.length} receta(s)
+            </span>
+          </div>
+
+          {fetchingPending ? (
+            <div className="flex justify-center py-6">
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                <thead>
+                  <tr style={{ color: "#8A6B55" }} className="text-[11px] uppercase tracking-wider">
+                    <th className="py-2 pr-3">Nombre</th>
+                    <th className="py-2 pr-3">Categoría</th>
+                    <th className="py-2 pr-3">Creada por</th>
+                    <th className="py-2 pr-3 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingRecipes.map((recipe) => (
+                    <tr key={recipe.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
+                      <td className="py-3 pr-3">{recipe.name}</td>
+                      <td className="py-3 pr-3">{recipe.category || "—"}</td>
+                      <td className="py-3 pr-3 text-[12px]" style={{ color: "#8A6B55" }}>
+                        {recipe.created_by || "—"}
+                      </td>
+                      <td className="py-3 pr-3 text-right">
+                        <button
+                          onClick={() => handleApprove(recipe)}
+                          disabled={approvingId === recipe.id}
+                          className="px-3 py-1.5 rounded-full text-[11px] flex items-center justify-center gap-1.5 disabled:opacity-60"
+                          style={{
+                            background: "#3F6B43",
+                            color: "#FFFFFF",
+                            fontFamily: "Montserrat, sans-serif",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {approvingId === recipe.id ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="w-3 h-3" />
+                          )}
+                          Aprobar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {pendingRecipes.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="py-6 text-center text-[13px]" style={{ color: "#8A6B55" }}>
+                        No hay recetas pendientes.
                       </td>
                     </tr>
                   )}
