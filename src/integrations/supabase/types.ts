@@ -88,6 +88,7 @@ export type Database = {
           category: string | null
           category_raw: string | null
           created_at: string | null
+          created_by: string | null
           id: string
           image_url: string | null
           ingredients: string | null
@@ -98,12 +99,14 @@ export type Database = {
           preparation: string | null
           servings: string | null
           sirve_con: string | null
+          status: string | null
           time: string | null
         }
         Insert: {
           category?: string | null
           category_raw?: string | null
           created_at?: string | null
+          created_by?: string | null
           id: string
           image_url?: string | null
           ingredients?: string | null
@@ -114,12 +117,14 @@ export type Database = {
           preparation?: string | null
           servings?: string | null
           sirve_con?: string | null
+          status?: string | null
           time?: string | null
         }
         Update: {
           category?: string | null
           category_raw?: string | null
           created_at?: string | null
+          created_by?: string | null
           id?: string
           image_url?: string | null
           ingredients?: string | null
@@ -130,6 +135,7 @@ export type Database = {
           preparation?: string | null
           servings?: string | null
           sirve_con?: string | null
+          status?: string | null
           time?: string | null
         }
         Relationships: []
