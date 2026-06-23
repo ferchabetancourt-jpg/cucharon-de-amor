@@ -497,6 +497,81 @@ export default function Admin() {
             </div>
           )}
         </section>
+
+        <section
+          className="p-6 mt-8"
+          style={{
+            background: "#FFFFFF",
+            border: "1px solid #EDE8DC",
+            borderRadius: "20px",
+          }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-lg flex items-center gap-2" style={{ color: "#3A2A20" }}>
+              <ChefHat className="w-4 h-4" style={{ color: "#E85D2F" }} /> Recetas pendientes
+            </h2>
+            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+              {pendingRecipes.length} receta(s)
+            </span>
+          </div>
+
+          {fetchingPending ? (
+            <div className="flex justify-center py-6">
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                <thead>
+                  <tr style={{ color: "#8A6B55" }} className="text-[11px] uppercase tracking-wider">
+                    <th className="py-2 pr-3">Nombre</th>
+                    <th className="py-2 pr-3">Categoría</th>
+                    <th className="py-2 pr-3">Creada por</th>
+                    <th className="py-2 pr-3 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingRecipes.map((recipe) => (
+                    <tr key={recipe.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
+                      <td className="py-3 pr-3">{recipe.name}</td>
+                      <td className="py-3 pr-3">{recipe.category || "—"}</td>
+                      <td className="py-3 pr-3 text-[12px]" style={{ color: "#8A6B55" }}>
+                        {recipe.created_by || "—"}
+                      </td>
+                      <td className="py-3 pr-3 text-right">
+                        <button
+                          onClick={() => handleApprove(recipe)}
+                          disabled={approvingId === recipe.id}
+                          className="px-3 py-1.5 rounded-full text-[11px] flex items-center justify-center gap-1.5 disabled:opacity-60"
+                          style={{
+                            background: "#3F6B43",
+                            color: "#FFFFFF",
+                            fontFamily: "Montserrat, sans-serif",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {approvingId === recipe.id ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="w-3 h-3" />
+                          )}
+                          Aprobar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {pendingRecipes.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="py-6 text-center text-[13px]" style={{ color: "#8A6B55" }}>
+                        No hay recetas pendientes.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );
