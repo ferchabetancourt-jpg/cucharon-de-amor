@@ -1,7 +1,11 @@
-import { ChefHat, BookOpen, Star } from "lucide-react";
+import { ChefHat, BookOpen, Star, KeyRound } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Tab = "chef" | "recipes" | "favorites";
+
+const ADMIN_EMAIL = "ferchabetancourt@gmail.com";
 
 interface NavBarProps {
   active: Tab;
@@ -11,6 +15,10 @@ interface NavBarProps {
 }
 
 export function NavBar({ active, onChange, recipeCount, favoriteCount }: NavBarProps) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
+
   const tabBtn = (key: Tab, label: string, Icon: typeof ChefHat, count?: number) => (
     <button
       onClick={() => onChange(key)}
@@ -37,7 +45,19 @@ export function NavBar({ active, onChange, recipeCount, favoriteCount }: NavBarP
         {tabBtn("chef", "Chef", ChefHat)}
         {tabBtn("recipes", "Mis Recetas", BookOpen, recipeCount)}
         {tabBtn("favorites", "Favoritos", Star, favoriteCount)}
+        {isAdmin && (
+          <button
+            onClick={() => navigate("/admin")}
+            className={cn(
+              "flex-1 py-3.5 px-2 text-[13px] font-medium flex items-center justify-center gap-1.5 border-b-[3px] transition-colors text-muted-foreground border-transparent hover:text-ink"
+            )}
+          >
+            <KeyRound className="w-4 h-4" />
+            Admin
+          </button>
+        )}
       </div>
     </nav>
   );
 }
+
