@@ -206,14 +206,14 @@ export default function Admin() {
     if (alsoPublish) setApprovingEdit(true);
     else setSavingEdit(true);
     try {
-      const payload: Record<string, unknown> = {
+      const payload = {
         name: editingRecipe.name,
-        category: editingRecipe.category,
-        ingredients: editingRecipe.ingredients,
-        preparation: editingRecipe.preparation,
-        notes: editingRecipe.notes,
+        category: editingRecipe.category ?? null,
+        ingredients: editingRecipe.ingredients ?? null,
+        preparation: editingRecipe.preparation ?? null,
+        notes: editingRecipe.notes ?? null,
+        ...(alsoPublish ? { status: "published" } : {}),
       };
-      if (alsoPublish) payload.status = "published";
       const { error } = await supabase
         .from("recipes_staging")
         .update(payload)
