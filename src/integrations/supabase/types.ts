@@ -91,11 +91,13 @@ export type Database = {
           id: string
           image_url: string | null
           ingredients: string | null
+          methods: string[] | null
           methods_raw: string | null
           name: string
           notes: string | null
           preparation: string | null
           servings: string | null
+          sirve_con: string | null
           time: string | null
         }
         Insert: {
@@ -105,11 +107,13 @@ export type Database = {
           id: string
           image_url?: string | null
           ingredients?: string | null
+          methods?: string[] | null
           methods_raw?: string | null
           name: string
           notes?: string | null
           preparation?: string | null
           servings?: string | null
+          sirve_con?: string | null
           time?: string | null
         }
         Update: {
@@ -119,11 +123,13 @@ export type Database = {
           id?: string
           image_url?: string | null
           ingredients?: string | null
+          methods?: string[] | null
           methods_raw?: string | null
           name?: string
           notes?: string | null
           preparation?: string | null
           servings?: string | null
+          sirve_con?: string | null
           time?: string | null
         }
         Relationships: []
