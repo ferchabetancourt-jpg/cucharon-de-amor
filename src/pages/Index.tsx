@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavBar } from "@/components/cucharon/NavBar";
 import { Header } from "@/components/cucharon/Header";
 import { InspirationCard } from "@/components/cucharon/InspirationCard";
@@ -9,13 +9,28 @@ import { useRecipes } from "@/hooks/use-recipes";
 import { recipesStore } from "@/lib/recipes-store";
 import { useAuth } from "@/contexts/AuthContext";
 import { WelcomeScreen } from "@/components/cucharon/WelcomeScreen";
+import { OnboardingModal } from "@/components/cucharon/OnboardingModal";
+
+const ONBOARDING_KEY = "cucharon_onboarding_seen";
 
 const Index = () => {
   const [tab, setTab] = useState<"chef" | "recipes" | "favorites">("chef");
   const [initialCat, setInitialCat] = useState<string | undefined>(undefined);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const recipes = useRecipes();
   const favoriteCount = recipes.filter((r) => recipesStore.isFavorite(r.id)).length;
   const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (user && !localStorage.getItem(ONBOARDING_KEY)) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
+
+  const handleCloseOnboarding = () => {
+    localStorage.setItem(ONBOARDING_KEY, "true");
+    setShowOnboarding(false);
+  };
 
   if (loading) {
     return <div className="min-h-screen bg-background" />;
@@ -23,6 +38,7 @@ const Index = () => {
   if (!user) {
     return <WelcomeScreen />;
   }
+
 
   // Sticky header wrapper
   return (
