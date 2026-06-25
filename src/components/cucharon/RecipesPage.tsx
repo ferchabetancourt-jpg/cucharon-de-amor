@@ -3,6 +3,7 @@ import { CATEGORIES, COOKING_METHODS, getCategoryBlock } from "@/lib/cucharon-da
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import {
   Search, Plus, Trash2, ArrowLeft, X, Star, Pencil, SlidersHorizontal, Clock, Utensils,
