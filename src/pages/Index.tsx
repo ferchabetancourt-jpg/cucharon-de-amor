@@ -97,6 +97,7 @@ const Index = () => {
           <FavoritesPage />
         )}
       </main>
+      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} />}
     </div>
   );
 };
