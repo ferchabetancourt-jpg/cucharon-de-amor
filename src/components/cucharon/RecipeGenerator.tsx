@@ -201,6 +201,21 @@ export function RecipeGenerator() {
         )}
       </section>
 
+      {/* Invitación a preservar tradiciones */}
+      <section
+        className="rounded-[24px] p-5 mb-4"
+        style={{
+          background: "#FFF6EA",
+          borderLeft: "3px solid #F2A93B",
+        }}
+      >
+        <p className="text-[15px] leading-relaxed" style={{ color: "#3A2A20", fontFamily: "'Montserrat', 'DM Sans', system-ui, sans-serif" }}>
+          🧡 Aquí no solo cocinamos — preservamos tradiciones.
+          <br />
+          ¿Tienes una receta familiar? Compártela.
+        </p>
+      </section>
+
       {/* Chips de preferencias - fuera del cacao, sobre crema */}
       <section className="rounded-[32px] px-5 py-4 md:px-7 md:py-5 mb-5 -mt-1" style={{ background: "#FFF6EA" }}>
         <div className="flex flex-wrap gap-2">
