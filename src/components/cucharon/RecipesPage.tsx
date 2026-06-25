@@ -3,6 +3,7 @@ import { CATEGORIES, COOKING_METHODS, getCategoryBlock } from "@/lib/cucharon-da
 import { recipesStore, type SavedRecipe } from "@/lib/recipes-store";
 import { useRecipes } from "@/hooks/use-recipes";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import {
   Search, Plus, Trash2, ArrowLeft, X, Star, Pencil, SlidersHorizontal, Clock, Utensils,
@@ -381,9 +382,40 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
   const { user } = useAuth();
   const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
   const allRecipes = useRecipes();
+  const [publishedRecipes, setPublishedRecipes] = useState<SavedRecipe[]>([]);
+
+  useEffect(() => {
+    if (isAdmin) return;
+    supabase
+      .from("recipes_staging")
+      .select("id, name, category, methods, time, ingredients, preparation, notes, image_url, created_at, status")
+      .eq("status", "published")
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Error cargando recetas publicadas", error);
+          return;
+        }
+        setPublishedRecipes(
+          (data ?? []).map((row: any) => ({
+            id: row.id,
+            name: row.name,
+            category: row.category,
+            methods: row.methods ?? [],
+            time: row.time ?? undefined,
+            ingredients: row.ingredients ?? undefined,
+            preparation: row.preparation ?? undefined,
+            notes: row.notes ?? undefined,
+            image: row.image_url ?? undefined,
+            createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
+          }))
+        );
+      });
+  }, [isAdmin]);
+
+  const sourceRecipes = isAdmin ? allRecipes : publishedRecipes;
   const recipes = favoritesOnly
-    ? allRecipes.filter((r) => recipesStore.isFavorite(r.id))
-    : allRecipes;
+    ? sourceRecipes.filter((r) => recipesStore.isFavorite(r.id))
+    : sourceRecipes;
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState(initialCategory ?? "all");
   const [methods, setMethods] = useState<string[]>([]);
