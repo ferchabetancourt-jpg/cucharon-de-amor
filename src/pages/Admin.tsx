@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat } from "lucide-react";
-import { Pencil } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +49,7 @@ type EditableRecipe = {
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [userSearch, setUserSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -318,6 +318,11 @@ export default function Admin() {
     fontFamily: "Montserrat, sans-serif",
   };
 
+  const filteredUsers = users.filter((u) => {
+    const term = userSearch.toLowerCase();
+    return (u.display_name?.toLowerCase().includes(term) ?? false) || (u.email?.toLowerCase().includes(term) ?? false);
+  });
+
   return (
     <div className="min-h-screen" style={{ background: "#FFF6EA" }}>
       <div className="max-w-5xl mx-auto px-5 py-8">
@@ -394,101 +399,6 @@ export default function Admin() {
 
         <section
           className="p-6"
-          style={{
-            background: "#FFFFFF",
-            border: "1px solid #EDE8DC",
-            borderRadius: "20px",
-          }}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
-            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
-              {users.length} cuenta(s)
-            </span>
-          </div>
-
-          {fetching ? (
-            <div className="flex justify-center py-10">
-              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm" style={{ fontFamily: "Montserrat, sans-serif" }}>
-                <thead>
-                  <tr style={{ color: "#8A6B55" }} className="text-[11px] uppercase tracking-wider">
-                    <th className="py-2 pr-3">Nombre</th>
-                    <th className="py-2 pr-3">Correo</th>
-                    <th className="py-2 pr-3">Estado</th>
-                    <th className="py-2 pr-3">Último ingreso</th>
-                    <th className="py-2 pr-3 text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((u) => {
-                    const banned = u.banned_until && new Date(u.banned_until) > new Date();
-                    return (
-                      <tr key={u.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
-                        <td className="py-3 pr-3">{u.display_name || "—"}</td>
-                        <td className="py-3 pr-3">{u.email}</td>
-                        <td className="py-3 pr-3">
-                          <span
-                            className="px-2 py-0.5 rounded-full text-[11px]"
-                            style={{
-                              background: banned ? "#FDECEC" : "#E8F1E8",
-                              color: banned ? "#A33B3B" : "#3F6B43",
-                            }}
-                          >
-                            {banned ? "Desactivado" : "Activo"}
-                          </span>
-                        </td>
-                        <td className="py-3 pr-3 text-[12px]" style={{ color: "#8A6B55" }}>
-                          {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString("es") : "—"}
-                        </td>
-                        <td className="py-3 pr-3">
-                          <div className="flex gap-2 justify-end">
-                            <button
-                              onClick={() => handleReset(u)}
-                              disabled={busy}
-                              title="Resetear contraseña"
-                              className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
-                              style={{ color: "#5E8C4A" }}
-                            >
-                              <KeyRound className="w-4 h-4" />
-                            </button>
-                            {banned ? (
-                              <button
-                                onClick={() => handleActivate(u)}
-                                disabled={busy}
-                                title="Reactivar"
-                                className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
-                                style={{ color: "#3F6B43" }}
-                              >
-                                <CheckCircle2 className="w-4 h-4" />
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => handleDeactivate(u)}
-                                disabled={busy || u.email?.toLowerCase() === ADMIN_EMAIL}
-                                title="Desactivar"
-                                className="p-2 rounded-full hover:bg-[#FDECEC] disabled:opacity-30"
-                                style={{ color: "#A33B3B" }}
-                              >
-                                <Ban className="w-4 h-4" />
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
-
-        <section
-          className="p-6 mt-8"
           style={{
             background: "#FFFFFF",
             border: "1px solid #EDE8DC",
@@ -573,6 +483,138 @@ export default function Admin() {
             </div>
           )}
         </section>
+
+        <section
+          className="p-6 mt-8"
+          style={{
+            background: "#FFFFFF",
+            border: "1px solid #EDE8DC",
+            borderRadius: "20px",
+          }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
+            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+              {filteredUsers.length} de {users.length} cuenta(s)
+            </span>
+          </div>
+
+          <div className="relative mb-4">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#8A6B55" }} />
+            <input
+              type="text"
+              value={userSearch}
+              onChange={(e) => setUserSearch(e.target.value)}
+              placeholder="Buscar por nombre o correo electrónico…"
+              className="w-full py-3 pl-11 pr-10 rounded-full text-[13.5px] outline-none transition-colors"
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid #EDE8DC",
+                color: "#3A2A20",
+                fontFamily: "Montserrat, sans-serif",
+                boxShadow: "0 1px 0 rgba(0,0,0,0.02)",
+              }}
+            />
+            {userSearch && (
+              <button
+                type="button"
+                onClick={() => setUserSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full"
+                style={{ color: "#8A6B55" }}
+              >
+                <span className="sr-only">Limpiar búsqueda</span>
+                ×
+              </button>
+            )}
+          </div>
+
+          {fetching ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="w-5 h-5 animate-spin" style={{ color: "#E85D2F" }} />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                <thead>
+                  <tr style={{ color: "#8A6B55" }} className="text-[11px] uppercase tracking-wider">
+                    <th className="py-2 pr-3">Nombre</th>
+                    <th className="py-2 pr-3">Correo</th>
+                    <th className="py-2 pr-3">Estado</th>
+                    <th className="py-2 pr-3">Último ingreso</th>
+                    <th className="py-2 pr-3 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((u) => {
+                      const banned = u.banned_until && new Date(u.banned_until) > new Date();
+                      return (
+                        <tr key={u.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
+                          <td className="py-3 pr-3">{u.display_name || "—"}</td>
+                          <td className="py-3 pr-3">{u.email}</td>
+                          <td className="py-3 pr-3">
+                            <span
+                              className="px-2 py-0.5 rounded-full text-[11px]"
+                              style={{
+                                background: banned ? "#FDECEC" : "#E8F1E8",
+                                color: banned ? "#A33B3B" : "#3F6B43",
+                              }}
+                            >
+                              {banned ? "Desactivado" : "Activo"}
+                            </span>
+                          </td>
+                          <td className="py-3 pr-3 text-[12px]" style={{ color: "#8A6B55" }}>
+                            {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString("es") : "—"}
+                          </td>
+                          <td className="py-3 pr-3">
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                onClick={() => handleReset(u)}
+                                disabled={busy}
+                                title="Resetear contraseña"
+                                className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
+                                style={{ color: "#5E8C4A" }}
+                              >
+                                <KeyRound className="w-4 h-4" />
+                              </button>
+                              {banned ? (
+                                <button
+                                  onClick={() => handleActivate(u)}
+                                  disabled={busy}
+                                  title="Reactivar"
+                                  className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
+                                  style={{ color: "#3F6B43" }}
+                                >
+                                  <CheckCircle2 className="w-4 h-4" />
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleDeactivate(u)}
+                                  disabled={busy || u.email?.toLowerCase() === ADMIN_EMAIL}
+                                  title="Desactivar"
+                                  className="p-2 rounded-full hover:bg-[#FDECEC] disabled:opacity-30"
+                                  style={{ color: "#A33B3B" }}
+                                >
+                                  <Ban className="w-4 h-4" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  {filteredUsers.length === 0 && !fetching && (
+                    <tr>
+                      <td colSpan={5} className="py-6 text-center text-[13px]" style={{ color: "#8A6B55" }}>
+                        No se encontraron usuarios.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
 
         <section
           className="p-6 mt-8"
