@@ -318,6 +318,11 @@ export default function Admin() {
     fontFamily: "Montserrat, sans-serif",
   };
 
+  const filteredUsers = users.filter((u) => {
+    const term = userSearch.toLowerCase();
+    return (u.display_name?.toLowerCase().includes(term) ?? false) || (u.email?.toLowerCase().includes(term) ?? false);
+  });
+
   return (
     <div className="min-h-screen" style={{ background: "#FFF6EA" }}>
       <div className="max-w-5xl mx-auto px-5 py-8">
