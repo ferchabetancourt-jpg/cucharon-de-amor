@@ -545,12 +545,7 @@ export default function Admin() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users
-                    .filter((u) => {
-                      const term = userSearch.toLowerCase();
-                      return (u.display_name?.toLowerCase().includes(term) ?? false) || (u.email?.toLowerCase().includes(term) ?? false);
-                    })
-                    .map((u) => {
+                  {filteredUsers.map((u) => {
                       const banned = u.banned_until && new Date(u.banned_until) > new Date();
                       return (
                         <tr key={u.id} className="border-t" style={{ borderColor: "#EDE8DC", color: "#3A2A20" }}>
