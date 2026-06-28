@@ -602,10 +602,7 @@ export default function Admin() {
                         </tr>
                       );
                     })}
-                  {users.filter((u) => {
-                    const term = userSearch.toLowerCase();
-                    return (u.display_name?.toLowerCase().includes(term) ?? false) || (u.email?.toLowerCase().includes(term) ?? false);
-                  }).length === 0 && !fetching && (
+                  {filteredUsers.length === 0 && !fetching && (
                     <tr>
                       <td colSpan={5} className="py-6 text-center text-[13px]" style={{ color: "#8A6B55" }}>
                         No se encontraron usuarios.
