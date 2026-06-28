@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil } from "lucide-react";
-import { Pencil } from "lucide-react";
 import {
   Dialog,
   DialogContent,
