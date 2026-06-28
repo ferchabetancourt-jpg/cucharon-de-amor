@@ -495,10 +495,7 @@ export default function Admin() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
             <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
-              {users.filter((u) => {
-                const term = userSearch.toLowerCase();
-                return (u.display_name?.toLowerCase().includes(term) ?? false) || (u.email?.toLowerCase().includes(term) ?? false);
-              }).length} de {users.length} cuenta(s)
+              {filteredUsers.length} de {users.length} cuenta(s)
             </span>
           </div>
 
