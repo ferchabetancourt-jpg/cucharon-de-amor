@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +50,7 @@ export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [userSearch, setUserSearch] = useState("");
+  const [usersExpanded, setUsersExpanded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -494,11 +495,29 @@ export default function Admin() {
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg" style={{ color: "#3A2A20" }}>Usuarios</h2>
-            <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
-              {filteredUsers.length} de {users.length} cuenta(s)
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+                {usersExpanded ? `${filteredUsers.length} de ${users.length} cuenta(s)` : `${users.length} cuenta(s)`}
+              </span>
+              <button
+                type="button"
+                onClick={() => setUsersExpanded((v) => !v)}
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px]"
+                style={{
+                  background: "#FFFFFF",
+                  border: "1px solid #EDE8DC",
+                  color: "#3A2A20",
+                  fontFamily: "Montserrat, sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                {usersExpanded ? <><ChevronUp className="w-3 h-3" /> Ocultar</> : <><ChevronDown className="w-3 h-3" /> Ver lista</>}
+              </button>
+            </div>
           </div>
 
+          {usersExpanded && (
+          <>
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#8A6B55" }} />
             <input
@@ -570,31 +589,31 @@ export default function Admin() {
                               <button
                                 onClick={() => handleReset(u)}
                                 disabled={busy}
-                                title="Resetear contraseña"
-                                className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
-                                style={{ color: "#5E8C4A" }}
+                                title="Establecer contraseña temporal"
+                                className="px-2.5 py-1.5 rounded-full text-[11px] inline-flex items-center gap-1.5 hover:bg-[#FFF6EA] disabled:opacity-50"
+                                style={{ color: "#5E8C4A", border: "1px solid #EDE8DC", fontWeight: 600 }}
                               >
-                                <KeyRound className="w-4 h-4" />
+                                <KeyRound className="w-3 h-3" /> Cambiar contraseña
                               </button>
                               {banned ? (
                                 <button
                                   onClick={() => handleActivate(u)}
                                   disabled={busy}
                                   title="Reactivar"
-                                  className="p-2 rounded-full hover:bg-[#FFF6EA] disabled:opacity-50"
-                                  style={{ color: "#3F6B43" }}
+                                  className="px-2.5 py-1.5 rounded-full text-[11px] inline-flex items-center gap-1.5 hover:bg-[#FFF6EA] disabled:opacity-50"
+                                  style={{ color: "#3F6B43", border: "1px solid #EDE8DC", fontWeight: 600 }}
                                 >
-                                  <CheckCircle2 className="w-4 h-4" />
+                                  <CheckCircle2 className="w-3 h-3" /> Reactivar
                                 </button>
                               ) : (
                                 <button
                                   onClick={() => handleDeactivate(u)}
                                   disabled={busy || u.email?.toLowerCase() === ADMIN_EMAIL}
-                                  title="Desactivar"
-                                  className="p-2 rounded-full hover:bg-[#FDECEC] disabled:opacity-30"
-                                  style={{ color: "#A33B3B" }}
+                                  title="Desactivar usuario"
+                                  className="px-2.5 py-1.5 rounded-full text-[11px] inline-flex items-center gap-1.5 hover:bg-[#FDECEC] disabled:opacity-30"
+                                  style={{ color: "#A33B3B", border: "1px solid #EDE8DC", fontWeight: 600 }}
                                 >
-                                  <Ban className="w-4 h-4" />
+                                  <Ban className="w-3 h-3" /> Desactivar usuario
                                 </button>
                               )}
                             </div>
@@ -612,6 +631,8 @@ export default function Admin() {
                 </tbody>
               </table>
             </div>
+          )}
+          </>
           )}
         </section>
 
