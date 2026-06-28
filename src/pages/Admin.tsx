@@ -49,6 +49,7 @@ type EditableRecipe = {
 export default function Admin() {
   const { user, loading } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [userSearch, setUserSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [fetching, setFetching] = useState(true);
 
