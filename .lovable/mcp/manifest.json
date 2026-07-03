@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "cucharon-de-amor-mcp",
+      "version": "0.1.0",
+      "title": "Un Cucharón de Amor"
+    },
+    "tools": [
+      {
+        "name": "search_recipes",
+        "title": "Search recipes",
+        "description": "Search published recipes in Un Cucharón de Amor by name, ingredient, or category. Returns up to 20 matches.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Text to match against recipe name or ingredients.",
+              "type": "string"
+            },
+            "category": {
+              "description": "Optional category filter.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max results (default 10).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_recipe",
+        "title": "Get recipe",
+        "description": "Fetch the full details of a published recipe by its id.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Recipe id."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "generate_recipe_idea",
+        "title": "Generate recipe idea",
+        "description": "Generate a new, gentle-on-the-body recipe idea from an ingredient and/or mood using Un Cucharón de Amor's AI chef.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "ingredient": {
+              "description": "Main ingredient available at home.",
+              "type": "string"
+            },
+            "mood": {
+              "description": "How the user's body feels today.",
+              "type": "string",
+              "enum": [
+                "liviano",
+                "confort",
+                "rapido",
+                "dulce",
+                "sinculpa",
+                "sorpresa"
+              ]
+            },
+            "prefs": {
+              "description": "Dietary preferences: airfryer, rapido, singluten, sinlacteos, proteina, veggie.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
