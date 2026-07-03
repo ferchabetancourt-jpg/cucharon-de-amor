@@ -286,6 +286,14 @@ export function RecipeGenerator() {
             );
           })}
         </div>
+
+        {loading && (
+          <div className="flex gap-1.5 justify-center py-3">
+            <span className="w-2.5 h-2.5 bg-terracotta-light rounded-full dot-bounce" />
+            <span className="w-2.5 h-2.5 bg-terracotta-light rounded-full dot-bounce" style={{ animationDelay: ".2s" }} />
+            <span className="w-2.5 h-2.5 bg-terracotta-light rounded-full dot-bounce" style={{ animationDelay: ".4s" }} />
+          </div>
+        )}
       </section>
 
 
