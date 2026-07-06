@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import {
   Search, Plus, Trash2, ArrowLeft, X, Star, Pencil, SlidersHorizontal, Clock, Utensils,
-  Soup, Zap, Leaf, ChefHat, IceCream2, Flag, Carrot, Sparkles,
+  Soup, Zap, Leaf, ChefHat, IceCream2, Flag, Carrot, Sparkles, Loader2,
   type LucideIcon,
 } from "lucide-react";
 import { RecipeFormModal } from "./RecipeFormModal";
@@ -383,9 +383,15 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
   const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL;
   const allRecipes = useRecipes();
   const [publishedRecipes, setPublishedRecipes] = useState<SavedRecipe[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isAdmin) return;
+    if (isAdmin) {
+      // For admin we rely on the local store (useRecipes) which hydrates quickly.
+      const t = setTimeout(() => setLoading(false), 250);
+      return () => clearTimeout(t);
+    }
+    setLoading(true);
     supabase
       .from("recipes_staging")
       .select("id, name, category, methods, time, ingredients, preparation, notes, image_url, created_at, status")
@@ -393,6 +399,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
       .then(({ data, error }) => {
         if (error) {
           console.error("Error cargando recetas publicadas", error);
+          setLoading(false);
           return;
         }
         setPublishedRecipes(
@@ -409,6 +416,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
             createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
           }))
         );
+        setLoading(false);
       });
   }, [isAdmin]);
 
@@ -513,6 +521,14 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         <RecipeFormModal open={openForm} onClose={closeForm} editing={editing} />
         {deleteDialog}
       </>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: "#E85D2F" }} />
+      </div>
     );
   }
 
