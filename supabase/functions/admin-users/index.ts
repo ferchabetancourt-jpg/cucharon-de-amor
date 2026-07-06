@@ -59,11 +59,23 @@ Deno.serve(async (req) => {
     if (action === "create") {
       const { email, password, name } = body;
       if (!email || !password) return json({ error: "Correo y contraseña requeridos" }, 400);
+      const normalizedEmail = String(email).trim().toLowerCase();
+      const { data: allowedRow, error: allowedErr } = await admin
+        .from("allowed_emails")
+        .select("id")
+        .ilike("email", normalizedEmail)
+        .maybeSingle();
+      if (allowedErr) throw allowedErr;
+      if (!allowedRow) {
+        return json({
+          error: "El acceso es solo por invitación. Escríbenos para solicitar tu acceso.",
+        }, 403);
+      }
       const { data, error } = await admin.auth.admin.createUser({
-        email,
+        email: normalizedEmail,
         password,
         email_confirm: true,
-        user_metadata: { display_name: name || email.split("@")[0] },
+        user_metadata: { display_name: name || normalizedEmail.split("@")[0] },
       });
       if (error) throw error;
       return json({ user: { id: data.user?.id, email: data.user?.email } });
