@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp, Mail, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,12 @@ type AdminRole = {
   id: string;
   email: string;
   role: string;
+  created_at: string | null;
+};
+
+type AllowedEmail = {
+  id: string;
+  email: string;
   created_at: string | null;
 };
 
@@ -62,6 +68,11 @@ export default function Admin() {
   const [fetchingRoles, setFetchingRoles] = useState(true);
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [addingAdmin, setAddingAdmin] = useState(false);
+
+  const [allowedEmails, setAllowedEmails] = useState<AllowedEmail[]>([]);
+  const [fetchingAllowed, setFetchingAllowed] = useState(true);
+  const [newAllowedEmail, setNewAllowedEmail] = useState("");
+  const [addingAllowed, setAddingAllowed] = useState(false);
 
   const [pendingRecipes, setPendingRecipes] = useState<PendingRecipe[]>([]);
   const [fetchingPending, setFetchingPending] = useState(true);
@@ -118,6 +129,58 @@ export default function Admin() {
   useEffect(() => {
     if (allowed) refreshAdmins();
   }, [allowed]);
+
+  const refreshAllowed = async () => {
+    setFetchingAllowed(true);
+    try {
+      const { data, error } = await supabase
+        .from("allowed_emails")
+        .select("id, email, created_at")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      setAllowedEmails((data ?? []) as AllowedEmail[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al cargar la lista de acceso");
+    } finally {
+      setFetchingAllowed(false);
+    }
+  };
+
+  useEffect(() => {
+    if (allowed) refreshAllowed();
+  }, [allowed]);
+
+  const handleAddAllowed = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = newAllowedEmail.trim().toLowerCase();
+    if (!email) return;
+    setAddingAllowed(true);
+    try {
+      const { error } = await supabase
+        .from("allowed_emails")
+        .insert({ email });
+      if (error) throw error;
+      toast.success("Correo agregado a la whitelist");
+      setNewAllowedEmail("");
+      refreshAllowed();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Error al agregar");
+    } finally {
+      setAddingAllowed(false);
+    }
+  };
+
+  const handleDeleteAllowed = async (row: AllowedEmail) => {
+    if (!confirm(`¿Eliminar ${row.email} de la lista de acceso?`)) return;
+    try {
+      const { error } = await supabase.from("allowed_emails").delete().eq("id", row.id);
+      if (error) throw error;
+      toast.success("Correo eliminado de la whitelist");
+      refreshAllowed();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Error al eliminar");
+    }
+  };
 
   const refreshPendingRecipes = async () => {
     setFetchingPending(true);
