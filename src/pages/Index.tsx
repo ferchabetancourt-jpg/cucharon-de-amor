@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/cucharon/NavBar";
 import { Header } from "@/components/cucharon/Header";
 import { InspirationCard } from "@/components/cucharon/InspirationCard";
@@ -11,8 +12,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { WelcomeScreen } from "@/components/cucharon/WelcomeScreen";
 import { OnboardingModal } from "@/components/cucharon/OnboardingModal";
 
-const ONBOARDING_KEY = "cucharon_onboarding_seen";
-
 const Index = () => {
   const [tab, setTab] = useState<"chef" | "recipes" | "favorites">("chef");
   const [initialCat, setInitialCat] = useState<string | undefined>(undefined);
@@ -22,14 +21,35 @@ const Index = () => {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (user && !localStorage.getItem(ONBOARDING_KEY)) {
-      setShowOnboarding(true);
-    }
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_visto")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (!cancelled && data && !(data as { onboarding_visto?: boolean }).onboarding_visto) {
+        setShowOnboarding(true);
+      }
+    })();
+    return () => { cancelled = true; };
   }, [user]);
 
   const handleCloseOnboarding = () => {
-    localStorage.setItem(ONBOARDING_KEY, "true");
     setShowOnboarding(false);
+    if (user) {
+      supabase
+        .from("profiles")
+        .update({ onboarding_visto: true } as never)
+        .eq("id", user.id)
+        .then(() => {});
+    }
+  };
+
+  const handlePickCategory = (categoryKey: string) => {
+    setInitialCat(categoryKey);
+    setTab("recipes");
   };
 
   if (loading) {
@@ -97,7 +117,9 @@ const Index = () => {
           <FavoritesPage />
         )}
       </main>
-      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} />}
+      {showOnboarding && (
+        <OnboardingModal onClose={handleCloseOnboarding} onPickCategory={handlePickCategory} />
+      )}
     </div>
   );
 };
