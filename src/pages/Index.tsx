@@ -23,17 +23,25 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
-    (async () => {
+    const check = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("onboarding_visto")
+        .select("onboarding_visto, password_changed")
         .eq("id", user.id)
         .maybeSingle();
-      if (!cancelled && data && !(data as { onboarding_visto?: boolean }).onboarding_visto) {
+      if (cancelled || !data) return;
+      const d = data as { onboarding_visto?: boolean; password_changed?: boolean | null };
+      if (!d.onboarding_visto && d.password_changed === true) {
         setShowOnboarding(true);
       }
-    })();
-    return () => { cancelled = true; };
+    };
+    check();
+    const onPwd = () => check();
+    window.addEventListener("cucharon:password-changed", onPwd);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("cucharon:password-changed", onPwd);
+    };
   }, [user]);
 
   const handleCloseOnboarding = () => {
