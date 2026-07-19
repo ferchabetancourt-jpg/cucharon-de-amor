@@ -8,6 +8,8 @@ type AuthCtx = {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  recoveryMode: boolean;
+  clearRecoveryMode: () => void;
   signOut: () => Promise<void>;
 };
 
@@ -15,6 +17,8 @@ const AuthContext = createContext<AuthCtx>({
   user: null,
   session: null,
   loading: true,
+  recoveryMode: false,
+  clearRecoveryMode: () => {},
   signOut: async () => {},
 });
 
@@ -22,12 +26,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [recoveryMode, setRecoveryMode] = useState(false);
 
   useEffect(() => {
     // Listener first (sync only — defer async work)
     const { data: sub } = supabase.auth.onAuthStateChange((event, sess) => {
       setSession(sess);
       setUser(sess?.user ?? null);
+      if (event === "PASSWORD_RECOVERY") {
+        setRecoveryMode(true);
+      }
       const uid = sess?.user?.id ?? null;
       setTimeout(() => {
         recipesStore.setUser(uid).catch(() => {});
@@ -36,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           track("user_login", { email: sess.user.email });
         } else if (event === "SIGNED_OUT") {
           identifyUser(null);
+          setRecoveryMode(false);
         }
       }, 0);
     });
@@ -57,7 +66,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        session,
+        loading,
+        recoveryMode,
+        clearRecoveryMode: () => setRecoveryMode(false),
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
