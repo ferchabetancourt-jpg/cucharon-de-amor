@@ -26,10 +26,14 @@ const Index = () => {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("onboarding_visto")
+        .select("onboarding_visto, password_changed")
         .eq("id", user.id)
         .maybeSingle();
-      if (!cancelled && data && !(data as { onboarding_visto?: boolean }).onboarding_visto) {
+      if (cancelled || !data) return;
+      const d = data as { onboarding_visto?: boolean; password_changed?: boolean | null };
+      // No abrir onboarding hasta que el usuario haya cambiado su contraseña,
+      // porque el ChangePasswordDialog lo cubriría y bloquearía la navegación.
+      if (!d.onboarding_visto && d.password_changed === true) {
         setShowOnboarding(true);
       }
     })();
