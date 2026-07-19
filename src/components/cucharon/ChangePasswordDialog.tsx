@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 export function ChangePasswordDialog() {
-  const { user } = useAuth();
+  const { user, recoveryMode } = useAuth();
   const [mustChange, setMustChange] = useState(false);
   const [checked, setChecked] = useState(false);
   const [pwd, setPwd] = useState("");
@@ -31,7 +31,7 @@ export function ChangePasswordDialog() {
     return () => { cancelled = true; };
   }, [user]);
 
-  if (!user || !checked || !mustChange) return null;
+  if (!user || !checked || !mustChange || recoveryMode) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
