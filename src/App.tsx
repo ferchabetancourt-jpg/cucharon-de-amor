@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Admin from "./pages/Admin.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ChangePasswordDialog } from "./components/cucharon/ChangePasswordDialog";
+import { RecoveryPasswordDialog } from "./components/cucharon/RecoveryPasswordDialog";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
         <ChangePasswordDialog />
+        <RecoveryPasswordDialog />
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

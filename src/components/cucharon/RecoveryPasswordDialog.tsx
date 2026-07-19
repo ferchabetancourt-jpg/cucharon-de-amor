@@ -1,37 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-export function ChangePasswordDialog() {
-  const { user, recoveryMode } = useAuth();
-  const [mustChange, setMustChange] = useState(false);
-  const [checked, setChecked] = useState(false);
+export function RecoveryPasswordDialog() {
+  const { recoveryMode, clearRecoveryMode, user } = useAuth();
   const [pwd, setPwd] = useState("");
   const [pwd2, setPwd2] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (!user) { setMustChange(false); setChecked(false); return; }
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("password_changed")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (cancelled) return;
-      const changed = (data as { password_changed?: boolean } | null)?.password_changed;
-      setMustChange(changed === false || changed === null || changed === undefined);
-      setChecked(true);
-    })();
-    return () => { cancelled = true; };
-  }, [user]);
-
-  if (!user || !checked || !mustChange || recoveryMode) return null;
+  if (!recoveryMode) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +29,20 @@ export function ChangePasswordDialog() {
     try {
       const { error: upErr } = await supabase.auth.updateUser({ password: pwd });
       if (upErr) throw upErr;
-      const { error: pErr } = await supabase
-        .from("profiles")
-        .update({ password_changed: true } as never)
-        .eq("id", user.id);
-      if (pErr) throw pErr;
+      // Mark first-login password as done too so ChangePasswordDialog no aparece
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ password_changed: true } as never)
+          .eq("id", user.id);
+      }
       toast.success("Contraseña actualizada 💛");
       setPwd(""); setPwd2("");
-      setMustChange(false);
+      clearRecoveryMode();
+      // Clean URL hash so recovery tokens no queden en la barra
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Algo salió mal");
     } finally {
@@ -81,15 +68,15 @@ export function ChangePasswordDialog() {
           }}
         >
           <div className="text-center mb-5">
-            <div className="text-[40px] leading-none mb-2">🔐</div>
+            <div className="text-[40px] leading-none mb-2">🔑</div>
             <DialogTitle asChild>
               <h2 className="font-serif text-[22px] md:text-[24px]" style={{ color: "#3A2A20", fontWeight: 600 }}>
-                Crea tu contraseña personal
+                Restablece tu contraseña
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
               <p className="text-[13px] mt-1 italic" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
-                Por seguridad, elige una contraseña que solo tú conozcas
+                Elige una nueva contraseña para tu cuenta
               </p>
             </DialogDescription>
           </div>
@@ -149,7 +136,7 @@ export function ChangePasswordDialog() {
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              Guardar y entrar
+              Guardar nueva contraseña
             </button>
 
             {error && (
