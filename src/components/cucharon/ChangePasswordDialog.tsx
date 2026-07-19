@@ -149,7 +149,7 @@ export function ChangePasswordDialog() {
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              Guardar contraseña
+              Guardar y entrar
             </button>
 
             {error && (
