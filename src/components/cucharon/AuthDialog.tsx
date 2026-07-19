@@ -15,23 +15,36 @@ export function AuthDialog({ open, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"login" | "forgot">("login");
+  const [info, setInfo] = useState("");
 
   const reset = () => {
     setEmail("");
     setPassword("");
     setError("");
+    setInfo("");
+    setMode("login");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setError("");
+    setInfo("");
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      toast.success("Hola de nuevo 💛");
-      reset();
-      onClose();
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin,
+        });
+        if (error) throw error;
+        setInfo("Revisa tu correo para restablecer tu contraseña");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Hola de nuevo 💛");
+        reset();
+        onClose();
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Algo salió mal";
       const friendly =
