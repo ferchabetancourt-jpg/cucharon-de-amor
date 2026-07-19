@@ -11,6 +11,7 @@ import { recipesStore } from "@/lib/recipes-store";
 import { useAuth } from "@/contexts/AuthContext";
 import { WelcomeScreen } from "@/components/cucharon/WelcomeScreen";
 import { OnboardingModal } from "@/components/cucharon/OnboardingModal";
+import { InstallPWAButton } from "@/components/cucharon/InstallPWAButton";
 
 const Index = () => {
   const [tab, setTab] = useState<"chef" | "recipes" | "favorites">("chef");
@@ -95,6 +96,7 @@ const Index = () => {
       <main className="max-w-[720px] mx-auto px-4 sm:px-5 pt-6 pb-24">
         {tab === "chef" ? (
           <>
+            <InstallPWAButton />
             <RecipeGenerator />
             <InspirationCard />
 
