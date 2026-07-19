@@ -15,12 +15,16 @@ export function AuthDialog({ open, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [mode, setMode] = useState<"login" | "forgot">("login");
+  const [mode, setMode] = useState<"login" | "forgot" | "signup">("login");
+  const [name, setName] = useState("");
+  const [password2, setPassword2] = useState("");
   const [info, setInfo] = useState("");
 
   const reset = () => {
     setEmail("");
     setPassword("");
+    setPassword2("");
+    setName("");
     setError("");
     setInfo("");
     setMode("login");
@@ -38,6 +42,34 @@ export function AuthDialog({ open, onClose }: Props) {
         });
         if (error) throw error;
         setInfo("Revisa tu correo para restablecer tu contraseña");
+      } else if (mode === "signup") {
+        if (password.length < 8) throw new Error("La contraseña debe tener al menos 8 caracteres.");
+        if (password !== password2) throw new Error("Las contraseñas no coinciden.");
+        const normalized = email.trim().toLowerCase();
+        const { data: allowed, error: allowedErr } = await supabase
+          .from("allowed_emails")
+          .select("id")
+          .ilike("email", normalized)
+          .maybeSingle();
+        if (allowedErr) throw allowedErr;
+        if (!allowed) {
+          setError("Tu acceso aún no está activado. Si ya compraste, tu activación llega en máximo 12 horas al correo con el que compraste.");
+          setBusy(false);
+          return;
+        }
+        const { data: signUpData, error: signErr } = await supabase.auth.signUp({
+          email: normalized,
+          password,
+          options: { data: { display_name: name || normalized.split("@")[0] } },
+        });
+        if (signErr) throw signErr;
+        const uid = signUpData.user?.id;
+        if (uid) {
+          await supabase.from("profiles").update({ password_changed: true } as never).eq("id", uid);
+        }
+        toast.success("¡Bienvenida! 💛");
+        reset();
+        onClose();
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -85,7 +117,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="font-serif text-[22px] md:text-[24px]"
                 style={{ color: "#3A2A20", fontWeight: 600 }}
               >
-                {mode === "forgot" ? "Recupera tu contraseña" : "Bienvenid@ de vuelta"}
+                {mode === "forgot" ? "Recupera tu contraseña" : mode === "signup" ? "Crea tu cuenta" : "Bienvenid@ de vuelta"}
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
@@ -95,12 +127,35 @@ export function AuthDialog({ open, onClose }: Props) {
               >
                 {mode === "forgot"
                   ? "Te enviaremos un enlace a tu correo"
+                  : mode === "signup"
+                  ? "Solo con invitación activada"
                   : "Recetas que viajan por generaciones"}
               </p>
             </DialogDescription>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
+            {mode === "signup" && (
+              <div>
+                <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Tu nombre"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1.5px solid #EDE8DC",
+                    color: "#3A2A20",
+                    fontFamily: "Montserrat, sans-serif",
+                  }}
+                />
+              </div>
+            )}
             <div>
               <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Correo
@@ -120,7 +175,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 }}
               />
             </div>
-            {mode === "login" && (
+            {mode !== "forgot" && (
             <div>
               <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Contraseña
@@ -128,7 +183,7 @@ export function AuthDialog({ open, onClose }: Props) {
               <input
                 type="password"
                 required
-                minLength={6}
+                minLength={mode === "signup" ? 8 : 6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -141,6 +196,28 @@ export function AuthDialog({ open, onClose }: Props) {
                 }}
               />
             </div>
+            )}
+            {mode === "signup" && (
+              <div>
+                <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
+                  Confirmar contraseña
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={password2}
+                  onChange={(e) => setPassword2(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-[14px] outline-none"
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1.5px solid #EDE8DC",
+                    color: "#3A2A20",
+                    fontFamily: "Montserrat, sans-serif",
+                  }}
+                />
+              </div>
             )}
 
             <button
@@ -156,10 +233,10 @@ export function AuthDialog({ open, onClose }: Props) {
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              {mode === "forgot" ? "Enviar enlace" : "Entrar"}
+              {mode === "forgot" ? "Enviar enlace" : mode === "signup" ? "Crear cuenta" : "Entrar"}
             </button>
 
-            <div className="text-center">
+            <div className="text-center space-y-1.5 flex flex-col">
               <button
                 type="button"
                 onClick={() => { setError(""); setInfo(""); setMode(mode === "forgot" ? "login" : "forgot"); }}
@@ -168,6 +245,16 @@ export function AuthDialog({ open, onClose }: Props) {
               >
                 {mode === "forgot" ? "Volver a iniciar sesión" : "¿Olvidaste tu contraseña?"}
               </button>
+              {mode !== "forgot" && (
+                <button
+                  type="button"
+                  onClick={() => { setError(""); setInfo(""); setMode(mode === "signup" ? "login" : "signup"); }}
+                  className="text-[12.5px] underline hover:opacity-80 transition-opacity"
+                  style={{ color: "#E85D2F", fontFamily: "Montserrat, sans-serif" }}
+                >
+                  {mode === "signup" ? "Ya tengo cuenta — Entrar" : "Crear cuenta"}
+                </button>
+              )}
             </div>
 
             {info && (
