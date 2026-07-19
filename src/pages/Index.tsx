@@ -23,7 +23,7 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
-    (async () => {
+    const check = async () => {
       const { data } = await supabase
         .from("profiles")
         .select("onboarding_visto, password_changed")
@@ -31,13 +31,17 @@ const Index = () => {
         .maybeSingle();
       if (cancelled || !data) return;
       const d = data as { onboarding_visto?: boolean; password_changed?: boolean | null };
-      // No abrir onboarding hasta que el usuario haya cambiado su contraseña,
-      // porque el ChangePasswordDialog lo cubriría y bloquearía la navegación.
       if (!d.onboarding_visto && d.password_changed === true) {
         setShowOnboarding(true);
       }
-    })();
-    return () => { cancelled = true; };
+    };
+    check();
+    const onPwd = () => check();
+    window.addEventListener("cucharon:password-changed", onPwd);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("cucharon:password-changed", onPwd);
+    };
   }, [user]);
 
   const handleCloseOnboarding = () => {
