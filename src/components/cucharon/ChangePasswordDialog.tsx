@@ -56,6 +56,7 @@ export function ChangePasswordDialog() {
       toast.success("Contraseña actualizada 💛");
       setPwd(""); setPwd2("");
       setMustChange(false);
+      window.dispatchEvent(new Event("cucharon:password-changed"));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Algo salió mal");
     } finally {
