@@ -15,23 +15,36 @@ export function AuthDialog({ open, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"login" | "forgot">("login");
+  const [info, setInfo] = useState("");
 
   const reset = () => {
     setEmail("");
     setPassword("");
     setError("");
+    setInfo("");
+    setMode("login");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setError("");
+    setInfo("");
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      toast.success("Hola de nuevo 💛");
-      reset();
-      onClose();
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin,
+        });
+        if (error) throw error;
+        setInfo("Revisa tu correo para restablecer tu contraseña");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Hola de nuevo 💛");
+        reset();
+        onClose();
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Algo salió mal";
       const friendly =
@@ -72,7 +85,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="font-serif text-[22px] md:text-[24px]"
                 style={{ color: "#3A2A20", fontWeight: 600 }}
               >
-                Bienvenid@ de vuelta
+                {mode === "forgot" ? "Recupera tu contraseña" : "Bienvenid@ de vuelta"}
               </h2>
             </DialogTitle>
             <DialogDescription asChild>
@@ -80,7 +93,9 @@ export function AuthDialog({ open, onClose }: Props) {
                 className="text-[13px] mt-1 italic"
                 style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
               >
-                Recetas que viajan por generaciones
+                {mode === "forgot"
+                  ? "Te enviaremos un enlace a tu correo"
+                  : "Recetas que viajan por generaciones"}
               </p>
             </DialogDescription>
           </div>
@@ -105,6 +120,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 }}
               />
             </div>
+            {mode === "login" && (
             <div>
               <label className="block text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#5E8C4A" }}>
                 Contraseña
@@ -125,6 +141,7 @@ export function AuthDialog({ open, onClose }: Props) {
                 }}
               />
             </div>
+            )}
 
             <button
               type="submit"
@@ -139,8 +156,33 @@ export function AuthDialog({ open, onClose }: Props) {
               }}
             >
               {busy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              Entrar
+              {mode === "forgot" ? "Enviar enlace" : "Entrar"}
             </button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => { setError(""); setInfo(""); setMode(mode === "forgot" ? "login" : "forgot"); }}
+                className="text-[12.5px] underline hover:opacity-80 transition-opacity"
+                style={{ color: "#E85D2F", fontFamily: "Montserrat, sans-serif" }}
+              >
+                {mode === "forgot" ? "Volver a iniciar sesión" : "¿Olvidaste tu contraseña?"}
+              </button>
+            </div>
+
+            {info && (
+              <div
+                className="mt-3 px-3.5 py-2.5 rounded-xl text-[12.5px] text-center leading-relaxed"
+                style={{
+                  background: "#FFF6EA",
+                  border: "1px solid #5E8C4A",
+                  color: "#3A6B2A",
+                  fontFamily: "Montserrat, sans-serif",
+                }}
+              >
+                {info}
+              </div>
+            )}
 
             {error && (
               <div
