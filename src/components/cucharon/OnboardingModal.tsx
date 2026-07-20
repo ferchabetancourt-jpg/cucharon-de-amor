@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import ajiacoAsset from "@/assets/onboarding-ajiaco.webp.asset.json";
 import appRecetasAsset from "@/assets/onboarding-app-recetas.webp.asset.json";
 import { CATEGORIES } from "@/lib/cucharon-data";
+import { supabase } from "@/integrations/supabase/client";
 
 const FONT = "'Montserrat', 'DM Sans', system-ui, sans-serif";
 
@@ -22,6 +23,21 @@ const MAP_ROWS = [
 export function OnboardingModal({ onClose, onPickCategory }: Props) {
   const [step, setStep] = useState(1);
   const collections = CATEGORIES.filter((c) => c.key !== "all");
+
+  const markSeenAndClose = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ onboarding_visto: true } as never)
+          .eq("id", user.id);
+      }
+    } catch {
+      // no-op
+    }
+    onClose();
+  };
 
   return (
     <div
@@ -47,7 +63,7 @@ export function OnboardingModal({ onClose, onPickCategory }: Props) {
             ))}
           </div>
           <button
-            onClick={onClose}
+            onClick={markSeenAndClose}
             className="text-[12px] transition-opacity hover:opacity-70"
             style={{ color: "#8A6B55", fontFamily: FONT }}
           >
@@ -119,7 +135,7 @@ export function OnboardingModal({ onClose, onPickCategory }: Props) {
                     key={c.key}
                     onClick={() => {
                       onPickCategory(c.key);
-                      onClose();
+                      markSeenAndClose();
                     }}
                     className="text-left rounded-xl px-3 py-3 text-[12.5px] leading-[1.3] transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                     style={{

@@ -286,19 +286,6 @@ export function AuthDialog({ open, onClose }: Props) {
             )}
           </form>
 
-          <p
-            className="text-center text-[12.5px] mt-4"
-            style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}
-          >
-            El registro es solo por invitación. Pide acceso a la administradora.{" "}
-            <a
-              href="mailto:"
-              className="underline hover:opacity-80 transition-opacity"
-              style={{ color: "#E85D2F" }}
-            >
-              ¿Cómo funciona la invitación?
-            </a>
-          </p>
         </div>
       </DialogContent>
     </Dialog>

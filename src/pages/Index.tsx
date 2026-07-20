@@ -34,11 +34,6 @@ const Index = () => {
       const d = data as { onboarding_visto?: boolean; password_changed?: boolean | null };
       if (!d.onboarding_visto && d.password_changed === true) {
         setShowOnboarding(true);
-        supabase
-          .from("profiles")
-          .update({ onboarding_visto: true } as never)
-          .eq("id", user.id)
-          .then(() => {});
       }
     };
     check();
