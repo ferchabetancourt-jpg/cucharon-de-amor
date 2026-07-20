@@ -53,10 +53,21 @@ export function ChangePasswordDialog() {
         .update({ password_changed: true } as never)
         .eq("id", user.id);
       if (pErr) throw pErr;
+      // Check onboarding status before closing so the onboarding modal can show if needed
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("onboarding_visto")
+        .eq("id", user.id)
+        .maybeSingle();
+      const onboardingVisto = (prof as { onboarding_visto?: boolean } | null)?.onboarding_visto;
       toast.success("Contraseña actualizada 💛");
       setPwd(""); setPwd2("");
       setMustChange(false);
-      window.dispatchEvent(new Event("cucharon:password-changed"));
+      window.dispatchEvent(
+        new CustomEvent("cucharon:password-changed", {
+          detail: { onboardingVisto: onboardingVisto === true },
+        })
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Algo salió mal");
     } finally {
