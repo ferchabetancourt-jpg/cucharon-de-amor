@@ -49,14 +49,14 @@ export function WelcomeScreen() {
             boxShadow: "0 10px 25px -10px rgba(232,93,47,0.6)",
           }}
         >
-          Tengo invitación
+          Comenzar
         </button>
         <div
           className="flex items-center gap-1.5 text-[12px]"
           style={{ color: "#C9B5A4", fontFamily: "Montserrat, sans-serif" }}
         >
           <Lock className="w-3 h-3" />
-          <span>Una cocina privada. Tu invitación es la llave.</span>
+          <span>Una cocina privada, hecha para ti.</span>
         </div>
       </div>
 
