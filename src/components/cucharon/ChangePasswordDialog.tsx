@@ -9,6 +9,7 @@ export function ChangePasswordDialog() {
   const { user, recoveryMode } = useAuth();
   const [mustChange, setMustChange] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [justChanged, setJustChanged] = useState(false);
   const [pwd, setPwd] = useState("");
   const [pwd2, setPwd2] = useState("");
   const [busy, setBusy] = useState(false);
@@ -16,6 +17,7 @@ export function ChangePasswordDialog() {
 
   useEffect(() => {
     if (!user) { setMustChange(false); setChecked(false); return; }
+    if (justChanged) return;
     let cancelled = false;
     (async () => {
       const { data } = await supabase
@@ -29,9 +31,9 @@ export function ChangePasswordDialog() {
       setChecked(true);
     })();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [user, justChanged]);
 
-  if (!user || !checked || !mustChange || recoveryMode) return null;
+  if (!user || !checked || !mustChange || recoveryMode || justChanged) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +65,7 @@ export function ChangePasswordDialog() {
       toast.success("Contraseña actualizada 💛");
       setPwd(""); setPwd2("");
       setMustChange(false);
+      setJustChanged(true);
       window.dispatchEvent(
         new CustomEvent("cucharon:password-changed", {
           detail: { onboardingVisto: onboardingVisto === true },
