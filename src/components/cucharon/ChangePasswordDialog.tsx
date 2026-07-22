@@ -93,8 +93,39 @@ export function ChangePasswordDialog() {
             border: "1px solid #EDE8DC",
             borderRadius: "20px",
             boxShadow: "0 20px 50px -20px rgba(47,42,38,0.25)",
+            position: "relative",
           }}
         >
+          <button
+            type="button"
+            aria-label="Cerrar"
+            onClick={() => {
+              setMustChange(false);
+              if (window.location.pathname !== "/") {
+                window.location.assign("/");
+              }
+            }}
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              width: 28,
+              height: 28,
+              borderRadius: "9999px",
+              background: "transparent",
+              border: "1px solid #EDE8DC",
+              color: "#8A6B55",
+              fontFamily: "Montserrat, sans-serif",
+              fontSize: 14,
+              lineHeight: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
+          >
+            ×
+          </button>
           <div className="text-center mb-5">
             <div className="text-[40px] leading-none mb-2">🔐</div>
             <DialogTitle asChild>
