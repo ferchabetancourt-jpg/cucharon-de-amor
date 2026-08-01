@@ -109,6 +109,18 @@ Deno.serve(async (req) => {
       return json({ ok: true });
     }
 
+    if (action === "delete") {
+      const { user_id } = body;
+      if (!user_id) return json({ error: "Falta user_id" }, 400);
+      const { data: target } = await admin.auth.admin.getUserById(user_id);
+      if (target?.user?.email?.toLowerCase() === ADMIN_EMAIL) {
+        return json({ error: "No puedes eliminar la cuenta administradora" }, 400);
+      }
+      const { error } = await admin.auth.admin.deleteUser(user_id);
+      if (error) throw error;
+      return json({ ok: true });
+    }
+
     return json({ error: "Acción desconocida" }, 400);
   } catch (e) {
     let msg = e instanceof Error ? e.message : "Error";

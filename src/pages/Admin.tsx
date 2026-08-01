@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp, Mail, Trash2 } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp, Mail, Trash2, Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -54,6 +54,10 @@ type EditableRecipe = {
 
 export default function Admin() {
   const { user, loading } = useAuth();
+  const [tab, setTab] = useState<"usuarios" | "acceso" | "recetas" | "backup">("usuarios");
+  const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState<string | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [userSearch, setUserSearch] = useState("");
   const [usersExpanded, setUsersExpanded] = useState(false);
@@ -375,6 +379,62 @@ export default function Admin() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await call("delete", { user_id: deleteTarget.id });
+      toast.success("Usuario eliminado");
+      setDeleteTarget(null);
+      refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const toCsv = (rows: Record<string, unknown>[]) => {
+    if (rows.length === 0) return "";
+    const headers = Object.keys(rows[0]);
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    return [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+  };
+
+  const downloadCsv = (filename: string, csv: string) => {
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExport = async (table: "recipes_staging" | "profiles" | "allowed_emails", label: string) => {
+    setExporting(table);
+    try {
+      const { data, error } = await supabase.from(table).select("*");
+      if (error) throw error;
+      const rows = (data ?? []) as Record<string, unknown>[];
+      if (rows.length === 0) {
+        toast.error("No hay datos para exportar");
+        return;
+      }
+      const date = new Date().toISOString().slice(0, 10);
+      downloadCsv(`${label}-${date}.csv`, toCsv(rows));
+      toast.success(`${rows.length} registro(s) exportados`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al exportar");
+    } finally {
+      setExporting(null);
+    }
+  };
+
   const inputStyle: React.CSSProperties = {
     background: "#FFFFFF",
     border: "1.5px solid #EDE8DC",
@@ -404,6 +464,32 @@ export default function Admin() {
           </div>
         </div>
 
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
+          {([
+            ["usuarios", "👤 Usuarios"],
+            ["acceso", "📋 Acceso"],
+            ["recetas", "🍳 Recetas"],
+            ["backup", "⬇️ Backup"],
+          ] as const).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setTab(key)}
+              className="px-4 py-2 rounded-full text-[13px] whitespace-nowrap transition-colors"
+              style={{
+                background: tab === key ? "#cc7237" : "#2f2a26",
+                color: tab === key ? "#FFFFFF" : "#f7f3eb",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "usuarios" && (
+        <>
         <section
           className="p-6 mb-8"
           style={{
@@ -679,6 +765,15 @@ export default function Admin() {
                                   <Ban className="w-3 h-3" /> Desactivar usuario
                                 </button>
                               )}
+                              <button
+                                onClick={() => setDeleteTarget(u)}
+                                disabled={busy || u.email?.toLowerCase() === ADMIN_EMAIL}
+                                title="Eliminar usuario"
+                                className="px-2.5 py-1.5 rounded-full text-[11px] inline-flex items-center gap-1.5 hover:bg-[#FDECEC] disabled:opacity-30"
+                                style={{ color: "#C0392B", border: "1px solid #EDE8DC", fontWeight: 600 }}
+                              >
+                                <Trash2 className="w-3 h-3" /> Eliminar usuario
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -698,8 +793,10 @@ export default function Admin() {
           </>
           )}
         </section>
+        </>
+        )}
 
-
+        {tab === "acceso" && (
         <section
           className="p-6 mt-8"
           style={{
@@ -791,7 +888,9 @@ export default function Admin() {
             </div>
           )}
         </section>
+        )}
 
+        {tab === "recetas" && (
         <section
           className="p-6 mt-8"
           style={{
@@ -882,7 +981,79 @@ export default function Admin() {
             </div>
           )}
         </section>
+        )}
+
+        {tab === "backup" && (
+        <section
+          className="p-6 mt-8"
+          style={{ background: "#FFFFFF", border: "1px solid #EDE8DC", borderRadius: "20px" }}
+        >
+          <h2 className="font-serif text-lg mb-2" style={{ color: "#3A2A20" }}>Backup de datos</h2>
+          <p className="text-[12.5px] mb-5" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+            Descarga una copia en CSV de la información de tu cocina.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {([
+              ["recipes_staging", "recetas", "Exportar Recetas"],
+              ["profiles", "usuarios", "Exportar Usuarios"],
+              ["allowed_emails", "whitelist", "Exportar Whitelist"],
+            ] as const).map(([table, label, text]) => (
+              <button
+                key={table}
+                type="button"
+                onClick={() => handleExport(table, label)}
+                disabled={exporting === table}
+                className="px-5 py-2.5 rounded-full text-[13.5px] inline-flex items-center gap-2 disabled:opacity-60"
+                style={{
+                  background: "#2f2a26",
+                  color: "#f7f3eb",
+                  fontFamily: "Montserrat, sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                {exporting === table ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {text}
+              </button>
+            ))}
+          </div>
+        </section>
+        )}
       </div>
+
+      <Dialog open={!!deleteTarget} onOpenChange={(o) => { if (!o && !deleting) setDeleteTarget(null); }}>
+        <DialogContent className="max-w-md" style={{ background: "#FFF6EA" }}>
+          <DialogHeader>
+            <DialogTitle className="font-serif" style={{ color: "#3A2A20" }}>Eliminar usuario</DialogTitle>
+          </DialogHeader>
+          <p className="text-[13.5px]" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+            ¿Estás segura de que quieres eliminar este usuario? Esta acción no se puede deshacer.
+          </p>
+          {deleteTarget && (
+            <p className="text-[13px]" style={{ color: "#3A2A20", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}>
+              {deleteTarget.display_name || deleteTarget.email}
+            </p>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}
+              className="px-4 py-2 rounded-full text-[13px] disabled:opacity-60"
+              style={{ background: "#FFFFFF", border: "1.5px solid #EDE8DC", color: "#3A2A20", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleDeleteUser}
+              disabled={deleting}
+              className="px-4 py-2 rounded-full text-[13px] inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              style={{ background: "#C0392B", color: "#FFFFFF", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}
+            >
+              {deleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+              Eliminar
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!editingRecipe} onOpenChange={(o) => { if (!o) setEditingRecipe(null); }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: "#FFF6EA" }}>
