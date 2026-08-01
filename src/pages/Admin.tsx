@@ -765,6 +765,15 @@ export default function Admin() {
                                   <Ban className="w-3 h-3" /> Desactivar usuario
                                 </button>
                               )}
+                              <button
+                                onClick={() => setDeleteTarget(u)}
+                                disabled={busy || u.email?.toLowerCase() === ADMIN_EMAIL}
+                                title="Eliminar usuario"
+                                className="px-2.5 py-1.5 rounded-full text-[11px] inline-flex items-center gap-1.5 hover:bg-[#FDECEC] disabled:opacity-30"
+                                style={{ color: "#C0392B", border: "1px solid #EDE8DC", fontWeight: 600 }}
+                              >
+                                <Trash2 className="w-3 h-3" /> Eliminar usuario
+                              </button>
                             </div>
                           </td>
                         </tr>
