@@ -879,7 +879,9 @@ export default function Admin() {
             </div>
           )}
         </section>
+        )}
 
+        {tab === "recetas" && (
         <section
           className="p-6 mt-8"
           style={{
