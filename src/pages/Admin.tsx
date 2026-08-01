@@ -972,6 +972,43 @@ export default function Admin() {
             </div>
           )}
         </section>
+        )}
+
+        {tab === "backup" && (
+        <section
+          className="p-6 mt-8"
+          style={{ background: "#FFFFFF", border: "1px solid #EDE8DC", borderRadius: "20px" }}
+        >
+          <h2 className="font-serif text-lg mb-2" style={{ color: "#3A2A20" }}>Backup de datos</h2>
+          <p className="text-[12.5px] mb-5" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+            Descarga una copia en CSV de la información de tu cocina.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {([
+              ["recipes_staging", "recetas", "Exportar Recetas"],
+              ["profiles", "usuarios", "Exportar Usuarios"],
+              ["allowed_emails", "whitelist", "Exportar Whitelist"],
+            ] as const).map(([table, label, text]) => (
+              <button
+                key={table}
+                type="button"
+                onClick={() => handleExport(table, label)}
+                disabled={exporting === table}
+                className="px-5 py-2.5 rounded-full text-[13.5px] inline-flex items-center gap-2 disabled:opacity-60"
+                style={{
+                  background: "#2f2a26",
+                  color: "#f7f3eb",
+                  fontFamily: "Montserrat, sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                {exporting === table ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {text}
+              </button>
+            ))}
+          </div>
+        </section>
+        )}
       </div>
 
       <Dialog open={!!editingRecipe} onOpenChange={(o) => { if (!o) setEditingRecipe(null); }}>
