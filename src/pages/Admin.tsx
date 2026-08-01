@@ -379,6 +379,62 @@ export default function Admin() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await call("delete", { user_id: deleteTarget.id });
+      toast.success("Usuario eliminado");
+      setDeleteTarget(null);
+      refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const toCsv = (rows: Record<string, unknown>[]) => {
+    if (rows.length === 0) return "";
+    const headers = Object.keys(rows[0]);
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    return [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+  };
+
+  const downloadCsv = (filename: string, csv: string) => {
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExport = async (table: "recipes_staging" | "profiles" | "allowed_emails", label: string) => {
+    setExporting(table);
+    try {
+      const { data, error } = await supabase.from(table).select("*");
+      if (error) throw error;
+      const rows = (data ?? []) as Record<string, unknown>[];
+      if (rows.length === 0) {
+        toast.error("No hay datos para exportar");
+        return;
+      }
+      const date = new Date().toISOString().slice(0, 10);
+      downloadCsv(`${label}-${date}.csv`, toCsv(rows));
+      toast.success(`${rows.length} registro(s) exportados`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al exportar");
+    } finally {
+      setExporting(null);
+    }
+  };
+
   const inputStyle: React.CSSProperties = {
     background: "#FFFFFF",
     border: "1.5px solid #EDE8DC",
