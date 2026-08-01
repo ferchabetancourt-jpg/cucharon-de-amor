@@ -464,6 +464,32 @@ export default function Admin() {
           </div>
         </div>
 
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
+          {([
+            ["usuarios", "👤 Usuarios"],
+            ["acceso", "📋 Acceso"],
+            ["recetas", "🍳 Recetas"],
+            ["backup", "⬇️ Backup"],
+          ] as const).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setTab(key)}
+              className="px-4 py-2 rounded-full text-[13px] whitespace-nowrap transition-colors"
+              style={{
+                background: tab === key ? "#cc7237" : "#2f2a26",
+                color: tab === key ? "#FFFFFF" : "#f7f3eb",
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "usuarios" && (
+        <>
         <section
           className="p-6 mb-8"
           style={{
