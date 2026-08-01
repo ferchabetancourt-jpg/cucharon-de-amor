@@ -784,8 +784,10 @@ export default function Admin() {
           </>
           )}
         </section>
+        </>
+        )}
 
-
+        {tab === "acceso" && (
         <section
           className="p-6 mt-8"
           style={{
