@@ -1020,6 +1020,41 @@ export default function Admin() {
         )}
       </div>
 
+      <Dialog open={!!deleteTarget} onOpenChange={(o) => { if (!o && !deleting) setDeleteTarget(null); }}>
+        <DialogContent className="max-w-md" style={{ background: "#FFF6EA" }}>
+          <DialogHeader>
+            <DialogTitle className="font-serif" style={{ color: "#3A2A20" }}>Eliminar usuario</DialogTitle>
+          </DialogHeader>
+          <p className="text-[13.5px]" style={{ color: "#8A6B55", fontFamily: "Montserrat, sans-serif" }}>
+            ¿Estás segura de que quieres eliminar este usuario? Esta acción no se puede deshacer.
+          </p>
+          {deleteTarget && (
+            <p className="text-[13px]" style={{ color: "#3A2A20", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}>
+              {deleteTarget.display_name || deleteTarget.email}
+            </p>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}
+              className="px-4 py-2 rounded-full text-[13px] disabled:opacity-60"
+              style={{ background: "#FFFFFF", border: "1.5px solid #EDE8DC", color: "#3A2A20", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleDeleteUser}
+              disabled={deleting}
+              className="px-4 py-2 rounded-full text-[13px] inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              style={{ background: "#C0392B", color: "#FFFFFF", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}
+            >
+              {deleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+              Eliminar
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={!!editingRecipe} onOpenChange={(o) => { if (!o) setEditingRecipe(null); }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: "#FFF6EA" }}>
           <DialogHeader>
