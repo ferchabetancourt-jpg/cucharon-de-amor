@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp, Mail, Trash2 } from "lucide-react";
+import { Loader2, UserPlus, KeyRound, Ban, CheckCircle2, ArrowLeft, ChefHat, Search, Pencil, ChevronDown, ChevronUp, Mail, Trash2, Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -54,6 +54,10 @@ type EditableRecipe = {
 
 export default function Admin() {
   const { user, loading } = useAuth();
+  const [tab, setTab] = useState<"usuarios" | "acceso" | "recetas" | "backup">("usuarios");
+  const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState<string | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [userSearch, setUserSearch] = useState("");
   const [usersExpanded, setUsersExpanded] = useState(false);
