@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import ajiacoAsset from "@/assets/onboarding-ajiaco.webp.asset.json";
-import appRecetasAsset from "@/assets/onboarding-app-recetas.webp.asset.json";
+import ajiacoAsset from "@/assets/onboarding-ajiaco.webp";
+import appRecetasAsset from "@/assets/onboarding-mapa.webp";
 import { CATEGORIES } from "@/lib/cucharon-data";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -75,7 +75,7 @@ export function OnboardingModal({ onClose, onPickCategory }: Props) {
           {step === 1 && (
             <div className="animate-fade-in">
               <div className="w-full rounded-2xl overflow-hidden mb-5" style={{ aspectRatio: "1 / 1", background: "#F5E8D0" }}>
-                <img src={ajiacoAsset.url} alt="Ajiaco casero humeante" className="w-full h-full object-cover" />
+                <img src={ajiacoAsset} alt="Ajiaco casero humeante" className="w-full h-full object-cover" />
               </div>
               <h2
                 className="text-[24px] leading-[1.15] mb-3"
@@ -113,7 +113,7 @@ export function OnboardingModal({ onClose, onPickCategory }: Props) {
                 ))}
               </ul>
               <div className="w-full rounded-xl overflow-hidden border" style={{ borderColor: "#EAD9C4", background: "#FFF" }}>
-                <img src={appRecetasAsset.url} alt="Pantalla de Mis Recetas" className="w-full h-auto object-cover" />
+                <img src={appRecetasAsset} alt="Pantalla de Mis Recetas" className="w-full h-auto object-cover" />
               </div>
             </div>
           )}

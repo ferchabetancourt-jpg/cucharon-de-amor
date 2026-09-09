@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Lock } from "lucide-react";
 import { AuthDialog } from "./AuthDialog";
-import logoSymbol from "@/assets/cucharon-logo-circle.png.asset.json";
-import bg from "@/assets/welcome-bg.png.asset.json";
+import logoSymbol from "@/assets/logo-cucharon.webp";
+import bg from "@/assets/modal-sopa.webp";
 
 export function WelcomeScreen() {
   const [open, setOpen] = useState(false);
@@ -10,7 +10,7 @@ export function WelcomeScreen() {
     <div
       className="min-h-screen w-full relative flex flex-col"
       style={{
-        backgroundImage: `url(${bg.url})`,
+        backgroundImage: `url(${bg})`,
         backgroundSize: "cover",
         backgroundPosition: "center bottom",
         backgroundRepeat: "no-repeat",
@@ -18,7 +18,7 @@ export function WelcomeScreen() {
     >
       <div className="flex-1 flex flex-col items-center px-6 pt-[12vh] text-center">
         <img
-          src={logoSymbol.url}
+          src={logoSymbol}
           alt="Un Cucharón de Amor"
           className="object-contain mb-4"
           style={{ width: "240px", height: "auto", border: "none", background: "transparent", boxShadow: "none" }}
