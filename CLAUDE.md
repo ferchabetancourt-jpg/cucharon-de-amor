@@ -63,6 +63,7 @@ Cuando aplique, todo repo debe tener estos 3 archivos en la raíz (nombrados `<D
 
 - Trabaja siempre en una rama `claude/<descripción-corta>`, nunca directo en `main`.
 - Default: una rama nueva por bloque/tarea (más fácil de rastrear qué PR trajo qué). Para un feature grande que necesita muchas rondas de ajuste seguidas, reutilizar una sola rama a través de varios PRs chicos es válido — pero confírmalo con Fercha antes de adoptar ese patrón en vez del default.
+- **Alcance de un PR:** por default, una feature o cambio de comportamiento por PR — más fácil de revisar y de revertir si algo sale mal. Un *pase de limpieza* (deuda técnica, dependencias sin uso, código muerto, performance — nada que cambie comportamiento para la usuaria) puede ir junto en un solo PR **si** cada pieza se compila/prueba por separado y el PR las detalla individualmente en la descripción, para que Fercha pueda aprobar o pedir revertir una pieza puntual sin bloquear las demás. Ante la duda de si algo es "limpieza" o "feature", trátalo como feature (PR aparte).
 - [Completar según el hosting: cómo se genera el link de preview — ej. "Vercel: hay que abrir PR para que el bot comente la URL" / "Lovable: el preview vive en la URL del proyecto directamente" / etc.]
 - Cuando Fercha dé "Aprobado / GO" final sobre un bloque: mergear el PR sin borrar la rama (salvo que pida lo contrario), y marcar el bloque como completado en PENDIENTES_<APP>.md.
 
