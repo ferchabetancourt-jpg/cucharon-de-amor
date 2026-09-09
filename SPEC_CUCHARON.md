@@ -189,11 +189,15 @@ Estufa · Horno · Refrigeración · Air Fryer · Instant Pot · Sin cocción ·
 - Pipeline: manual (DALL-E → WebP <200KB → panel admin)
 - Formato: WebP 600x600px, quality 85→75→65→55
 
-### Imágenes de la app (problema pendiente en Vercel)
-Los archivos `src/assets/*.asset.json` apuntan al CDN de Lovable
-(`/__l5e/assets-v1/...`) que no funciona en Vercel.
+### Imágenes de la app (corregido sept 2026)
+Los archivos `src/assets/*.asset.json` apuntaban al CDN de Lovable
+(`/__l5e/assets-v1/...`), que no funciona en Vercel.
 
-**Imágenes subidas a `public/assets/` en GitHub:**
+**Corrección de ruta:** las 7 imágenes reales viven en `src/assets/`
+(no en `public/assets/` — esa carpeta no existe en el repo). Están
+importadas directo como `.webp` en cada componente en vez de pasar
+por un `.asset.json`:
+
 | Archivo | Dónde se usa |
 |---|---|
 | `logo-cucharon.webp` | Logo header + pantalla ingreso |
@@ -204,8 +208,11 @@ Los archivos `src/assets/*.asset.json` apuntan al CDN de Lovable
 | `onboarding-ajiaco.webp` | Onboarding pantalla 1 |
 | `onboarding-mapa.webp` | Onboarding pantalla 2 |
 
-**Pendiente:** actualizar los `.asset.json` para que `"url"`
-apunte a `/assets/nombre.webp` en vez del CDN de Lovable.
+**Estado:** arreglado en PR — pendiente de aprobar/mergear a `main`.
+Quedan ~12 `.asset.json` sin imagen real de reemplazo todavía
+(selector de ánimo ×6, estrella de favoritos, tarjeta de inspiración,
+4 imágenes semilla de recetas) — se resuelven cuando haya archivos
+reales para subir.
 
 ---
 
@@ -244,8 +251,8 @@ apunte a `/assets/nombre.webp` en vez del CDN de Lovable.
 
 ## 10. PENDIENTES TÉCNICOS (en orden de prioridad)
 
-1. **URGENTE:** Arreglar imágenes rotas en Vercel
-   — actualizar `.asset.json` apuntando a `/assets/*.webp`
+1. ~~**URGENTE:** Arreglar imágenes rotas en Vercel~~ — resuelto en
+   PR, pendiente de aprobar/mergear a `main` (ver secc. 7)
 2. Mover validación de whitelist a server-side (Edge Function)
    antes de reencender ads
 3. Migrar landing page a Vercel (actualmente en Lovable)
@@ -259,16 +266,19 @@ apunte a `/assets/nombre.webp` en vez del CDN de Lovable.
 
 ## 11. PALETA DE COLORES
 
+**Corregido sept 2026** — ver `IDENTIDAD_VISUAL_CUCHARON.md` para el
+detalle completo y el porqué. Resumen:
+
 | Variable | Hex | Uso |
 |---|---|---|
-| Terracota principal | `#cc7237` | Botones CTA, acento |
-| Crema fondo | `#f7f3eb` | Fondo principal |
-| Beige tarjetas | `#e7d8c6` | Tarjetas, fondos secundarios |
-| Café oscuro | `#2f2a26` | Texto principal |
-| Café medio | `#3a3532` | Texto secundario |
-| Gris cálido | `#a29f9d` | Texto terciario |
-| Terracota claro | `#d68e5f` | Acento secundario |
-| Dorado | `#d0ab6f` | Detalles decorativos |
+| Terracota principal | `#E85D2F` | Botones CTA, acento |
+| Crema fondo | `#FFF6EA` | Fondo principal |
+| Crema profundo | `#F7E8D2` | Tarjetas, fondos secundarios |
+| Café oscuro (ink) | `#3A2A20` | Texto principal |
+| Café medio | `#8A6B55` | Texto secundario |
+| Verde | `#5E8C4A` | Acento secundario (salud) |
+| Terracota claro | `#F18A63` | Hover, focus ring |
+| Dorado (ochre) | `#F2A93B` | Detalles decorativos |
 
 ---
 
@@ -278,7 +288,9 @@ apunte a `/assets/nombre.webp` en vez del CDN de Lovable.
 - Email confirmation: DESACTIVADO (autoConfirm = true)
 - Admin restringido a `ferchabetancourt@gmail.com`
 - NO tocar el pixel, NO tocar la whitelist, NO tocar las recetas
-- Una feature a la vez (nunca mezclar en un mismo prompt/PR)
+- Alcance de PR: ver regla en `CLAUDE.md` secc. D (una feature por
+  PR; un pase de limpieza puede ir junto si cada pieza se prueba
+  por separado y el PR las detalla individualmente)
 - Compilar con `npm run build` antes de cualquier push
 - Diagnosticar antes de parchar — si algo falla 2 veces, buscar raíz
 - Probar en DEV antes de aplicar en producción
@@ -296,5 +308,7 @@ apunte a `/assets/nombre.webp` en vez del CDN de Lovable.
 
 ---
 
-**Última actualización:** Septiembre 2026
+**Última actualización:** Septiembre 2026 (rutas de imágenes,
+paleta de colores y regla de PRs corregidas para reflejar el
+código real, ver notas inline)
 **Comando para actualizar:** "Vera actualiza SPEC_CUCHARON: [cambio]"
