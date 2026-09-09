@@ -14,7 +14,7 @@ import { RecipeFormModal } from "./RecipeFormModal";
 import { toast } from "sonner";
 import { useRecipeNotes } from "@/hooks/use-recipe-notes";
 import { track } from "@/lib/analytics";
-import cucharonSopa from "@/assets/cucharon-sopa.png.asset.json";
+import cucharonSopa from "@/assets/cucharon-sopa.webp";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -290,7 +290,7 @@ export function RecipeListItem({
         {/* Left 42% — photo or color block */}
         <div className="relative shrink-0" style={{ width: "42%" }}>
           {image ? (
-            <img src={image} alt="" className="w-full h-full object-cover" />
+            <img src={image} alt="" loading="lazy" className="w-full h-full object-cover" />
           ) : (
             <CategoryBlock catKey={recipe.category} iconSize={36} />
           )}
@@ -544,7 +544,7 @@ export function RecipesPage({ favoritesOnly = false, initialCategory }: { favori
         }}
       >
         <img
-          src={cucharonSopa.url}
+          src={cucharonSopa}
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute top-1/2 -translate-y-1/2 right-0 md:right-2 w-[170px] md:w-[240px] h-auto object-contain"

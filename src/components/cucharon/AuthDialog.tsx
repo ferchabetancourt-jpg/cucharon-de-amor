@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import logoFull from "@/assets/cucharon-logo-full.png.asset.json";
+import logoFull from "@/assets/logo-cucharon.webp";
 
 interface Props {
   open: boolean;
@@ -107,7 +107,7 @@ export function AuthDialog({ open, onClose }: Props) {
         >
           <div className="text-center mb-5">
             <img
-              src={logoFull.url}
+              src={logoFull}
               alt="Un Cucharón de Amor"
               className="mx-auto mb-3 object-contain"
               style={{ width: "200px", height: "auto" }}

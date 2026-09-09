@@ -5,7 +5,7 @@ import { RecipeFormModal } from "./RecipeFormModal";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Save, Leaf, Refrigerator, Feather, Heart, Timer, Cookie, Sparkles, Gift } from "lucide-react";
-import sartenHero from "@/assets/sarten-hero.png.asset.json";
+import sartenHero from "@/assets/sarten-chef.webp";
 import moodLiviano from "@/assets/mood-liviano.png.asset.json";
 import moodConfort from "@/assets/mood-confort.png.asset.json";
 import moodRapido from "@/assets/mood-rapido.png.asset.json";
@@ -126,7 +126,7 @@ export function RecipeGenerator() {
       >
         {/* Fotografía hiperrealista del sartén */}
         <img
-          src={sartenHero.url}
+          src={sartenHero}
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute -top-2 -right-4 md:-right-6 w-[150px] md:w-[210px] object-contain"
