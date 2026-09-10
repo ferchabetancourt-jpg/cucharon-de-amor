@@ -1,13 +1,22 @@
 # PENDIENTES — Un Cucharón de Amor
-**Última actualización: Septiembre 2026**
+**Última actualización: Septiembre 2026** (imágenes rotas resueltas,
+migración fuera de Lovable completa, nuevo pendiente de hero de
+modales)
 
 ---
 
 ## 🔧 TÉCNICOS (en orden de prioridad)
 
-- [ ] **URGENTE:** Arreglar imágenes rotas en Vercel
-      — actualizar `src/assets/*.asset.json` para que `"url"`
-      apunte a `/assets/nombre.webp` en vez del CDN de Lovable
+- [x] ~~Arreglar imágenes rotas en Vercel~~ — resuelto sept 2026
+      (logo, modal de entrada, chef IA, favoritos, onboarding,
+      decorativa, inspiración). Migración completa fuera de Lovable.
+- [ ] Faltan ~11 imágenes sin archivo real todavía (selector de
+      ánimo ×6, estrella de favoritos, 4 imágenes semilla de
+      recetas) — se conectan cuando Fercha tenga los archivos
+- [ ] Estandarizar el color del hero en todos los modales —
+      hoy cada modal (bienvenida/login, onboarding, chef, etc.)
+      usa un tono distinto, revisar y unificar según
+      `IDENTIDAD_VISUAL_CUCHARON.md`
 - [ ] Mover validación de whitelist a server-side (Edge Function)
       — pendiente antes de reencender cualquier campaña de ads
 - [ ] Migrar landing page a Vercel (actualmente en Lovable)
