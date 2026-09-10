@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { INSPIRATIONS } from "@/lib/cucharon-data";
 import { RotateCw, Loader2 } from "lucide-react";
-import inspirationHero from "@/assets/inspiration-hero.jpg.asset.json";
+import inspirationHero from "@/assets/inspiration-hero.webp";
 
 const HISTORY_SIZE = Math.min(8, Math.max(1, INSPIRATIONS.length - 1));
 
@@ -36,7 +36,7 @@ export function InspirationCard() {
     >
       <div className="relative w-full h-[180px] md:h-[220px] overflow-hidden">
         <img
-          src={inspirationHero.url}
+          src={inspirationHero}
           alt=""
           aria-hidden
           loading="lazy"
