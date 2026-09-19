@@ -32,8 +32,14 @@ Hoy es un producto comercial real.
 
 ### URLs activas
 - App: `https://cucharon-de-amor.vercel.app`
-- Landing: `https://n-de-amor-landing.lovable.app` *(pendiente migrar)*
-- Página Gracias: `https://gracias-un-cuchar.lovable.app` *(pendiente migrar)*
+- Landing: `https://n-de-amor-landing.lovable.app` *(en Lovable,
+  cuenta de ferchabetancourt; confirmado funcionando 19 sept pese a
+  que el plan venció; sigue pendiente migrar a Vercel — no es
+  infraestructura confiable a largo plazo sobre una cuenta sin
+  pagar)*
+- Página Gracias: `https://gracias-un-cuchar.lovable.app` *(mismo
+  caso — en Lovable, cuenta de ferchabetancourt, funcionando,
+  pendiente migrar)*
 - Checkout: `https://pay.hotmart.com/F106796702L?checkoutMode=10&bid=1784422266748`
 
 ### Supabase
@@ -104,7 +110,9 @@ Whitelist de emails autorizados a crear cuenta (compradoras Hotmart).
 | status | text | Estado de publicación |
 | created_by | text | Quién subió la receta |
 
-**Total recetas:** ~237
+**Total recetas:** ~237 (sin verificar desde ago 2026 — este número
+se mueve solo a medida que se suben recetas; confirmar en el panel
+admin la próxima vez que se actualice este doc)
 
 ### `user_roles`
 | Columna | Tipo |
@@ -168,7 +176,9 @@ Whitelist de emails autorizados a crear cuenta (compradoras Hotmart).
 8. Especiales
 
 ### 7 Métodos de cocción (chips)
-Estufa · Horno · Refrigeración · Air Fryer · Instant Pot · Sin cocción · Microondas
+**Corregido sept 2026** — verificado contra `src/lib/cucharon-data.ts`:
+Air Fryer · Sartén · Horno · Olla de Presión Eléctrica · Olla
+tradicional · Sin cocción · Licuadora
 
 ### Filtro de salud (obligatorio en toda receta)
 ✅ Digestión ligera · Sin grasas pesadas · Sin ajo crudo
@@ -207,12 +217,13 @@ por un `.asset.json`:
 | `cucharon-sopa.webp` | Imagen decorativa |
 | `onboarding-ajiaco.webp` | Onboarding pantalla 1 |
 | `onboarding-mapa.webp` | Onboarding pantalla 2 |
+| `inspiration-hero.webp` | Tarjeta "Inspiración del momento" |
 
-**Estado:** arreglado en PR — pendiente de aprobar/mergear a `main`.
-Quedan ~12 `.asset.json` sin imagen real de reemplazo todavía
-(selector de ánimo ×6, estrella de favoritos, tarjeta de inspiración,
-4 imágenes semilla de recetas) — se resuelven cuando haya archivos
-reales para subir.
+**Estado:** arreglado y mergeado a `main` — migración fuera de
+Lovable completa para estas 8 imágenes.
+Quedan ~11 `.asset.json` sin imagen real de reemplazo todavía
+(selector de ánimo ×6, estrella de favoritos, 4 imágenes semilla de
+recetas) — se resuelven cuando haya archivos reales para subir.
 
 ---
 
@@ -251,12 +262,13 @@ reales para subir.
 
 ## 10. PENDIENTES TÉCNICOS (en orden de prioridad)
 
-1. ~~**URGENTE:** Arreglar imágenes rotas en Vercel~~ — resuelto en
-   PR, pendiente de aprobar/mergear a `main` (ver secc. 7)
+1. ~~**URGENTE:** Arreglar imágenes rotas en Vercel~~ — resuelto y
+   mergeado a `main` sept 2026 (ver secc. 7)
 2. Mover validación de whitelist a server-side (Edge Function)
    antes de reencender ads
-3. Migrar landing page a Vercel (actualmente en Lovable)
-4. Migrar página de Gracias a Vercel
+3. Migrar landing page a Vercel (actualmente en Lovable, funcionando
+   pero sobre cuenta sin pagar — sin apuro, sin dejarlo indefinido)
+4. Migrar página de Gracias a Vercel (mismo caso)
 5. Actualizar PDF de instalación (URL ahora es Vercel, no Lovable)
 6. "Sirve con" en RecipeDetail — datos en BD, falta UI
 7. Backup completo BD + código (código ya en GitHub ✅)
@@ -308,7 +320,9 @@ detalle completo y el porqué. Resumen:
 
 ---
 
-**Última actualización:** Septiembre 2026 (rutas de imágenes,
-paleta de colores y regla de PRs corregidas para reflejar el
-código real, ver notas inline)
+**Última actualización:** Septiembre 2026 (métodos de cocción
+corregidos contra `cucharon-data.ts`, imágenes de la app confirmadas
+mergeadas incluyendo la de Inspiración; landing y página de Gracias
+confirmadas funcionando pese al vencimiento de Lovable — pendiente
+de migrar sin apuro, ya no es urgente)
 **Comando para actualizar:** "Vera actualiza SPEC_CUCHARON: [cambio]"
