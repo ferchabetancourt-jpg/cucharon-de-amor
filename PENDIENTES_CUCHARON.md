@@ -1,7 +1,8 @@
 # PENDIENTES — Un Cucharón de Amor
 **Última actualización: Septiembre 2026** (imágenes rotas resueltas,
-migración fuera de Lovable completa, nuevo pendiente de hero de
-modales)
+migración fuera de Lovable completa del código; nuevo pendiente
+URGENTE — verificar landing y página de Gracias, que aún viven en
+Lovable y el plan ya venció)
 
 ---
 
@@ -17,10 +18,15 @@ modales)
       hoy cada modal (bienvenida/login, onboarding, chef, etc.)
       usa un tono distinto, revisar y unificar según
       `IDENTIDAD_VISUAL_CUCHARON.md`
+- [ ] **URGENTE (dependencia: Fercha):** Verificar si la landing
+      (`n-de-amor-landing.lovable.app`) y la página de Gracias
+      (`gracias-un-cuchar.lovable.app`) siguen cargando — el plan
+      de Lovable venció el 10 de septiembre y esas dos páginas
+      todavía viven ahí. Si están caídas, el embudo de venta de
+      Hotmart puede estar roto (checkout → Gracias). Migrar ambas
+      a Vercel apenas se confirme.
 - [ ] Mover validación de whitelist a server-side (Edge Function)
       — pendiente antes de reencender cualquier campaña de ads
-- [ ] Migrar landing page a Vercel (actualmente en Lovable)
-- [ ] Migrar página de Gracias a Vercel
 - [ ] Actualizar PDF de instalación — la URL cambió de Lovable a Vercel
 - [ ] "Sirve con" en RecipeDetail — datos ya en BD (`sirve_con`), falta UI
 - [ ] Estandarización masiva de verbos en recetas
