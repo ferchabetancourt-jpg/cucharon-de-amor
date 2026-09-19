@@ -32,11 +32,12 @@ Hoy es un producto comercial real.
 
 ### URLs activas
 - App: `https://cucharon-de-amor.vercel.app`
-- Landing: `https://n-de-amor-landing.lovable.app` *(⚠️ RIESGO —
-  Lovable ya no está pagado desde sept 2026; esta URL puede estar
-  caída. Verificar urgente y migrar a Vercel — ver PENDIENTES)*
+- Landing: `https://n-de-amor-landing.lovable.app` *(confirmado
+  funcionando 19 sept pese a que el plan de Lovable venció; sigue
+  pendiente migrar a Vercel — no es infraestructura confiable a
+  largo plazo sobre una cuenta sin pagar)*
 - Página Gracias: `https://gracias-un-cuchar.lovable.app` *(mismo
-  riesgo que la landing — verificar urgente)*
+  caso — funcionando, pendiente migrar)*
 - Checkout: `https://pay.hotmart.com/F106796702L?checkoutMode=10&bid=1784422266748`
 
 ### Supabase
@@ -261,16 +262,15 @@ recetas) — se resuelven cuando haya archivos reales para subir.
 
 1. ~~**URGENTE:** Arreglar imágenes rotas en Vercel~~ — resuelto y
    mergeado a `main` sept 2026 (ver secc. 7)
-2. **URGENTE:** Verificar si landing y página de Gracias siguen
-   vivas — el plan de Lovable ya venció (ver secc. 2, URLs activas)
-3. Mover validación de whitelist a server-side (Edge Function)
+2. Mover validación de whitelist a server-side (Edge Function)
    antes de reencender ads
-4. Migrar landing page a Vercel (actualmente en Lovable)
-5. Migrar página de Gracias a Vercel
-6. Actualizar PDF de instalación (URL ahora es Vercel, no Lovable)
-7. "Sirve con" en RecipeDetail — datos en BD, falta UI
-8. Backup completo BD + código (código ya en GitHub ✅)
-9. Estandarización masiva verbos (SQL listo, 55 verbos, 619 ocurrencias)
+3. Migrar landing page a Vercel (actualmente en Lovable, funcionando
+   pero sobre cuenta sin pagar — sin apuro, sin dejarlo indefinido)
+4. Migrar página de Gracias a Vercel (mismo caso)
+5. Actualizar PDF de instalación (URL ahora es Vercel, no Lovable)
+6. "Sirve con" en RecipeDetail — datos en BD, falta UI
+7. Backup completo BD + código (código ya en GitHub ✅)
+8. Estandarización masiva verbos (SQL listo, 55 verbos, 619 ocurrencias)
 
 ---
 
@@ -320,6 +320,7 @@ detalle completo y el porqué. Resumen:
 
 **Última actualización:** Septiembre 2026 (métodos de cocción
 corregidos contra `cucharon-data.ts`, imágenes de la app confirmadas
-mergeadas incluyendo la de Inspiración, riesgo de landing/Gracias
-caídas por vencimiento de Lovable anotado como urgente)
+mergeadas incluyendo la de Inspiración; landing y página de Gracias
+confirmadas funcionando pese al vencimiento de Lovable — pendiente
+de migrar sin apuro, ya no es urgente)
 **Comando para actualizar:** "Vera actualiza SPEC_CUCHARON: [cambio]"

@@ -1,8 +1,8 @@
 # PENDIENTES — Un Cucharón de Amor
 **Última actualización: Septiembre 2026** (imágenes rotas resueltas,
-migración fuera de Lovable completa del código; nuevo pendiente
-URGENTE — verificar landing y página de Gracias, que aún viven en
-Lovable y el plan ya venció)
+migración fuera de Lovable completa del código; landing y página de
+Gracias confirmadas funcionando pese al vencimiento del plan de
+Lovable — pendiente migrarlas, sin apuro)
 
 ---
 
@@ -18,13 +18,14 @@ Lovable y el plan ya venció)
       hoy cada modal (bienvenida/login, onboarding, chef, etc.)
       usa un tono distinto, revisar y unificar según
       `IDENTIDAD_VISUAL_CUCHARON.md`
-- [ ] **URGENTE (dependencia: Fercha):** Verificar si la landing
-      (`n-de-amor-landing.lovable.app`) y la página de Gracias
-      (`gracias-un-cuchar.lovable.app`) siguen cargando — el plan
-      de Lovable venció el 10 de septiembre y esas dos páginas
-      todavía viven ahí. Si están caídas, el embudo de venta de
-      Hotmart puede estar roto (checkout → Gracias). Migrar ambas
-      a Vercel apenas se confirme.
+- [ ] Migrar landing (`n-de-amor-landing.lovable.app`) y página de
+      Gracias (`gracias-un-cuchar.lovable.app`) a Vercel — Fercha
+      confirmó (19 sept) que ambas siguen cargando bien pese a que
+      el plan de Lovable venció, así que no es una emergencia. Pero
+      sigue siendo infraestructura de venta corriendo sobre una
+      cuenta sin pagar — Lovable podría borrar proyectos inactivos
+      sin aviso en cualquier momento. Migrar sin apuro pero sin
+      dejarlo indefinido.
 - [ ] Mover validación de whitelist a server-side (Edge Function)
       — pendiente antes de reencender cualquier campaña de ads
 - [ ] Actualizar PDF de instalación — la URL cambió de Lovable a Vercel
