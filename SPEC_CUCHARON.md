@@ -32,12 +32,14 @@ Hoy es un producto comercial real.
 
 ### URLs activas
 - App: `https://cucharon-de-amor.vercel.app`
-- Landing: `https://n-de-amor-landing.lovable.app` *(confirmado
-  funcionando 19 sept pese a que el plan de Lovable venció; sigue
-  pendiente migrar a Vercel — no es infraestructura confiable a
-  largo plazo sobre una cuenta sin pagar)*
+- Landing: `https://n-de-amor-landing.lovable.app` *(en Lovable,
+  cuenta de ferchabetancourt; confirmado funcionando 19 sept pese a
+  que el plan venció; sigue pendiente migrar a Vercel — no es
+  infraestructura confiable a largo plazo sobre una cuenta sin
+  pagar)*
 - Página Gracias: `https://gracias-un-cuchar.lovable.app` *(mismo
-  caso — funcionando, pendiente migrar)*
+  caso — en Lovable, cuenta de ferchabetancourt, funcionando,
+  pendiente migrar)*
 - Checkout: `https://pay.hotmart.com/F106796702L?checkoutMode=10&bid=1784422266748`
 
 ### Supabase

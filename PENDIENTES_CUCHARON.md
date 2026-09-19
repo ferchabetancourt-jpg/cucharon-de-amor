@@ -19,13 +19,14 @@ Lovable — pendiente migrarlas, sin apuro)
       usa un tono distinto, revisar y unificar según
       `IDENTIDAD_VISUAL_CUCHARON.md`
 - [ ] Migrar landing (`n-de-amor-landing.lovable.app`) y página de
-      Gracias (`gracias-un-cuchar.lovable.app`) a Vercel — Fercha
-      confirmó (19 sept) que ambas siguen cargando bien pese a que
-      el plan de Lovable venció, así que no es una emergencia. Pero
-      sigue siendo infraestructura de venta corriendo sobre una
-      cuenta sin pagar — Lovable podría borrar proyectos inactivos
-      sin aviso en cualquier momento. Migrar sin apuro pero sin
-      dejarlo indefinido.
+      Gracias (`gracias-un-cuchar.lovable.app`) a Vercel — ambas
+      están en Lovable bajo la cuenta de **ferchabetancourt**.
+      Fercha confirmó (19 sept) que siguen cargando bien pese a que
+      el plan venció, así que no es una emergencia. Pero sigue
+      siendo infraestructura de venta corriendo sobre una cuenta sin
+      pagar — Lovable podría borrar proyectos inactivos sin aviso en
+      cualquier momento. Migrar sin apuro pero sin dejarlo
+      indefinido.
 - [ ] Mover validación de whitelist a server-side (Edge Function)
       — pendiente antes de reencender cualquier campaña de ads
 - [ ] Actualizar PDF de instalación — la URL cambió de Lovable a Vercel
